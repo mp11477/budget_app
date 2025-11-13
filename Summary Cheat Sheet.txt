@@ -1,0 +1,18 @@
+✅ Summary Cheat Sheet
+Scenario	                        Account	            Type	        Notes
+Loan payment from deposit account	Debit (Deposit)	    TRANSFER	    Money left your deposit account
+                                    Credit (Loan)	    LOAN_PAYMENT	Debt was reduced
+Loan payment from credit card	    Debit (Credit Card)	TRANSFER	    You used a CC — shifted debt, didn’t pay it off
+                                    Credit (Loan)	    LOAN_PAYMENT	Debt was reduced (only if loan account is tracked)
+Loan pmt fr dep acct (no loan acct)	Debit (Deposit) 	LOAN_PAYMENT	Use LOAN_PAYMENT to reflect intent even if no loan acct is tracked
+Credit card pmt from dep account	Debit (Deposit)	    TRANSFER	    Money left checking/savings
+                                    Credit (CC)	        CC_PAYMENT	    You reduced the CC balance
+Cr card pmt from another Cr Card	Debit (CC1)	        TRANSFER	    Debt shifted, not paid
+                                    Credit (CC2)	    CC_PAYMENT	    You paid off part of CC2
+Balance transfer between cr cards	Debit (CC1)	        TRANSFER	    You used a balance transfer
+                                    Credit (CC2)	    TRANSFER	    Shifted balance, didn’t reduce debt
+Mort/loan subsidy sent to spouse	Debit (Deposit)	    LOAN_PAYMENT	No loan account, but still want it tracked as debt payoff
+Interest charged on credit acct	    Debit (Loan/CC)	    INTEREST	    Increases debt
+Interest earned on deposit acct     Credit (Deposit)	INCOME	        Treated as income
+Refund (e.g. return or rebate)	    Credit (CC or Dep)	CREDIT	        Reduces net spending — should match original subcategory
+Return of previously bought item	Credit (CC or Dep)	CREDIT	        Use same subcategory as original purchase to zero out category spend

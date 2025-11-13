@@ -1,0 +1,25 @@
+{% if recent_transactions %}
+   
+  <h3>Last 10 Transactions</h3>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Debit</th>
+      <th>Credit</th>
+      <th>Cleared</th>
+    </tr>
+    {% for tx in recent_transactions %}
+    <tr>
+      <td>{{ tx.date }}</td>
+      <td>{{ tx.description }}</td>
+      <td>{% if tx.debit %}${{ tx.debit|floatformat:2 }}{% endif %}</td>
+      <td>{% if tx.credit %}${{ tx.credit|floatformat:2 }}{% endif %}</td>
+      <td>{% if tx.cleared %}✅{% else %}❌{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  
+{% else %}
+  <p>No recent transactions.</p>
+{% endif %}

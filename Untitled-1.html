@@ -1,0 +1,200 @@
+// const netLabels = JSON.parse(document.getElementById("net-labels-data").textContent);
+// const incomeData = JSON.parse(document.getElementById("income-data").textContent);
+// const expenseData = JSON.parse(document.getElementById("expense-data").textContent);
+// const netData = JSON.parse(document.getElementById("net-data").textContent);
+// const totalNetCashFlow = netData.reduce((a, b) => a + b, 0);
+// const totalNetFormatted = (totalNetCashFlow >= 0 ? '+' : '-') + "$" + Math.abs(totalNetCashFlow).toLocaleString();
+// const ccPaymentData = JSON.parse(document.getElementById("cc-payment-data").textContent);
+
+// const netCashHTML = `
+//   <p style="text-align: center; font-weight: bold; margin-top: 10px;">
+//       Yearly Net Cash Flow: 
+//       <span style="color: ${totalNetCashFlow >= 0 ? 'green' : 'red'}">
+//         $${totalNetFormatted}
+//       </span>
+//   </p>
+//   <div style="margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto; font-size: 15px; line-height: 1.6; background-color: #f9f9f9; padding: 15px; border-left: 5px solid #2980b9;">
+//     ${
+//       totalNetCashFlow < 0
+//       ? `<strong>Why is this number negative?</strong><br>
+//       At the start of the year, we had more money in checking accounts than today. Now, we have a bit less. That means we used some of our cash — not to overspend, but to pay down debt.<br><br>
+//       Paying off credit cards reduces our debt and improves our net worth, but it still uses real cash. That's why it shows up as a negative number here, even though it's actually a good thing!<br><br>
+//       So no, we're not in trouble — we're just using cash to get out of debt faster. 💪<br><br>
+//       <strong><h2>Now, how about letting me eat some stinky pussy to celebrate?!?</strong></h2>`
+//       : totalNetCashFlow === 0
+//       ? `<strong>Why is this number zero?</strong><br>
+//       We have broken even this year.  Our ending account balances are exactly what they were at the beginning.📊<br><br>
+//       That's not bad! It means we balanced our income and expenses perfectly, even if we were paying down debt along the way.<br><br>
+//       <strong><h2>Now, how about you let me eat that sweet pussy to celebreate?!?</h2></strong>`
+//       : `<strong>Why is this number positive?</strong><br>
+//       Boom! 💰 We made more than we spent, even after paying down debt and doing grown-up things.<br><br>
+//       Our account balances are up — and so is my mood!<br><br>
+//       <strong><em>So how about you drop your pants, bend over, and let me eat that ass like I earned it?!? 🔥</em></strong>`
+//     }
+//   </div>
+// `;
+
+// document.getElementById("netCashFlowChart").insertAdjacentHTML("afterend", netCashHTML);
+
+// const drawNetCashFlowLabels = {
+//   id: 'drawNetCashFlowLabels',
+//   afterDatasetsDraw(chart) {
+//     const {
+//       ctx,
+//       chartArea: {bottom},
+//       scales: {x}
+//     } = chart;
+
+//     ctx.save();
+//     ctx.font = 'bold 12px Segoe UI';
+//     ctx.fillStyle = '#333';
+//     ctx.textAlign = 'center';
+
+//     netLabels.forEach((label, i) => {
+//       const xPos = x.getPixelForValue(i);
+//       const value = netData[i];
+//       const formatted = (value >= 0 ? '+' : '-') + `$${Math.abs(value).toLocaleString()}`;
+//       ctx.fillStyle = value >= 0 ? '#2ecc71' : '#e74c3c';  // green or red
+//       ctx.fillText(formatted, xPos, bottom + 32);
+//     });
+
+//     ctx.restore();
+//   }
+// };
+
+// new Chart(document.getElementById("netCashFlowChart").getContext("2d"), {
+//   type: 'bar',
+//   data: {
+//     labels: netLabels,
+//     datasets: [
+//     {
+//         label: "True Expenses",
+//         data: expenseData.map(v => -v),
+//         backgroundColor: "rgba(231, 76, 60, 0.6)",
+//         stack: "outflow"
+//       },
+//       {
+//         label: "Credit Card Repayment",
+//         data: ccPaymentData.map(v => -v),
+//         backgroundColor: "rgba(241, 196, 15, 0.6)",
+//         stack: "outflow"
+//       },
+//       {
+//         label: "Income",
+//         data: incomeData,
+//         backgroundColor: "rgba(46, 204, 113, 0.6)",
+//         stack: "inflow"
+//       },
+//       {
+//         type: 'line',
+//         label: "Net Cash Flow",
+//         data: netData,
+//         borderColor: "rgba(44, 62, 80, 1)",
+//         borderWidth: 2,
+//         fill: false,
+//         pointBackgroundColor: "black"
+//       }
+//     ]
+//   },
+  
+//   options: {
+//     responsive: true,
+//     layout: {
+//       padding: {
+//         bottom: 30  // ← gives space for net labels below the axis
+//       }
+//     },
+//     scales: {
+//       y: {
+//         beginAtZero: true,
+//         ticks: {
+//           callback: val => `$${val.toLocaleString()}`
+//       }
+//     }
+//     },
+//     plugins: {
+//       tooltip: {
+//         callbacks: {
+//           label: (ctx) => {
+//             const val = ctx.raw;
+//             return `${ctx.dataset.label}: $${Math.abs(val).toLocaleString()}`;
+//           }      
+//         }
+//       },
+//       legend: {
+//           position: 'top'
+        
+        
+//       },
+      
+//     scales: {
+//       y: {
+//         beginAtZero: true,
+//         ticks: {
+//           callback: val => `$${val.toLocaleString()}`
+//         }
+//       }
+    
+//   }
+//     }
+//   },
+//   plugins: [drawNetCashFlowLabels]
+// });
+
+// // 🟣 Debt Balance + Monthly Payments Chart
+// //“The red line is our total credit card debt at the end of each month.
+// //The green bars show how much we paid off that month.
+// //So when the red line drops, it means we’re getting out of debt — which is good — even if cash flow looks negative.”
+
+// const debtLabels = JSON.parse(document.getElementById("debt-labels-data").textContent);
+// const debtLine = JSON.parse(document.getElementById("debt-data").textContent);
+// const payments = JSON.parse(document.getElementById("payment-data").textContent);
+
+// console.log("🟣 DEBUG - debtLine:", debtLine);
+// console.log("🟣 DEBUG - payments:", payments);
+// console.log("🟣 DEBUG - debtLabels:", debtLabels);
+
+// new Chart(document.getElementById("debtComboChart").getContext("2d"), {
+//   data: {
+//     labels: debtLabels,
+//     datasets: [
+//       {
+//         type: 'line',
+//         label: 'Total CC Balance',
+//         data: debtLine,
+//         borderColor: 'red',
+//         backgroundColor: 'rgba(255, 0, 0, 0.2)',
+//         tension: 0.3,
+//         yAxisID: 'y',
+//         pointRadius: 4,
+//         pointHoverRadius: 6
+//       },
+//       {
+//         type: 'bar',
+//         label: 'Monthly CC Payments',
+//         data: payments,
+//         backgroundColor: 'green',
+//         yAxisID: 'y'
+//       }
+//     ]
+//   },
+//   options: {
+//     responsive: true,
+//     plugins: {
+//       tooltip: {
+//         callbacks: {
+//           label: context => `$${context.raw.toLocaleString()}`
+//         }
+//       }
+//     },
+//     scales: {
+//       y: {
+//         beginAtZero: true,
+//         title: {
+//           display: true,
+//           text: 'Amount ($)'
+//         }
+//       }
+//     }
+//   }
+// });

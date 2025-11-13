@@ -1,0 +1,29 @@
+{% if recent_transfers %}
+  <div class="recent-transfers-block">
+    <h3>Recent Transfers</h3>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>From</th>
+        <th>Transaction Type</th>
+        <th>To</th>
+        <th>Transaction Type</th>
+        <th>Amount</th>
+        <th>Description</th>
+      </tr>
+      {% for t in recent_transfers %}
+      <tr>
+        <td>{{ t.date }}</td>
+        <td>{{ t.from_account.name }}</td>
+        <td>{{ t.from_tx.transaction_type|default:"—" }}</td>
+        <td>{{ t.to_account.name }}</td>
+        <td>{{ t.to_tx.transaction_type|default:"—" }}</td>
+        <td>${{ t.amount|floatformat:2 }}</td>
+        <td>{{ t.description }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}<div style="text-align: center;">
+      <b style="font-weight: bold;">❌ No recent transfers between these accounts found!</b>
+  </div>
+{% endif %}

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{# Add page-specific tweaks to <main> if desired #}
+{% block main_class %} {% endblock %}
+
+{% block content %}
+
+<div class="p-1 text-[12px] !text-white text-center ">
+    <a href="{% url 'add_transaction' %}"
+           class = "rounded-xl bg-[#113170] hover:bg-[#798A9A] p-1 text-center inline-flex items-center m-4 pr-3">
+        <i class="material-icons text-green-600 m-1 ">paid</i>
+        <span>Add Transaction</span>
+    </a>
+    <a href="{% url 'add_transfer' %}"
+           class = "rounded-xl bg-[#113170] hover:bg-[#798A9A] p-1 text-center inline-flex items-center m-4 pr-3">
+        <i class="material-icons text-green-600 m-1 ">payments</i>
+        <span>Add Transfer</span>
+    </a>
+    
+</div>
+
+<h1>Summary of Accounts</h1>
+<div class="flex gap-8 ">
+    <div class="flex-1">
+
+        <h2>Deposit Accounts</h2>
+        <table class="deposit-accounts-table table-fixed mr-80">
+            <tr class = "header-row">
+                <th>Account</th>
+                <th>Current Balance</th>
+                <th>Current Balance (incl non-posted transactions)</th>
+            </tr>
+            {% for row in deposit_summary %}
+            <tr class = "data-row">
+                <td class = "account-name"><a href="{% url 'account_transactions' account_id=row.id %}">{{ row.name }}</a></td>
+                <td class = "balance" class="{% if row.cleared_balance < 0 %}negative{% endif %}">${{ row.cleared_balance|floatformat:2 }}</td>
+                <td class = "balance" class="{% if row.total_balance < 0 %}negative{% endif %}">${{ row.total_balance|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+             <tr class = "footer-row">
+                <td><strong>Total</strong></td>
+              
+                <td>
+                  <!-- Cleared Balance Total Link -->
+                  <a href="{% url 'deposit_summary_transactions' %}?month={{ current_month }}&year={{ current_year }}">
+                    ${{ deposit_cleared_total|floatformat:2 }}
+                  </a>
+                </td>
+              
+                <td>
+                  <!-- Total Balance Including Non-Posted Transactions -->
+                  <a href="{% url 'deposit_summary_transactions' %}?month={{ current_month }}&year={{ current_year }}">
+                    ${{ deposit_total|floatformat:2 }}
+                  </a>
+                </td>
+              </tr>
+        </table>
+    </div>
+
+    <div class="flex-1">
+        <h2>Pending Transactions - Deposit Accounts</h2>
+        <table class = "pending-transactions-table table-fixed mr-80">
+          <tr class = "pending-header-row">
+            <th>Account</th>
+            <th>Description</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Action</th>
+          </tr>
+          {% for tx in uncleared_transactions %}
+          <tr>
+            <td>{{ tx.account.name }}</td>
+            <td>{{ tx.description }}</td>
+            <td>{% if tx.debit %} ${{ tx.debit|floatformat:2 }} {% endif %}</td>
+            <td>{% if tx.credit %} ${{ tx.credit|floatformat:2 }} {% endif %}</td>
+            <td>
+              <form method="post" action="{% url 'mark_transaction_cleared' tx.id %}">
+                {% csrf_token %}
+                <button type="submit" class = "rounded-xl bg-[#113170] hover:bg-[#798A9A] p-1 flex items-center gap-1 !text-white">
+                  <i class="material-icons text-green-600 mr-1 ">check_circle</i>
+                  <span>Mark Cleared</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <div class="flex gap-8 ">
+      <div class="flex-1">
+        <h2>Charge / Loan Accounts</h2>
+        <table class="credit-accounts-table table-fixed mr-80">
+            <tr class = "header-row">
+                <th>Account</th>
+                <th>Type</th>
+                <th>Balance</th>
+                <th>Balance (incl non-posted transactions)</th>
+            </tr>
+            {% for row in loan_summary %}
+            <tr class = "data-row">
+                <td class ="account-name"><a href="{% url 'account_transactions' account_id=row.id %}">{{ row.name }}</a></td>
+                <td class = "account-type">{{ row.type }}</td>
+                <td class = "balance" class="{% if row.cleared_balance < 0 %}negative{% endif %}">${{ row.cleared_balance|floatformat:2 }}</td>
+                <td class = "balance" class="{% if row.total_balance < 0 %}negative{% endif %}">${{ row.total_balance|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            <tr class = "footer-row">
+              <td><strong>Total</strong></td>
+              <td style="background-color: rgb(103, 104, 107);"></span></td>
+              <td>
+                <!-- Cleared Balance Total Link -->
+                <a href="{% url 'loan_summary_transactions' %}?month={{ current_month }}&year={{ current_year }}">
+                  ${{ loan_cleared_total|floatformat:2 }}
+                </a>
+              </td>
+            
+              <td>
+                <!-- Total Balance Including Non-Posted Transactions -->
+                <a href="{% url 'loan_summary_transactions' %}?month={{ current_month }}&year={{ current_year }}">
+                  ${{ loan_total|floatformat:2 }}
+                </a>
+              </td>
+            </tr>
+      </table>
+  </div>
+  <div class="flex-1">
+      <h2>Pending Transactions - Credit Accounts</h2>
+      <table class = "pending-transactions-table table-fixed mr-80">
+        <tr class = "pending-header-row">
+          <th>Account</th>
+          <th>Description</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Action</th>
+        </tr>
+        {% for tx in uncleared_cc_transactions %}
+        <tr>
+          <td class = "pending-account">{{ tx.account.name }}</td>
+          <td class = "pending-description">{{ tx.description }}</td>
+          <td>{% if tx.debit %} ${{ tx.debit|floatformat:2 }} {% endif %}</td>
+          <td>{% if tx.credit %} ${{ tx.credit|floatformat:2 }} {% endif %}</td>
+          <td>
+            <form method="post" action="{% url 'mark_transaction_cleared' tx.id %}">
+              {% csrf_token %}
+              <button type="submit" class = "rounded-xl bg-[#113170] hover:bg-[#798A9A] p-1 flex items-center gap-1 !text-white">
+                <i class="material-icons text-green-600 mr-1 ">check_circle</i>
+                <span>Mark Cleared</span>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+</div>
+
+<div class="flex gap-8 margin top-8">
+  <div class="flex-1">
+    <h2>Transactions Needing a Subcategory</h2>
+    <table class = "pending-subcategory-table w-full mb-8">
+      <colgroup>
+        <col /> <col /> <col /> <col /> <col />
+        <col style="width: 500px;" /> <!-- Update Subcategory column -->
+      </colgroup>
+      <tr class = "pending-subcat-header-row">
+        <th>Date</th>
+        <th>Account</th>
+        <th>Description</th>
+        <th>Debit</th>
+        <th>Credit</th>
+        <th>Update Subcategory</th>
+      </tr>
+      {% for u in update_subcategory %}
+      <tr class = "pending-subcat-data-row">
+        <td>{{ u.date  }}</td>
+        <td>{{ u.account.name }}</td>
+        <td>{{ u.description }}</td>
+        <td>{% if u.debit %} ${{ u.debit|floatformat:2 }} {% endif %}</td>
+        <td>{% if u.credit %} ${{ u.credit|floatformat:2 }} {% endif %}</td>
+        <td class="p-2 border whitespace-nowrap">
+          <form method="post"
+                action="{% url 'update_subcategory' u.id %}"
+                class="sub-cat-name flex flex-nowrap items-center gap-2">
+            {% csrf_token %}
+
+            <select name="sub_cat_name"
+                    class="rounded-xl bg-gray-300 px-3 py-2 w-44 text-sm"
+                    required>
+              <!-- Blank, non-selectable placeholder -->
+              <option class="text-gray-400" value="" disabled selected hidden>Select Subcategory</option>
+
+              {% for key, label in sub_cat_name %}
+                <option value="{{ key }}" {% if u.subcategory_id == key %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+
+            <button type="submit"
+                    class="shrink-0 rounded-xl bg-[#113170] hover:bg-[#798A9A] px-2 py-1 flex items-center gap-2 text-white text-sm">
+              <i class="material-icons text-green-600">edit_attributes</i>
+              <span>Update</span>
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+  
+{% endblock %}

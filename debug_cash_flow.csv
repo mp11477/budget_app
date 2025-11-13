@@ -1,0 +1,914 @@
+Month,Date,Account,Subcategory,Category,Amount,Credit,Debit,Is Income,Is Expense
+2025-01,2025-01-01,Uber Eats,Transfer between accounts,Transfers (Internal),0.00,0.00,0.00,False,False
+2025-01,2025-01-01,Walmart Spark,Transfer between accounts,Transfers (Internal),0.00,0.00,0.00,False,False
+2025-01,2025-01-01,FSA Dependent UPMC,Transfer between accounts,Transfers (Internal),0.00,0.00,0.00,False,False
+2025-01,2025-01-01,Capital One Union + Mastercard,Transfer between accounts,Transfers (Internal),0.00,0.00,0.00,False,False
+2025-01,2025-01-01,Capital One QS Mastercard,Transfer between accounts,Transfers (Internal),0.00,0.00,,False,False
+2025-01,2025-01-01,NFCU Checking,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-140.00,,140.00,False,True
+2025-01,2025-01-02,NFCU Cash Rewards Visa,Transportation (Fuel),Transportation Expenses,-31.75,,31.75,False,True
+2025-01,2025-01-02,NFCU Cash Rewards Visa,Personal (Nicotine),Personal/Lifestyle (Discretionary),-59.34,,59.34,False,True
+2025-01,2025-01-02,NFCU Checking,Transfer between accounts,Transfers (Internal),-1317.40,,1317.40,False,False
+2025-01,2025-01-02,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),1317.40,1317.40,,False,False
+2025-01,2025-01-03,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-37.40,,37.40,False,True
+2025-01,2025-01-03,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-01,2025-01-06,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-01,2025-01-06,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-01,2025-01-06,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-01,2025-01-06,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-4.00,,4.00,False,True
+2025-01,2025-01-06,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-124.75,,124.75,False,True
+2025-01,2025-01-06,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-18.16,,18.16,False,True
+2025-01,2025-01-06,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-54.00,,54.00,False,True
+2025-01,2025-01-06,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-30.00,,30.00,False,True
+2025-01,2025-01-07,BofA Checking,Transfer between accounts,Transfers (Internal),-54.00,,54.00,False,False
+2025-01,2025-01-07,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),54.00,54.00,,False,False
+2025-01,2025-01-08,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-40.63,,40.63,False,True
+2025-01,2025-01-08,NFCU Cash Rewards Visa,Personal (Nicotine),Personal/Lifestyle (Discretionary),-69.93,,69.93,False,True
+2025-01,2025-01-09,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-01,2025-01-09,BofA Checking,Transfer between accounts,Transfers (Internal),-124.75,,124.75,False,False
+2025-01,2025-01-09,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-01,2025-01-09,BofA Checking,Transfer between accounts,Transfers (Internal),-18.16,,18.16,False,False
+2025-01,2025-01-09,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),232.91,232.91,0.00,False,False
+2025-01,2025-01-09,NFCU Checking,Transfer between accounts,Transfers (Internal),-160.00,,160.00,False,False
+2025-01,2025-01-09,PenFed Gold Signature Visa,Credit Card Payments,Transfers (Internal),160.00,160.00,,False,False
+2025-01,2025-01-12,PenFed Gold Signature Visa,Finance Charges (Credit Cards),Finance Charges,-112.54,,112.54,False,False
+2025-01,2025-01-13,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-01,2025-01-13,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-16.57,,16.57,False,True
+2025-01,2025-01-13,NFCU Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",14.40,14.40,0.00,True,False
+2025-01,2025-01-13,NFCU Checking,Transfer between accounts,Transfers (Internal),-14.40,,14.40,False,False
+2025-01,2025-01-13,NFCU Savings,Transfer between accounts,Transfers (Internal),14.40,14.40,,False,False
+2025-01,2025-01-13,Capital One QS Mastercard,Loan Payments (Vehicle),Transportation Expenses,-513.00,,513.00,False,True
+2025-01,2025-01-13,Regional Acceptance Auto,Transfer between accounts,Transfers (Internal),513.00,513.00,,False,False
+2025-01,2025-01-14,BofA Checking,Transfer between accounts,Transfers (Internal),-16.57,,16.57,False,False
+2025-01,2025-01-14,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),16.57,16.57,,False,False
+2025-01,2025-01-14,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-18.96,,18.96,False,True
+2025-01,2025-01-15,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2134.30,2134.30,,True,False
+2025-01,2025-01-15,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-01,2025-01-15,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",237.14,237.14,,True,False
+2025-01,2025-01-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-01,2025-01-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-01,2025-01-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-01,2025-01-15,BofA Checking,Utilities (Sewage),Utilities,-260.94,,260.94,False,True
+2025-01,2025-01-15,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-01,2025-01-15,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-01,2025-01-15,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-01,2025-01-15,Macy's Store Card,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-222.60,,222.60,False,True
+2025-01,2025-01-16,Capital One QS Mastercard,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.70,7.70,,True,False
+2025-01,2025-01-16,Capital One QS Mastercard,Credit Card Payments,Transfers (Internal),505.30,505.30,0.00,False,False
+2025-01,2025-01-16,NFCU Checking,Transfer between accounts,Transfers (Internal),-505.30,,505.30,False,False
+2025-01,2025-01-17,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-01,2025-01-17,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-18.42,,18.42,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-60.00,,60.00,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-13.92,,13.92,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Personal (Haircuts),Personal/Lifestyle (Discretionary),-26.00,,26.00,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-61.39,,61.39,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),243.75,243.75,,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-8.33,,8.33,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-6.00,,6.00,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Transportation (Fuel),Transportation Expenses,-31.00,,31.00,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Personal (Nicotine),Personal/Lifestyle (Discretionary),-59.34,,59.34,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-35.12,,35.12,False,True
+2025-01,2025-01-20,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.90,,10.90,False,True
+2025-01,2025-01-21,NFCU Checking,Transfer between accounts,Transfers (Internal),-2000.00,,2000.00,False,False
+2025-01,2025-01-21,PenFed Visa Signature,Credit Card Payments,Transfers (Internal),2000.00,2000.00,,False,False
+2025-01,2025-01-21,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-01,2025-01-22,NFCU Checking,Transfer between accounts,Transfers (Internal),-7.70,,7.70,False,False
+2025-01,2025-01-22,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.70,7.70,,True,False
+2025-01,2025-01-24,NFCU Checking,Daycare,Daycare,-130.00,,130.00,False,True
+2025-01,2025-01-24,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-27.02,,27.02,False,True
+2025-01,2025-01-24,NFCU AMEX,Utilities (Electricity),Utilities,-92.59,,92.59,False,True
+2025-01,2025-01-25,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-21.11,,21.11,False,True
+2025-01,2025-01-26,FSA Dependent,Transfer between accounts,Transfers (Internal),-100.00,,100.00,False,False
+2025-01,2025-01-27,BofA Checking,Utilities (Internet),Utilities,-69.61,,69.61,False,True
+2025-01,2025-01-27,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-39.55,,39.55,False,True
+2025-01,2025-01-28,BofA Checking,Transfer between accounts,Transfers (Internal),-92.59,,92.59,False,False
+2025-01,2025-01-28,NFCU AMEX,Credit Card Payments,Transfers (Internal),92.59,92.59,,False,False
+2025-01,2025-01-28,NFCU AMEX,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-01,2025-01-28,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-38.38,,38.38,False,True
+2025-01,2025-01-29,PenFed Visa Signature,Finance Charges (Credit Cards),Finance Charges,-68.19,,68.19,False,False
+2025-01,2025-01-29,PenFed Visa Signature,Transfer between accounts,Transfers (Internal),2952.42,2952.42,,False,False
+2025-01,2025-01-29,PenFed Gold Signature Visa,Transfer between accounts,Transfers (Internal),7580.00,7580.00,,False,False
+2025-01,2025-01-29,NFCU AMEX,Transfer between accounts,Transfers (Internal),-2952.42,,2952.42,False,False
+2025-01,2025-01-29,NFCU AMEX,Transfer between accounts,Transfers (Internal),-7580.00,,7580.00,False,False
+2025-01,2025-01-29,Macy's Store Card,Transfer between accounts,Transfers (Internal),222.60,222.60,,False,False
+2025-01,2025-01-29,NFCU AMEX,Transfer between accounts,Transfers (Internal),-222.60,,222.60,False,False
+2025-01,2025-01-29,NFCU Checking,Transfer between accounts,Transfers (Internal),100.00,100.00,,False,False
+2025-01,2025-01-29,NFCU AMEX,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-01,2025-01-29,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-01,2025-01-29,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-01,2025-01-30,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.39,21.39,,False,False
+2025-01,2025-01-31,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2103.43,2103.43,,True,False
+2025-01,2025-01-31,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",233.72,233.72,,True,False
+2025-01,2025-01-31,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-01,2025-01-31,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-01,2025-01-31,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-01,2025-01-31,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-01,2025-01-31,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.34,,5.34,False,True
+2025-01,2025-01-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-324.00,,324.00,False,False
+2025-01,2025-01-31,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),324.00,324.00,,False,False
+2025-01,2025-01-31,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-20.00,,20.00,False,True
+2025-01,2025-01-31,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-01,2025-01-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-210.78,,210.78,False,False
+2025-01,2025-01-31,NFCU AMEX,Credit Card Payments,Transfers (Internal),210.78,210.78,,False,False
+2025-01,2025-01-31,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.90,,10.90,False,True
+2025-01,2025-01-31,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.02,0.02,,True,False
+2025-01,2025-01-31,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",1.65,1.65,,True,False
+2025-01,2025-01-31,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",21.54,21.54,,True,False
+2025-02,2025-02-03,NFCU AMEX,Transportation (Satellite Radio),Transportation Expenses,-18.16,,18.16,False,True
+2025-02,2025-02-03,BofA Checking,Transfer between accounts,Transfers (Internal),-18.16,,18.16,False,False
+2025-02,2025-02-03,NFCU AMEX,Credit Card Payments,Transfers (Internal),18.16,18.16,,False,False
+2025-02,2025-02-03,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-02,2025-02-03,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-47.32,,47.32,False,True
+2025-02,2025-02-04,NFCU Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",3.94,3.94,,True,False
+2025-02,2025-02-04,NFCU Checking,Transfer between accounts,Transfers (Internal),-3.94,,3.94,False,False
+2025-02,2025-02-04,NFCU Savings,Transfer between accounts,Transfers (Internal),3.94,3.94,,False,False
+2025-02,2025-02-05,NFCU AMEX,Utilities (Natural Gas),Utilities,-174.86,,174.86,False,True
+2025-02,2025-02-05,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-39.01,,39.01,False,True
+2025-02,2025-02-05,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-13.78,,13.78,False,True
+2025-02,2025-02-06,BofA Checking,Transfer between accounts,Transfers (Internal),-174.86,,174.86,False,False
+2025-02,2025-02-06,NFCU AMEX,Credit Card Payments,Transfers (Internal),174.86,174.86,,False,False
+2025-02,2025-02-06,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-02,2025-02-06,NFCU Checking,Transfer between accounts,Transfers (Internal),212.02,212.02,,False,False
+2025-02,2025-02-06,FSA Dependent,Transfer between accounts,Transfers (Internal),-100.00,,100.00,False,False
+2025-02,2025-02-06,FSA Health,Transfer between accounts,Transfers (Internal),-214.41,,214.41,False,False
+2025-02,2025-02-06,Dasher Direct,Transfer between accounts,Transfers (Internal),-93.12,,93.12,False,False
+2025-02,2025-02-06,NFCU Checking,Transfer between accounts,Transfers (Internal),93.12,93.12,,False,False
+2025-02,2025-02-07,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-02,2025-02-07,NFCU AMEX,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-43.31,,43.31,False,True
+2025-02,2025-02-07,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-37.29,,37.29,False,True
+2025-02,2025-02-09,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-52.50,,52.50,False,True
+2025-02,2025-02-09,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),11.96,11.96,0.00,False,True
+2025-02,2025-02-09,NFCU AMEX,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-54.00,,54.00,False,True
+2025-02,2025-02-10,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-02,2025-02-11,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-02,2025-02-11,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-02,2025-02-11,BofA Checking,Transfer between accounts,Transfers (Internal),-54.00,,54.00,False,False
+2025-02,2025-02-11,NFCU AMEX,Credit Card Payments,Transfers (Internal),54.00,54.00,,False,False
+2025-02,2025-02-11,FSA Dependent,Transfer between accounts,Transfers (Internal),-216.66,,216.66,False,False
+2025-02,2025-02-11,NFCU Checking,Transfer between accounts,Transfers (Internal),280.04,280.04,,False,False
+2025-02,2025-02-11,Capital One QS Mastercard,Loan Payments (Vehicle),Transportation Expenses,-513.00,,513.00,False,True
+2025-02,2025-02-11,NFCU Checking,Transfer between accounts,Transfers (Internal),-505.30,,505.30,False,False
+2025-02,2025-02-11,NFCU Checking,Transfer between accounts,Transfers (Internal),-7.70,,7.70,False,False
+2025-02,2025-02-11,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.70,7.70,,True,False
+2025-02,2025-02-11,NFCU Checking,Transfer between accounts,Transfers (Internal),-1500.00,,1500.00,False,False
+2025-02,2025-02-11,NFCU AMEX,Credit Card Payments,Transfers (Internal),1500.00,1500.00,,False,False
+2025-02,2025-02-12,NFCU Checking,Taxes (Local - Refund),Tax Refund,50.00,50.00,,False,False
+2025-02,2025-02-12,NFCU AMEX,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-02,2025-02-12,NFCU AMEX,Utilities (Streaming Services),Utilities,-16.57,,16.57,False,True
+2025-02,2025-02-12,PenFed Gold Signature Visa,Finance Charges (Credit Cards),Finance Charges,-64.99,,64.99,False,False
+2025-02,2025-02-13,BofA Checking,Transfer between accounts,Transfers (Internal),-16.57,,16.57,False,False
+2025-02,2025-02-13,NFCU AMEX,Credit Card Payments,Transfers (Internal),16.57,16.57,,False,False
+2025-02,2025-02-14,Capital One QS Mastercard,Credit Card Payments,Transfers (Internal),505.30,505.30,,False,False
+2025-02,2025-02-14,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-02,2025-02-14,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",237.15,237.15,,True,False
+2025-02,2025-02-14,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2134.30,2134.30,,True,False
+2025-02,2025-02-14,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-02,2025-02-14,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-02,2025-02-14,NFCU Checking,Gifts (Valentine's Day),Gifts (Discretionary),-36.00,,36.00,False,True
+2025-02,2025-02-14,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-02,2025-02-14,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-25.01,,25.01,False,True
+2025-02,2025-02-14,NFCU AMEX,Gifts (Valentine's Day),Gifts (Discretionary),-28.10,,28.10,False,True
+2025-02,2025-02-14,NFCU AMEX,Gifts (Valentine's Day),Gifts (Discretionary),-7.00,,7.00,False,True
+2025-02,2025-02-14,NFCU AMEX,Gifts (Valentine's Day),Gifts (Discretionary),-52.32,,52.32,False,True
+2025-02,2025-02-14,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-13.60,,13.60,False,True
+2025-02,2025-02-15,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-02,2025-02-15,Capital One QS Mastercard,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.70,7.70,,True,False
+2025-02,2025-02-16,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-72.98,,72.98,False,True
+2025-02,2025-02-18,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-02,2025-02-18,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-02,2025-02-18,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-02,2025-02-18,BofA Checking,Transfer between accounts,Transfers (Internal),-200.00,,200.00,False,False
+2025-02,2025-02-18,Lending Club Savings,Transfer between accounts,Transfers (Internal),200.00,200.00,,False,False
+2025-02,2025-02-18,PenFed Gold Signature Visa,Transfer between accounts,Transfers (Internal),64.99,64.99,0.00,False,False
+2025-02,2025-02-18,NFCU AMEX,Transfer between accounts,Transfers (Internal),-64.99,,64.99,False,False
+2025-02,2025-02-20,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-61.40,,61.40,False,True
+2025-02,2025-02-20,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-61.57,,61.57,False,True
+2025-02,2025-02-20,BofA Checking,Taxes (Federal - Refund),Tax Refund,3498.00,3498.00,,False,False
+2025-02,2025-02-20,BofA Checking,Transfer between accounts,Transfers (Internal),-1749.00,,1749.00,False,False
+2025-02,2025-02-20,NFCU AMEX,Credit Card Payments,Transfers (Internal),1749.00,1749.00,,False,False
+2025-02,2025-02-20,NFCU AMEX,Clothing (Adult),Clothing (Adult/Child),-59.50,,59.50,False,True
+2025-02,2025-02-21,NFCU Checking,Daycare,Daycare,-50.00,,50.00,False,True
+2025-02,2025-02-21,BofA Checking,Transportation (Fuel),Transportation Expenses,-48.13,,48.13,False,True
+2025-02,2025-02-21,BofA Checking,Transfer between accounts,Transfers (Internal),-1700.00,0.00,1700.00,False,False
+2025-02,2025-02-23,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-18.40,,18.40,False,True
+2025-02,2025-02-24,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-8.46,,8.46,False,True
+2025-02,2025-02-25,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),16.80,16.80,,False,False
+2025-02,2025-02-25,NFCU Checking,Transfer between accounts,Transfers (Internal),-16.80,,16.80,False,False
+2025-02,2025-02-25,BofA Checking,Taxes (State - Refund),Tax Refund,132.00,132.00,,False,False
+2025-02,2025-02-25,BofA Checking,Utilities (Water),Utilities,-131.36,,131.36,False,True
+2025-02,2025-02-25,NFCU AMEX,Utilities (Electricity),Utilities,-98.51,,98.51,False,True
+2025-02,2025-02-25,BofA Checking,Transfer between accounts,Transfers (Internal),-98.51,,98.51,False,False
+2025-02,2025-02-25,NFCU AMEX,Credit Card Payments,Transfers (Internal),98.51,98.51,,False,False
+2025-02,2025-02-25,Lending Club Savings,Transfer between accounts,Transfers (Internal),150.00,150.00,,False,False
+2025-02,2025-02-25,BofA Checking,Transfer between accounts,Transfers (Internal),-150.00,,150.00,False,False
+2025-02,2025-02-25,NFCU AMEX,Pets (Vet),Pets,-550.00,,550.00,False,True
+2025-02,2025-02-25,FSA Health,Transfer between accounts,Transfers (Internal),-97.98,,97.98,False,False
+2025-02,2025-02-25,FSA Dependent,Transfer between accounts,Transfers (Internal),-155.01,,155.01,False,False
+2025-02,2025-02-25,NFCU Checking,Transfer between accounts,Transfers (Internal),345.32,345.32,,False,False
+2025-02,2025-02-26,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-25.42,,25.42,False,True
+2025-02,2025-02-27,NFCU Cash Rewards Visa,Healthcare (Bloodwork/Tests),Medical/Healthcare,-6.36,,6.36,False,True
+2025-02,2025-02-27,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-50.00,,50.00,False,True
+2025-02,2025-02-28,NFCU AMEX,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-02,2025-02-28,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-02,2025-02-28,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-23.50,,23.50,False,True
+2025-02,2025-02-28,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-02,2025-02-28,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",233.71,233.71,,True,False
+2025-02,2025-02-28,BofA Checking,Utilities (Internet),Utilities,-74.61,,74.61,False,True
+2025-02,2025-02-28,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-35.00,,35.00,False,True
+2025-02,2025-02-28,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",200.01,200.01,,True,False
+2025-02,2025-02-28,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2103.43,2103.43,,True,False
+2025-02,2025-02-28,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-02,2025-02-28,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-02,2025-02-28,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.02,0.02,,True,False
+2025-02,2025-02-28,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",1.55,1.55,,True,False
+2025-02,2025-02-28,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",19.50,19.50,,True,False
+2025-03,2025-03-03,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-03,2025-03-03,NFCU AMEX,Credit Card Payments,Transfers (Internal),21.39,21.39,,False,False
+2025-03,2025-03-03,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-03,2025-03-03,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-03,2025-03-03,NFCU AMEX,Transportation (Satellite Radio),Transportation Expenses,-18.16,,18.16,False,True
+2025-03,2025-03-03,BofA Checking,Transfer between accounts,Transfers (Internal),-18.16,,18.16,False,False
+2025-03,2025-03-03,NFCU AMEX,Credit Card Payments,Transfers (Internal),18.16,18.16,,False,False
+2025-03,2025-03-03,NFCU Checking,Transfer between accounts,Transfers (Internal),-2500.00,,2500.00,False,False
+2025-03,2025-03-03,NFCU AMEX,Credit Card Payments,Transfers (Internal),2500.00,2500.00,,False,False
+2025-03,2025-03-03,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-39.45,,39.45,False,True
+2025-03,2025-03-03,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",4.15,4.15,,True,False
+2025-03,2025-03-04,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.34,,5.34,False,True
+2025-03,2025-03-04,NFCU Checking,Transfer between accounts,Transfers (Internal),-7.63,,7.63,False,False
+2025-03,2025-03-07,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-61.40,,61.40,False,True
+2025-03,2025-03-07,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-180.82,,180.82,False,True
+2025-03,2025-03-07,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-9.87,,9.87,False,True
+2025-03,2025-03-07,BofA Checking,Transfer between accounts,Transfers (Internal),-180.82,,180.82,False,False
+2025-03,2025-03-07,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),180.82,180.82,,False,False
+2025-03,2025-03-07,Capital One QS Mastercard,Loan Payments (Vehicle),Transportation Expenses,-513.00,,513.00,False,True
+2025-03,2025-03-07,Regional Acceptance Auto,Transfer between accounts,Transfers (Internal),513.00,513.00,,False,False
+2025-03,2025-03-10,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-19.41,,19.41,False,True
+2025-03,2025-03-10,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-44.33,,44.33,False,True
+2025-03,2025-03-10,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-03,2025-03-10,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",15.62,15.62,0.00,True,False
+2025-03,2025-03-10,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-54.00,,54.00,False,True
+2025-03,2025-03-10,NFCU Checking,Transfer between accounts,Transfers (Internal),-7.70,,7.70,False,False
+2025-03,2025-03-11,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-03,2025-03-11,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-03,2025-03-11,BofA Checking,Transfer between accounts,Transfers (Internal),-54.00,,54.00,False,False
+2025-03,2025-03-11,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-03,2025-03-11,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),54.00,54.00,,False,False
+2025-03,2025-03-13,NFCU Checking,Transfer between accounts,Transfers (Internal),238.28,238.28,,False,False
+2025-03,2025-03-13,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-03,2025-03-13,FSA Health,Transfer between accounts,Transfers (Internal),-83.27,,83.27,False,False
+2025-03,2025-03-13,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-03,2025-03-13,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-03,2025-03-13,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-20.00,,20.00,False,True
+2025-03,2025-03-13,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-03,2025-03-13,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-4.17,,4.17,False,False
+2025-03,2025-03-13,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-03,2025-03-13,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),19.25,19.25,,False,False
+2025-03,2025-03-13,Capital One QS Mastercard,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.70,7.70,,True,False
+2025-03,2025-03-14,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2134.30,2134.30,,True,False
+2025-03,2025-03-14,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",237.15,237.15,,True,False
+2025-03,2025-03-14,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-03,2025-03-14,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-03,2025-03-14,NFCU Checking,Transfer between accounts,Transfers (Internal),-505.30,,505.30,False,False
+2025-03,2025-03-14,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-03,2025-03-14,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-03,2025-03-14,Capital One QS Mastercard,Credit Card Payments,Transfers (Internal),505.30,505.30,,False,False
+2025-03,2025-03-14,NFCU AMEX,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-25.67,,25.67,False,True
+2025-03,2025-03-14,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-61.68,,61.68,False,True
+2025-03,2025-03-15,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-373.27,,373.27,False,True
+2025-03,2025-03-16,NFCU AMEX,Pets (Emergency),Pets,-12.00,,12.00,False,True
+2025-03,2025-03-16,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-27.01,,27.01,False,True
+2025-03,2025-03-16,NFCU Cash Rewards Visa,Pets (Emergency),Pets,-1083.37,,1083.37,False,True
+2025-03,2025-03-16,NFCU Cash Rewards Visa,Pets (Emergency),Pets,-475.03,,475.03,False,True
+2025-03,2025-03-17,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-03,2025-03-17,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-03,2025-03-17,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-03,2025-03-17,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-97.80,,97.80,False,True
+2025-03,2025-03-17,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-98.66,,98.66,False,True
+2025-03,2025-03-17,BofA Checking,Transfer between accounts,Transfers (Internal),-98.66,,98.66,False,False
+2025-03,2025-03-17,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),98.66,98.66,,False,False
+2025-03,2025-03-18,NFCU Checking,Transfer between accounts,Transfers (Internal),54.20,54.20,,False,False
+2025-03,2025-03-18,FSA Health,Transfer between accounts,Transfers (Internal),-54.20,,54.20,False,False
+2025-03,2025-03-18,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",32.06,32.06,,True,False
+2025-03,2025-03-19,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-03,2025-03-20,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-5.82,,5.82,False,True
+2025-03,2025-03-23,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-03,2025-03-23,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-18.40,,18.40,False,True
+2025-03,2025-03-24,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-24.00,,24.00,False,True
+2025-03,2025-03-24,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-03,2025-03-24,NFCU Savings,Transfer between accounts,Transfers (Internal),11.13,11.13,,False,False
+2025-03,2025-03-24,NFCU Cash Rewards Visa,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",11.13,11.13,0.00,True,False
+2025-03,2025-03-24,NFCU Checking,Transfer between accounts,Transfers (Internal),-11.13,,11.13,False,False
+2025-03,2025-03-25,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-12.76,,12.76,False,True
+2025-03,2025-03-25,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.26,,10.26,False,True
+2025-03,2025-03-25,NFCU Checking,Transfer between accounts,Transfers (Internal),322.80,322.80,,False,False
+2025-03,2025-03-25,FSA Dependent,Transfer between accounts,Transfers (Internal),-200.00,,200.00,False,False
+2025-03,2025-03-25,FSA Health,Transfer between accounts,Transfers (Internal),-122.80,,122.80,False,False
+2025-03,2025-03-27,NFCU Checking,Daycare,Daycare,-50.00,,50.00,False,True
+2025-03,2025-03-27,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-7.25,,7.25,False,True
+2025-03,2025-03-28,BofA Checking,Utilities (Internet),Utilities,-25.16,,25.16,False,True
+2025-03,2025-03-28,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-03,2025-03-28,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2134.57,2134.57,,True,False
+2025-03,2025-03-28,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-03,2025-03-28,NFCU Cash Rewards Visa,Clothing (Kids),Clothing (Adult/Child),-53.49,,53.49,False,True
+2025-03,2025-03-28,NFCU Cash Rewards Visa,Personal (Haircuts),Personal/Lifestyle (Discretionary),-26.00,,26.00,False,True
+2025-03,2025-03-28,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-25.42,,25.42,False,True
+2025-03,2025-03-28,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",237.17,237.17,,True,False
+2025-03,2025-03-29,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-03,2025-03-29,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-23.41,,23.41,False,True
+2025-03,2025-03-29,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-03,2025-03-29,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.39,21.39,,False,False
+2025-03,2025-03-29,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-03,2025-03-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-2342.38,,2342.38,False,False
+2025-03,2025-03-31,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),2342.38,2342.38,,False,False
+2025-03,2025-03-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-1400.00,,1400.00,False,False
+2025-03,2025-03-31,NFCU AMEX,Credit Card Payments,Transfers (Internal),1400.00,1400.00,,False,False
+2025-03,2025-03-31,BofA Checking,Utilities (Sanitation),Utilities,-376.32,,376.32,False,True
+2025-03,2025-03-31,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.02,0.02,,True,False
+2025-03,2025-03-31,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",2.49,2.49,,True,False
+2025-03,2025-03-31,FSA Dependent,Transfer between accounts,Transfers (Internal),-61.65,,61.65,False,False
+2025-03,2025-03-31,FSA Health,Transfer between accounts,Transfers (Internal),-43.40,,43.40,False,False
+2025-03,2025-03-31,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",23.42,23.42,,True,False
+2025-04,2025-04-01,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-04,2025-04-01,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-04,2025-04-01,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-04,2025-04-01,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-28.01,,28.01,False,True
+2025-04,2025-04-01,NFCU Checking,Transfer between accounts,Transfers (Internal),105.05,105.05,0.00,False,False
+2025-04,2025-04-01,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.34,,5.34,False,True
+2025-04,2025-04-02,NFCU Checking,Daycare,Daycare,-150.00,,150.00,False,True
+2025-04,2025-04-03,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-50.00,,50.00,False,True
+2025-04,2025-04-03,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-21.38,,21.38,False,True
+2025-04,2025-04-04,BofA Checking,Transfer between accounts,Transfers (Internal),-21.38,,21.38,False,False
+2025-04,2025-04-04,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.38,21.38,,False,False
+2025-04,2025-04-04,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-6.35,,6.35,False,True
+2025-04,2025-04-07,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-155.58,,155.58,False,True
+2025-04,2025-04-07,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-04,2025-04-07,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-53.85,,53.85,False,True
+2025-04,2025-04-07,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-54.00,,54.00,False,True
+2025-04,2025-04-08,NFCU Checking,Transfer between accounts,Transfers (Internal),182.17,182.17,,False,False
+2025-04,2025-04-08,FSA Dependent,Transfer between accounts,Transfers (Internal),-138.35,,138.35,False,False
+2025-04,2025-04-08,FSA Health,Transfer between accounts,Transfers (Internal),-43.82,,43.82,False,False
+2025-04,2025-04-08,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",57.89,57.89,,True,False
+2025-04,2025-04-08,BofA Checking,Transfer between accounts,Transfers (Internal),-155.58,,155.58,False,False
+2025-04,2025-04-08,BofA Checking,Transfer between accounts,Transfers (Internal),-54.00,,54.00,False,False
+2025-04,2025-04-08,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-04,2025-04-08,NFCU Checking,Transfer between accounts,Transfers (Internal),-250.00,,250.00,False,False
+2025-04,2025-04-08,Lending Club Savings,Transfer between accounts,Transfers (Internal),250.00,250.00,,False,False
+2025-04,2025-04-09,NFCU Checking,Transfer between accounts,Transfers (Internal),155.58,155.58,0.00,False,False
+2025-04,2025-04-09,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-04,2025-04-09,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),54.00,54.00,,False,False
+2025-04,2025-04-10,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-30.53,,30.53,False,True
+2025-04,2025-04-10,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-9.84,,9.84,False,True
+2025-04,2025-04-11,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-04,2025-04-11,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-04,2025-04-11,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-04,2025-04-12,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-20.67,,20.67,False,True
+2025-04,2025-04-14,NFCU Checking,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-25.41,,25.41,False,True
+2025-04,2025-04-14,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-4.30,,4.30,False,False
+2025-04,2025-04-14,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-39.51,,39.51,False,True
+2025-04,2025-04-14,NFCU Cash Rewards Visa,Gifts (Easter),Gifts (Discretionary),-54.98,21.98,76.96,False,True
+2025-04,2025-04-14,NFCU Cash Rewards Visa,Grocery (Household-Cleaning/Health&Beauty),Grocery (Food/Cleaning/Pet/Health&Beauty),-44.50,,44.50,False,True
+2025-04,2025-04-15,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2179.02,2179.02,,True,False
+2025-04,2025-04-15,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-04,2025-04-15,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-04,2025-04-15,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-04,2025-04-15,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",242.11,242.11,,True,False
+2025-04,2025-04-15,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-04,2025-04-15,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),19.25,19.25,,False,False
+2025-04,2025-04-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-04,2025-04-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-04,2025-04-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-04,2025-04-15,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-60.83,,60.83,False,True
+2025-04,2025-04-15,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-30.75,,30.75,False,True
+2025-04,2025-04-15,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-60.00,,60.00,False,True
+2025-04,2025-04-15,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-57.14,,57.14,False,True
+2025-04,2025-04-16,BofA Checking,Utilities (Sewage),Utilities,-228.94,,228.94,False,True
+2025-04,2025-04-16,NFCU Checking,Transfer between accounts,Transfers (Internal),69.98,69.98,,False,False
+2025-04,2025-04-16,FSA Dependent,Transfer between accounts,Transfers (Internal),-69.98,,69.98,False,False
+2025-04,2025-04-16,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-41.65,,41.65,False,True
+2025-04,2025-04-16,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-561.00,,561.00,False,True
+2025-04,2025-04-16,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),-18410.26,0.00,18410.26,False,False
+2025-04,2025-04-16,Regional Acceptance Auto,Transfer between accounts,Transfers (Internal),18459.04,18459.04,,False,False
+2025-04,2025-04-16,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),561.00,561.00,,False,False
+2025-04,2025-04-17,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-21.19,,21.19,False,True
+2025-04,2025-04-17,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-15.35,,15.35,False,True
+2025-04,2025-04-17,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-04,2025-04-17,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-04,2025-04-17,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-5.82,,5.82,False,True
+2025-04,2025-04-18,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-32.79,,32.79,False,True
+2025-04,2025-04-18,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",6.59,6.59,,True,False
+2025-04,2025-04-19,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-36.98,,36.98,False,True
+2025-04,2025-04-19,NFCU AMEX,Entertainment (Bakery),Entertainment (Travel/Attractions/Dining),-64.50,,64.50,False,True
+2025-04,2025-04-21,NFCU Cash Rewards Visa,Healthcare (Medical Devices),Medical/Healthcare,-21.47,,21.47,False,True
+2025-04,2025-04-21,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-10.70,,10.70,False,True
+2025-04,2025-04-21,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-34.71,,34.71,False,True
+2025-04,2025-04-21,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-42.56,,42.56,False,True
+2025-04,2025-04-21,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-23.41,,23.41,False,True
+2025-04,2025-04-22,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-105.87,,105.87,False,True
+2025-04,2025-04-22,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-140.68,,140.68,False,True
+2025-04,2025-04-23,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-04,2025-04-23,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-04,2025-04-23,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-2.77,,2.77,False,True
+2025-04,2025-04-23,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-2.74,,2.74,False,True
+2025-04,2025-04-23,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-30.00,,30.00,False,True
+2025-04,2025-04-24,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",9.10,9.10,,True,False
+2025-04,2025-04-24,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-04,2025-04-24,NFCU Checking,Daycare,Daycare,-70.00,,70.00,False,True
+2025-04,2025-04-25,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-04,2025-04-26,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-25.42,,25.42,False,True
+2025-04,2025-04-29,BofA Checking,Transfer between accounts,Transfers (Internal),-140.68,0.00,140.68,False,False
+2025-04,2025-04-29,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),140.68,140.68,,False,False
+2025-04,2025-04-29,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-04,2025-04-29,BofA Checking,Utilities (Internet),Utilities,-44.99,,44.99,False,True
+2025-04,2025-04-30,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-04,2025-04-30,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.39,21.39,,False,False
+2025-04,2025-04-30,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",1902.02,1902.02,,True,False
+2025-04,2025-04-30,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-04,2025-04-30,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",211.34,211.34,,True,False
+2025-04,2025-04-30,FSA Health,Transfer between accounts,Transfers (Internal),-121.80,,121.80,False,False
+2025-04,2025-04-30,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-04,2025-04-30,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-04,2025-04-30,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-973.41,,973.41,False,True
+2025-04,2025-04-30,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.34,,5.34,False,True
+2025-04,2025-04-30,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.02,0.02,,True,False
+2025-04,2025-04-30,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",2.69,2.69,,True,False
+2025-04,2025-04-30,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-9.19,,9.19,False,True
+2025-04,2025-04-30,NFCU AMEX,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-14.60,,14.60,False,True
+2025-04,2025-04-30,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",26.49,26.49,,True,False
+2025-04,2025-04-30,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-15.23,,15.23,False,True
+2025-05,2025-05-01,NFCU Checking,Transfer between accounts,Transfers (Internal),121.98,121.98,,False,False
+2025-05,2025-05-01,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-05,2025-05-01,NFCU Checking,Transfer between accounts,Transfers (Internal),-722.46,,722.46,False,False
+2025-05,2025-05-01,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),722.46,722.46,,False,False
+2025-05,2025-05-01,NFCU Checking,Transfer between accounts,Transfers (Internal),-1900.00,,1900.00,False,False
+2025-05,2025-05-01,NFCU AMEX,Credit Card Payments,Transfers (Internal),1900.00,1900.00,,False,False
+2025-05,2025-05-01,Lending Club Savings,Transfer between accounts,Transfers (Internal),250.00,250.00,,False,False
+2025-05,2025-05-01,NFCU Checking,Transfer between accounts,Transfers (Internal),-250.00,,250.00,False,False
+2025-05,2025-05-01,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-110.81,,110.81,False,True
+2025-05,2025-05-01,BofA Checking,Transfer between accounts,Transfers (Internal),-110.81,0.00,110.81,False,False
+2025-05,2025-05-01,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),110.81,110.81,,False,False
+2025-05,2025-05-01,NFCU Vehicle Loan,Finance Charges (Loans),Finance Charges,-87.61,,87.61,False,False
+2025-05,2025-05-02,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-17.75,,17.75,False,True
+2025-05,2025-05-02,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-05,2025-05-02,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-23.41,,23.41,False,True
+2025-05,2025-05-05,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-21.38,,21.38,False,True
+2025-05,2025-05-05,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",23.34,23.34,,True,False
+2025-05,2025-05-05,BofA Checking,Transfer between accounts,Transfers (Internal),-21.38,,21.38,False,False
+2025-05,2025-05-05,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.38,21.38,,False,False
+2025-05,2025-05-05,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-237.09,,237.09,False,True
+2025-05,2025-05-05,NFCU Checking,Transfer between accounts,Transfers (Internal),233.75,233.75,,False,False
+2025-05,2025-05-05,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-05,2025-05-05,FSA Health,Transfer between accounts,Transfers (Internal),-25.42,,25.42,False,False
+2025-05,2025-05-05,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-50.00,,50.00,False,True
+2025-05,2025-05-05,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-87.37,,87.37,False,True
+2025-05,2025-05-05,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-34.00,,34.00,False,True
+2025-05,2025-05-06,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-69.50,,69.50,False,True
+2025-05,2025-05-06,NFCU Checking,Daycare,Daycare,-50.00,,50.00,False,True
+2025-04,2025-04-30,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",314.87,314.87,,True,False
+2025-05,2025-05-07,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-18.00,,18.00,False,True
+2025-05,2025-05-08,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-54.00,,54.00,False,True
+2025-05,2025-05-08,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-561.00,,561.00,False,True
+2025-05,2025-05-08,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),561.00,561.00,,False,False
+2025-05,2025-05-08,BofA Checking,Transfer between accounts,Transfers (Internal),-54.00,,54.00,False,False
+2025-05,2025-05-08,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),54.00,54.00,,False,False
+2025-05,2025-05-08,NFCU Cash Rewards Visa,Gifts (Easter),Gifts (Discretionary),-25.00,,25.00,False,True
+2025-05,2025-05-08,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-05,2025-05-09,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-05,2025-05-09,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-05,2025-05-09,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-05,2025-05-09,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-05,2025-05-09,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-11.17,,11.17,False,True
+2025-05,2025-05-09,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-23.87,,23.87,False,True
+2025-05,2025-05-09,NFCU Cash Rewards Visa,Transportation (Vehicle Maintenance/Repair),Transportation Expenses,-267.32,,267.32,False,True
+2025-05,2025-05-10,NFCU Cash Rewards Visa,Gifts (Mother's Day),Gifts (Discretionary),-73.83,,73.83,False,True
+2025-05,2025-05-10,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-05,2025-05-10,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.26,,10.26,False,True
+2025-05,2025-05-12,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",11.26,11.26,,True,False
+2025-05,2025-05-12,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-05,2025-05-12,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),19.25,19.25,,False,False
+2025-05,2025-05-12,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-66.71,,66.71,False,True
+2025-05,2025-05-12,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-6.14,,6.14,False,False
+2025-05,2025-05-13,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-76.98,,76.98,False,True
+2025-05,2025-05-13,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-26.00,,26.00,False,True
+2025-05,2025-05-13,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-05,2025-05-13,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-8.79,,8.79,False,True
+2025-05,2025-05-13,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",9.33,9.33,,True,False
+2025-05,2025-05-14,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2216.29,2216.29,,True,False
+2025-05,2025-05-14,NFCU Cash Rewards Visa,Grocery (Household-Cleaning/Health&Beauty),Grocery (Food/Cleaning/Pet/Health&Beauty),-9.60,,9.60,False,True
+2025-05,2025-05-14,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-05,2025-05-14,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-35.00,,35.00,False,True
+2025-05,2025-05-15,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-05,2025-05-15,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-05,2025-05-15,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",246.25,246.25,,True,False
+2025-05,2025-05-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-05,2025-05-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-05,2025-05-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-05,2025-05-15,NFCU Vehicle Loan,Finance Charges (Loans),Finance Charges,-117.92,,117.92,False,False
+2025-05,2025-05-15,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-05,2025-05-16,NFCU Checking,Gifts (Birthday),Gifts (Discretionary),-120.00,,120.00,False,True
+2025-05,2025-05-16,NFCU Checking,ATM Fees,Finance Charges,-4.95,,4.95,False,False
+2025-05,2025-05-16,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-05,2025-05-18,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-12.13,,12.13,False,True
+2025-05,2025-05-19,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",200.00,200.00,,True,False
+2025-05,2025-05-19,FSA Dependent,Transfer between accounts,Transfers (Internal),-163.36,,163.36,False,False
+2025-05,2025-05-19,FSA Health,Transfer between accounts,Transfers (Internal),-101.98,,101.98,False,False
+2025-05,2025-05-19,NFCU Checking,Transfer between accounts,Transfers (Internal),265.34,265.34,,False,False
+2025-05,2025-05-19,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-13.87,,13.87,False,True
+2025-05,2025-05-21,BofA Checking,Utilities (Water),Utilities,-124.61,,124.61,False,True
+2025-05,2025-05-21,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-5.29,,5.29,False,True
+2025-05,2025-05-21,NFCU Checking,Healthcare (Medication),Medical/Healthcare,-158.00,,158.00,False,True
+2025-05,2025-05-21,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-26.52,,26.52,False,True
+2025-05,2025-05-22,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-29.00,,29.00,False,True
+2025-05,2025-05-22,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-05,2025-05-22,NFCU Cash Rewards Visa,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-213.81,,213.81,False,True
+2025-05,2025-05-23,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-05,2025-05-23,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-05,2025-05-23,NFCU AMEX,Gifts (Special Occasion),Gifts (Discretionary),-20.00,,20.00,False,True
+2025-05,2025-05-26,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-05,2025-05-26,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-12.16,,12.16,False,True
+2025-05,2025-05-26,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-27.42,,27.42,False,True
+2025-05,2025-05-26,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-7.99,,7.99,False,True
+2025-05,2025-05-27,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",7.26,7.26,,True,False
+2025-05,2025-05-27,BofA Checking,Utilities (Internet),Utilities,-44.99,,44.99,False,True
+2025-05,2025-05-27,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-05,2025-05-28,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-05,2025-05-28,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.39,21.39,,False,False
+2025-05,2025-05-28,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-108.76,,108.76,False,True
+2025-05,2025-05-28,BofA Checking,Transfer between accounts,Transfers (Internal),-108.76,,108.76,False,False
+2025-05,2025-05-28,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),108.76,108.76,,False,False
+2025-05,2025-05-28,NFCU Cash Rewards Visa,Healthcare (PCP-CoPay),Medical/Healthcare,-30.00,,30.00,False,True
+2025-05,2025-05-29,NFCU Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",5.94,5.94,,True,False
+2025-05,2025-05-29,NFCU Checking,Transfer between accounts,Transfers (Internal),-5.94,,5.94,False,False
+2025-05,2025-05-29,NFCU Savings,Transfer between accounts,Transfers (Internal),5.94,5.94,,False,False
+2025-05,2025-05-30,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2185.42,2185.42,,True,False
+2025-05,2025-05-30,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",242.82,242.82,,True,False
+2025-05,2025-05-30,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-05,2025-05-30,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-05,2025-05-30,FSA Dependent,Transfer between accounts,Transfers (Internal),-44.97,,44.97,False,False
+2025-05,2025-05-30,FSA Health,Transfer between accounts,Transfers (Internal),-50.00,,50.00,False,False
+2025-05,2025-05-30,NFCU Checking,Transfer between accounts,Transfers (Internal),94.97,94.97,,False,False
+2025-05,2025-05-30,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",4.66,4.66,,True,False
+2025-05,2025-05-30,NFCU Checking,Transfer between accounts,Transfers (Internal),-1803.57,,1803.57,False,False
+2025-05,2025-05-30,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),1803.57,1803.57,,False,False
+2025-05,2025-05-30,NFCU Checking,Transfer between accounts,Transfers (Internal),-1400.00,,1400.00,False,False
+2025-05,2025-05-30,NFCU AMEX,Credit Card Payments,Transfers (Internal),1400.00,1400.00,,False,False
+2025-05,2025-05-30,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-44.61,,44.61,False,True
+2025-05,2025-05-30,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-32.71,,32.71,False,True
+2025-05,2025-05-30,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-18.17,,18.17,False,True
+2025-05,2025-05-31,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",3.24,3.24,,True,False
+2025-05,2025-05-31,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.16,0.16,,True,False
+2025-05,2025-05-31,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-05,2025-05-31,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-45.89,,45.89,False,True
+2025-05,2025-05-31,NFCU AMEX,Entertainment (Bakery),Entertainment (Travel/Attractions/Dining),-9.99,,9.99,False,True
+2025-05,2025-05-31,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-05,2025-05-31,NFCU Cash Rewards Visa,Personal (Haircuts),Personal/Lifestyle (Discretionary),-47.00,,47.00,False,True
+2025-05,2025-05-31,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-53.03,37.05,90.08,False,True
+2025-05,2025-05-31,NFCU Cash Rewards Visa,Clothing (Adult),Clothing (Adult/Child),0.00,8.47,8.47,False,True
+2025-05,2025-05-31,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",28.60,28.60,,True,False
+2025-06,2025-06-01,BofA Checking,Transfer between accounts,Transfers (Internal),-67.06,,67.06,False,False
+2025-06,2025-06-01,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),67.06,67.06,,False,False
+2025-06,2025-06-02,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-21.38,,21.38,False,True
+2025-06,2025-06-02,BofA Checking,Transfer between accounts,Transfers (Internal),-21.38,,21.38,False,False
+2025-06,2025-06-02,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.38,21.38,,False,False
+2025-06,2025-06-02,Lending Club Savings,Transfer between accounts,Transfers (Internal),250.00,250.00,,False,False
+2025-06,2025-06-02,BofA Checking,Transfer between accounts,Transfers (Internal),-250.00,,250.00,False,False
+2025-06,2025-06-03,NFCU Checking,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-52.34,,52.34,False,True
+2025-06,2025-06-03,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-11.65,,11.65,False,True
+2025-06,2025-06-03,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-32.27,,32.27,False,True
+2025-06,2025-06-03,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-43.01,,43.01,False,True
+2025-06,2025-06-03,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-2.59,,2.59,False,True
+2025-06,2025-06-04,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-67.06,,67.06,False,True
+2025-06,2025-06-04,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-66.22,,66.22,False,True
+2025-06,2025-06-04,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-11.82,1.29,13.11,False,True
+2025-06,2025-06-04,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-817.62,,817.62,False,True
+2025-06,2025-06-05,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-11.58,,11.58,False,True
+2025-06,2025-06-05,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-21.63,,21.63,False,True
+2025-06,2025-06-06,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-06,2025-06-06,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.87,,5.87,False,True
+2025-06,2025-06-06,NFCU Checking,Daycare,Daycare,-147.28,,147.28,False,True
+2025-06,2025-06-06,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-16.04,,16.04,False,True
+2025-06,2025-06-06,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-19.35,,19.35,False,True
+2025-06,2025-06-07,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-40.00,,40.00,False,True
+2025-06,2025-06-07,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-39.51,,39.51,False,True
+2025-06,2025-06-07,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-19.47,,19.47,False,True
+2025-06,2025-06-07,NFCU AMEX,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-47.02,,47.02,False,True
+2025-06,2025-06-07,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-358.81,,358.81,False,True
+2025-06,2025-06-07,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-6.41,,6.41,False,True
+2025-06,2025-06-08,NFCU Checking,Daycare,Daycare,-150.00,,150.00,False,True
+2025-06,2025-06-08,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-2.98,,2.98,False,True
+2025-06,2025-06-08,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",23.35,23.35,,True,False
+2025-06,2025-06-08,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-240.00,,240.00,False,True
+2025-06,2025-06-08,NFCU Cash Rewards Visa,Entertainment (Travel),Entertainment (Travel/Attractions/Dining),-105.00,,105.00,False,True
+2025-06,2025-06-09,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-11.79,,11.79,False,True
+2025-06,2025-06-10,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-06,2025-06-10,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",12.11,12.11,,True,False
+2025-06,2025-06-10,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-10,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-06,2025-06-10,FSA Health,Transfer between accounts,Transfers (Internal),-100.89,,100.89,False,False
+2025-06,2025-06-10,NFCU Checking,Transfer between accounts,Transfers (Internal),309.22,309.22,,False,False
+2025-06,2025-06-11,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-06,2025-06-11,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-06,2025-06-11,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-11,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-12.90,,12.90,False,True
+2025-06,2025-06-11,NFCU Cash Rewards Visa,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-47.62,,47.62,False,True
+2025-06,2025-06-11,NFCU AMEX,Healthcare (Medication),Medical/Healthcare,-119.64,,119.64,False,True
+2025-06,2025-06-12,NFCU Checking,Daycare,Daycare,-133.52,,133.52,False,True
+2025-06,2025-06-12,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-06,2025-06-12,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-06,2025-06-13,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),19.25,19.25,,False,False
+2025-06,2025-06-13,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-06,2025-06-13,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2216.29,2216.29,,True,False
+2025-06,2025-06-13,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-06,2025-06-13,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",246.25,246.25,,True,False
+2025-06,2025-06-13,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,0.00,184.67,False,True
+2025-06,2025-06-14,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-06,2025-06-14,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-561.00,,561.00,False,True
+2025-06,2025-06-14,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",5.80,5.80,,True,False
+2025-06,2025-06-14,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-6.40,,6.40,False,False
+2025-06,2025-06-14,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-22.52,,22.52,False,True
+2025-06,2025-06-14,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),561.00,561.00,,False,False
+2025-06,2025-06-14,NFCU Vehicle Loan,Finance Charges (Loans),Finance Charges,-91.29,,91.29,False,False
+2025-06,2025-06-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,0.00,91.75,False,True
+2025-06,2025-06-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,0.00,9.67,False,True
+2025-06,2025-06-17,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-18,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-42.82,,42.82,False,True
+2025-06,2025-06-18,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-18,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.76,,63.76,False,True
+2025-06,2025-06-19,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-06,2025-06-19,BofA Checking,Transfer between accounts,Transfers (Internal),-107.78,,107.78,False,False
+2025-06,2025-06-19,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-107.78,,107.78,False,True
+2025-06,2025-06-19,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),107.78,107.78,,False,False
+2025-06,2025-06-19,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-06,2025-06-20,NFCU Checking,Daycare,Daycare,-136.52,,136.52,False,True
+2025-06,2025-06-21,NFCU Checking,Gifts (Special Occasion),Gifts (Discretionary),-10.00,,10.00,False,True
+2025-06,2025-06-22,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",5.00,5.00,,True,False
+2025-06,2025-06-24,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-24,NFCU Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",50.00,50.00,,True,False
+2025-06,2025-06-24,NFCU Cash Rewards Visa,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-52.95,,52.95,False,True
+2025-06,2025-06-25,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-29.73,,29.73,False,True
+2025-06,2025-06-25,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-13.76,,13.76,False,True
+2025-06,2025-06-25,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-15.16,,15.16,False,True
+2025-06,2025-06-25,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-06,2025-06-26,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-35.00,,35.00,False,True
+2025-06,2025-06-26,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-61.96,,61.96,False,True
+2025-06,2025-06-26,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-22.61,,22.61,False,True
+2025-06,2025-06-27,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-36.00,,36.00,False,True
+2025-06,2025-06-27,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-06,2025-06-27,NFCU Checking,Daycare,Daycare,-50.00,,50.00,False,True
+2025-06,2025-06-27,NFCU Checking,Daycare,Daycare,-60.76,,60.76,False,True
+2025-06,2025-06-27,BofA Checking,Utilities (Internet),Utilities,-44.99,,44.99,False,True
+2025-06,2025-06-28,NFCU AMEX,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-37.68,,37.68,False,True
+2025-06,2025-06-28,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-6.50,,6.50,False,True
+2025-06,2025-06-30,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2185.42,2185.42,,True,False
+2025-06,2025-06-30,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-06,2025-06-30,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",242.82,242.82,,True,False
+2025-06,2025-06-30,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-16.39,,16.39,False,True
+2025-06,2025-06-30,NFCU Checking,Transfer between accounts,Transfers (Internal),-2000.00,,2000.00,False,False
+2025-06,2025-06-30,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),2000.00,2000.00,,False,False
+2025-06,2025-06-30,NFCU Checking,Transfer between accounts,Transfers (Internal),-400.00,,400.00,False,False
+2025-06,2025-06-30,NFCU AMEX,Credit Card Payments,Transfers (Internal),400.00,400.00,,False,False
+2025-07,2025-07-01,BofA Checking,Transfer between accounts,Transfers (Internal),-16.39,,16.39,False,False
+2025-07,2025-07-01,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),16.39,16.39,,False,False
+2025-07,2025-07-01,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-07,2025-07-01,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-48.18,,48.18,False,True
+2025-07,2025-07-01,BofA Checking,Transfer between accounts,Transfers (Internal),-48.18,,48.18,False,False
+2025-07,2025-07-01,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),48.18,48.18,,False,False
+2025-06,2025-06-30,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.37,0.37,,True,False
+2025-06,2025-06-30,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",3.73,3.73,,True,False
+2025-06,2025-06-30,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-36.30,,36.30,False,True
+2025-06,2025-06-30,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-06,2025-06-30,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.90,,10.90,False,True
+2025-07,2025-07-01,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",54.17,54.17,,True,False
+2025-06,2025-06-30,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",28.64,28.64,,True,False
+2025-07,2025-07-01,BofA Checking,Transfer between accounts,Transfers (Internal),-250.00,,250.00,False,False
+2025-07,2025-07-01,Lending Club Savings,Transfer between accounts,Transfers (Internal),250.00,250.00,,False,False
+2025-07,2025-07-01,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.87,,5.87,False,True
+2025-07,2025-07-02,NFCU AMEX,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-17.39,,17.39,False,True
+2025-06,2025-06-16,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-32.00,,32.00,False,True
+2025-07,2025-07-03,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-07,2025-07-03,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-07,2025-07-04,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-07,2025-07-06,FSA Dependent,Transfer between accounts,Transfers (Internal),-416.66,,416.66,False,False
+2025-07,2025-07-06,NFCU Checking,Transfer between accounts,Transfers (Internal),416.66,416.66,,False,False
+2025-07,2025-07-06,FSA Health,Transfer between accounts,Transfers (Internal),-349.75,,349.75,False,False
+2025-07,2025-07-06,NFCU Checking,Transfer between accounts,Transfers (Internal),349.75,349.75,,False,False
+2025-07,2025-07-04,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-12.00,,12.00,False,True
+2025-07,2025-07-06,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-116.53,,116.53,False,True
+2025-07,2025-07-04,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-21.38,,21.38,False,True
+2025-07,2025-07-08,BofA Checking,Transfer between accounts,Transfers (Internal),-21.38,,21.38,False,False
+2025-07,2025-07-08,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),21.38,21.38,,False,False
+2025-07,2025-07-06,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-19.22,,19.22,False,True
+2025-07,2025-07-06,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-33.91,,33.91,False,True
+2025-07,2025-07-07,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-58.41,,58.41,False,True
+2025-07,2025-07-09,NFCU Checking,Daycare,Daycare,-121.52,,121.52,False,True
+2025-07,2025-07-01,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),11.20,11.20,,False,True
+2025-07,2025-07-09,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",6.16,6.16,,True,False
+2025-07,2025-07-09,NFCU Checking,Transfer between accounts,Transfers (Internal),-300.00,,300.00,False,False
+2025-07,2025-07-09,NFCU AMEX,Credit Card Payments,Transfers (Internal),300.00,300.00,,False,False
+2025-07,2025-07-09,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-07,2025-07-08,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-07,2025-07-10,NFCU AMEX,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-07,2025-07-10,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-3.99,,3.99,False,True
+2025-07,2025-07-11,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",1.73,1.73,,True,False
+2025-07,2025-07-10,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-07,2025-07-10,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),90.00,90.00,,False,False
+2025-07,2025-07-10,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-07,2025-07-10,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-60.00,,60.00,False,True
+2025-07,2025-07-10,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-16.90,,16.90,False,True
+2025-07,2025-07-10,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-26.80,,26.80,False,True
+2025-07,2025-07-11,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-9.98,,9.98,False,False
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-07,2025-07-15,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-07,2025-07-15,NFCU Cash Rewards Visa,Credit Card Payments,Transfers (Internal),19.25,19.25,,False,False
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-18.17,,18.17,False,True
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Grocery (Household-Cleaning/Health&Beauty),Grocery (Food/Cleaning/Pet/Health&Beauty),-12.06,,12.06,False,True
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-70.08,,70.08,False,True
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-18.40,,18.40,False,True
+2025-07,2025-07-14,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-07,2025-07-15,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",246.25,246.25,,True,False
+2025-07,2025-07-15,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2216.29,2216.29,,True,False
+2025-07,2025-07-15,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-07,2025-07-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-07,2025-07-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-9.67,,9.67,False,True
+2025-07,2025-07-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-184.67,,184.67,False,True
+2025-07,2025-07-14,NFCU Checking,Daycare,Daycare,-121.52,,121.52,False,True
+2025-07,2025-07-14,BofA Checking,Utilities (Sewage),Utilities,-165.76,,165.76,False,True
+2025-07,2025-07-14,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-561.00,,561.00,False,True
+2025-07,2025-07-14,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),561.00,561.00,,False,False
+2025-07,2025-07-15,NFCU Checking,Loan Payments (Vehicle),Transportation Expenses,-214.00,,214.00,False,True
+2025-07,2025-07-18,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-07,2025-07-14,NFCU Cash Rewards Visa,Healthcare (Medical Devices),Medical/Healthcare,-172.22,,172.22,False,True
+2025-07,2025-07-15,NFCU Vehicle Loan,Finance Charges (Loans),Finance Charges,-75.97,,75.97,False,False
+2025-07,2025-07-18,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-9.53,,9.53,False,True
+2025-07,2025-07-16,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.50,,10.50,False,True
+2025-07,2025-07-16,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-8.99,,8.99,False,True
+2025-07,2025-07-18,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-32.00,,32.00,False,True
+2025-07,2025-07-18,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.16,,63.16,False,True
+2025-07,2025-07-18,NFCU AMEX,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-8.78,,8.78,False,True
+2025-07,2025-07-19,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-19.48,,19.48,False,True
+2025-07,2025-07-20,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-07,2025-07-20,NFCU Checking,Daycare,Daycare,-133.52,,133.52,False,True
+2025-07,2025-07-25,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-07,2025-07-25,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-07,2025-07-21,NFCU AMEX,Gifts (Birthday),Gifts (Discretionary),-22.60,,22.60,False,True
+2025-07,2025-07-21,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-10.69,,10.69,False,True
+2025-07,2025-07-25,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-07,2025-07-25,NFCU Checking,Daycare,Daycare,-96.76,,96.76,False,True
+2025-07,2025-07-26,NFCU Cash Rewards Visa,Personal (Haircuts),Personal/Lifestyle (Discretionary),-45.00,,45.00,False,True
+2025-07,2025-07-28,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-07,2025-07-27,NFCU AMEX,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-6.60,,6.60,False,True
+2025-07,2025-07-28,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-42.15,,42.15,False,True
+2025-07,2025-07-25,BofA Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",0.21,0.21,,True,False
+2025-07,2025-07-28,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-07,2025-07-28,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),21.39,21.39,,False,False
+2025-07,2025-07-28,BofA Checking,Utilities (Streaming Services),Utilities,-44.99,,44.99,False,True
+2025-07,2025-07-28,NFCU Cash Rewards Visa,Healthcare (Therapy),Medical/Healthcare,-25.00,,25.00,False,True
+2025-07,2025-07-31,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2185.42,2185.42,,True,False
+2025-07,2025-07-31,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-6.52,,6.52,False,True
+2025-07,2025-07-31,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-63.76,,63.76,False,True
+2025-07,2025-07-30,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-513.30,,513.30,False,True
+2025-07,2025-07-30,NFCU Cash Rewards Visa,Personal (Memberships),Personal/Lifestyle (Discretionary),-58.00,,58.00,False,True
+2025-07,2025-07-30,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-1024.55,,1024.55,False,True
+2025-07,2025-07-31,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-07,2025-07-31,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",242.82,242.82,,True,False
+2025-08,2025-08-01,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-07,2025-07-31,FSA Health,Transfer between accounts,Transfers (Internal),-90.10,,90.10,False,False
+2025-07,2025-07-31,NFCU Checking,Transfer between accounts,Transfers (Internal),90.10,90.10,,False,False
+2025-07,2025-07-31,BofA Checking,Loan Payments (Vehicle),Transportation Expenses,-152.06,,152.06,False,True
+2025-08,2025-08-01,NFCU Checking,Daycare,Daycare,-50.00,,50.00,False,True
+2025-08,2025-08-01,NFCU Checking,Daycare,Daycare,-121.52,,121.52,False,True
+2025-08,2025-08-01,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-07,2025-07-31,NFCU Savings,Transfer between accounts,Transfers (Internal),-1238.25,,1238.25,False,False
+2025-07,2025-07-31,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),1238.25,1238.25,,False,False
+2025-07,2025-07-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-2500.00,,2500.00,False,False
+2025-07,2025-07-31,NFCU AMEX,Transfer between accounts,Transfers (Internal),2500.00,2500.00,,False,False
+2025-07,2025-07-31,NFCU Checking,Transfer between accounts,Transfers (Internal),-300.00,,300.00,False,False
+2025-07,2025-07-31,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),300.00,300.00,,False,False
+2025-07,2025-07-31,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.87,,5.87,False,True
+2025-07,2025-07-31,NFCU Checking,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.37,0.37,,True,False
+2025-08,2025-08-01,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-08,2025-08-01,NFCU Cash Rewards Visa,Transportation Fees (Registration/Parking/Tolls/License),Transportation Expenses,-35.00,,35.00,False,True
+2025-08,2025-08-01,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-2.98,,2.98,False,True
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Gifts (Birthday),Gifts (Discretionary),-1.34,,1.34,False,True
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-9.66,,9.66,False,True
+2025-08,2025-08-01,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-28.50,,28.50,False,True
+2025-08,2025-08-03,NFCU AMEX,Entertainment (Bakery),Entertainment (Travel/Attractions/Dining),-36.70,,36.70,False,True
+2025-08,2025-08-03,NFCU AMEX,Gifts (Birthday),Gifts (Discretionary),-32.74,,32.74,False,True
+2025-07,2025-07-31,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.13,0.13,,True,False
+2025-08,2025-08-03,NFCU Checking,Transfer between accounts,Transfers (Internal),320.00,320.00,,False,False
+2025-08,2025-08-05,BofA Checking,Transfer between accounts,Transfers (Internal),-9.66,,9.66,False,False
+2025-08,2025-08-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),9.66,9.66,,False,False
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-220.86,,220.86,False,True
+2025-08,2025-08-05,BofA Checking,Transfer between accounts,Transfers (Internal),-220.86,,220.86,False,False
+2025-08,2025-08-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),220.86,220.86,,False,False
+2025-08,2025-08-04,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-44.60,,44.60,False,True
+2025-08,2025-08-05,BofA Checking,Transfer between accounts,Transfers (Internal),-44.60,,44.60,False,False
+2025-08,2025-08-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),44.60,44.60,,False,False
+2025-08,2025-08-10,NFCU Cash Rewards Visa,Utilities (Cell Phone),Utilities,-90.00,,90.00,False,True
+2025-08,2025-08-05,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-08,2025-08-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),90.00,90.00,,False,False
+2025-07,2025-07-31,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",29.71,29.71,,True,False
+2025-08,2025-08-04,BofA Checking,Transfer between accounts,Transfers (Internal),-150.00,,150.00,False,False
+2025-08,2025-08-04,Lending Club Savings,Transfer between accounts,Transfers (Internal),150.00,150.00,,False,False
+2025-08,2025-08-04,NFCU Checking,Transfer between accounts,Transfers (Internal),-100.00,,100.00,False,False
+2025-08,2025-08-04,Lending Club Savings,Transfer between accounts,Transfers (Internal),100.00,100.00,,False,False
+2025-08,2025-08-03,NFCU Checking,Transfer between accounts,Transfers (Internal),-50.00,,50.00,False,False
+2025-08,2025-08-03,NFCU Savings,Transfer between accounts,Transfers (Internal),50.00,50.00,,False,False
+2025-08,2025-08-03,NFCU Checking,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",45.44,45.44,,True,False
+2025-08,2025-08-01,FSA Health,Transfer between accounts,Transfers (Internal),-0.18,,0.18,False,False
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Gifts (Birthday),Gifts (Discretionary),-141.70,,141.70,False,True
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Gifts (Birthday),Gifts (Discretionary),-13.90,,13.90,False,True
+2025-08,2025-08-03,NFCU Cash Rewards Visa,Gifts (Birthday),Gifts (Discretionary),-118.12,,118.12,False,True
+2025-08,2025-08-04,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-08,2025-08-04,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-08,2025-08-01,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-16.90,,16.90,False,True
+2025-08,2025-08-01,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-9.55,,9.55,False,True
+2025-08,2025-08-06,NFCU Cash Rewards Visa,Healthcare (Psychiatry),Medical/Healthcare,-25.00,,25.00,False,True
+2025-08,2025-08-06,NFCU Savings,Transfer between accounts,Transfers (Internal),12.29,12.29,,False,False
+2025-08,2025-08-07,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-08,2025-08-10,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-61.04,,61.04,False,True
+2025-08,2025-08-08,NFCU Cash Rewards Visa,Grocery (Household-Cleaning/Health&Beauty),Grocery (Food/Cleaning/Pet/Health&Beauty),-7.60,,7.60,False,True
+2025-08,2025-08-10,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-60.00,,60.00,False,True
+2025-08,2025-08-10,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-5.60,,5.60,False,True
+2025-08,2025-08-11,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-10.41,,10.41,False,True
+2025-08,2025-08-11,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-32.00,,32.00,False,True
+2025-08,2025-08-11,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-18.10,,18.10,False,True
+2025-08,2025-08-12,NFCU Savings,Transfer between accounts,Transfers (Internal),3.76,3.76,,False,False
+2025-08,2025-08-14,NFCU Checking,Transfer between accounts,Transfers (Internal),-561.00,,561.00,False,False
+2025-08,2025-08-14,NFCU Vehicle Loan,Transfer between accounts,Transfers (Internal),561.00,561.00,,False,False
+2025-08,2025-08-14,NFCU Vehicle Loan,Finance Charges (Loans),Finance Charges,-73.29,,73.29,False,False
+2025-08,2025-08-12,NFCU AMEX,Finance Charges (Credit Cards),Finance Charges,-6.07,,6.07,False,False
+2025-08,2025-08-13,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-19.25,,19.25,False,True
+2025-08,2025-08-14,BofA Checking,Transfer between accounts,Transfers (Internal),-19.25,,19.25,False,False
+2025-08,2025-08-14,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),19.25,19.25,,False,False
+2025-08,2025-08-13,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-106.99,,106.99,False,True
+2025-08,2025-08-15,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2216.29,2216.29,,True,False
+2025-08,2025-08-15,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-08,2025-08-15,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",246.25,246.25,,True,False
+2025-08,2025-08-15,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-08,2025-08-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-15.42,,15.42,False,True
+2025-08,2025-08-15,BofA Checking,Insurance (Auto),Insurance (Auto/Home/Umbrella/Misc),-225.25,,225.25,False,True
+2025-08,2025-08-15,BofA Checking,Insurance (Home),Insurance (Auto/Home/Umbrella/Misc),-91.75,,91.75,False,True
+2025-08,2025-08-15,BofA Checking,Insurance (Umbrella),Insurance (Auto/Home/Umbrella/Misc),-4.17,,4.17,False,True
+2025-08,2025-08-20,BofA Checking,Utilities (Water),Utilities,-138.11,,138.11,False,True
+2025-08,2025-08-15,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-08,2025-08-15,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",3.74,3.74,,True,False
+2025-08,2025-08-18,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-23.50,,23.50,False,True
+2025-08,2025-08-18,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-61.04,,61.04,False,True
+2025-08,2025-08-18,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-14.07,,14.07,False,True
+2025-08,2025-08-19,NFCU Cash Rewards Visa,Utilities (Electricity),Utilities,-240.05,,240.05,False,True
+2025-08,2025-08-19,NFCU Cash Rewards Visa,Housing (Home Maintenance/Repair),Housing (Repairs/Mortgage/Taxes),-19.99,,19.99,False,True
+2025-08,2025-08-20,NFCU Cash Rewards Visa,Housing (Home Goods),Housing (Repairs/Mortgage/Taxes),-7.41,,7.41,False,True
+2025-08,2025-08-20,NFCU Cash Rewards Visa,Healthcare (Medical Devices),Medical/Healthcare,-21.90,,21.90,False,True
+2025-08,2025-08-20,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-21.00,,21.00,False,True
+2025-08,2025-08-20,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-15.16,,15.16,False,True
+2025-08,2025-08-20,NFCU Cash Rewards Visa,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-32.28,,32.28,False,True
+2025-08,2025-08-22,NFCU Savings,Transfer between accounts,Transfers (Internal),6.49,6.49,,False,False
+2025-08,2025-08-22,NFCU Checking,Transfer between accounts,Transfers (Internal),-6.49,,6.49,False,False
+2025-08,2025-08-22,NFCU Cash Rewards Visa,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",6.49,6.49,,True,False
+2025-08,2025-08-22,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-08,2025-08-22,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-24.66,,24.66,False,True
+2025-08,2025-08-23,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-15.16,,15.16,False,True
+2025-08,2025-08-25,FSA Dependent,Transfer between accounts,Transfers (Internal),-208.33,,208.33,False,False
+2025-08,2025-08-25,NFCU Checking,Transfer between accounts,Transfers (Internal),208.33,208.33,,False,False
+2025-08,2025-08-28,NFCU Checking,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-5.87,,5.87,False,True
+2025-08,2025-08-28,BofA Checking,Utilities (Streaming Services),Utilities,-44.99,,44.99,False,True
+2025-08,2025-08-29,NFCU Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",2185.42,2185.42,,True,False
+2025-08,2025-08-29,BofA Checking,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",242.82,242.82,,True,False
+2025-08,2025-08-29,BofA Checking,Salary - UPMC,"Income (Salary, Interest Earned/Tax Refunds)",250.00,250.00,,True,False
+2025-08,2025-08-29,FSA Dependent,Salary - Tobii Dynavox,"Income (Salary, Interest Earned/Tax Refunds)",208.33,208.33,,True,False
+2025-08,2025-08-28,NFCU Checking,Loan Payments (Mortgage Payments),Housing (Repairs/Mortgage/Taxes),-550.00,,550.00,False,True
+2025-08,2025-08-29,BofA Checking,Transfer between accounts,Transfers (Internal),-240.05,,240.05,False,False
+2025-08,2025-08-29,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),240.05,240.05,,False,False
+2025-08,2025-08-29,NFCU Checking,Transfer between accounts,Transfers (Internal),-1772.00,,1772.00,False,False
+2025-08,2025-08-29,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),1772.00,1772.00,,False,False
+2025-08,2025-08-29,NFCU Checking,Transfer between accounts,Transfers (Internal),-1500.00,,1500.00,False,False
+2025-08,2025-08-29,NFCU AMEX,Transfer between accounts,Transfers (Internal),1500.00,1500.00,,False,False
+2025-08,2025-08-28,NFCU AMEX,Transportation (Fuel),Transportation Expenses,-24.00,,24.00,False,True
+2025-08,2025-08-28,NFCU AMEX,Personal (Nicotine),Personal/Lifestyle (Discretionary),-65.28,,65.28,False,True
+2025-08,2025-08-27,NFCU Cash Rewards Visa,Grocery (Food),Grocery (Food/Cleaning/Pet/Health&Beauty),-93.24,,93.24,False,True
+2025-08,2025-08-28,NFCU Cash Rewards Visa,Utilities (Streaming Services),Utilities,-21.39,,21.39,False,True
+2025-08,2025-08-29,BofA Checking,Transfer between accounts,Transfers (Internal),-21.39,,21.39,False,False
+2025-08,2025-08-29,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),21.39,21.39,,False,False
+2025-09,2025-09-05,BofA Checking,Transfer between accounts,Transfers (Internal),-90.00,,90.00,False,False
+2025-09,2025-09-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),90.00,90.00,,False,False
+2025-09,2025-09-03,NFCU Cash Rewards Visa,Utilities (Natural Gas),Utilities,-40.33,,40.33,False,True
+2025-09,2025-09-05,BofA Checking,Transfer between accounts,Transfers (Internal),-40.33,,40.33,False,False
+2025-09,2025-09-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),40.33,40.33,,False,False
+2025-09,2025-09-05,NFCU Cash Rewards Visa,Transportation (Satellite Radio),Transportation Expenses,-9.66,,9.66,False,True
+2025-09,2025-09-05,BofA Checking,Transfer between accounts,Transfers (Internal),-9.66,,9.66,False,False
+2025-09,2025-09-05,NFCU Cash Rewards Visa,Transfer between accounts,Transfers (Internal),9.66,9.66,,False,False
+2025-09,2025-09-02,BofA Checking,Transfer between accounts,Transfers (Internal),-100.00,,100.00,False,False
+2025-09,2025-09-02,Lending Club Savings,Transfer between accounts,Transfers (Internal),100.00,100.00,,False,False
+2025-09,2025-09-02,NFCU Checking,Transfer between accounts,Transfers (Internal),-150.00,,150.00,False,False
+2025-09,2025-09-02,Lending Club Savings,Transfer between accounts,Transfers (Internal),150.00,150.00,,False,False
+2025-08,2025-08-29,NFCU Checking,Daycare,Daycare,-225.00,,225.00,False,True
+2025-08,2025-08-29,NFCU Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",0.17,0.17,,True,False
+2025-09,2025-09-01,NFCU AMEX,Entertainment (Dining),Entertainment (Travel/Attractions/Dining),-14.17,,14.17,False,True
+2025-08,2025-08-31,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,19.55,19.55,,False,True
+2025-09,2025-09-01,NFCU Cash Rewards Visa,Personal (Subscriptions),Personal/Lifestyle (Discretionary),-21.20,,21.20,False,True
+2025-08,2025-08-31,NFCU Cash Rewards Visa,Healthcare (Medication),Medical/Healthcare,-54.19,,54.19,False,True
+2025-09,2025-09-01,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-11.16,,11.16,False,True
+2025-09,2025-09-01,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-19.64,,19.64,False,True
+2025-09,2025-09-01,NFCU Cash Rewards Visa,Entertainment (Attractions),Entertainment (Travel/Attractions/Dining),-26.42,,26.42,False,True
+2025-09,2025-09-02,NFCU Savings,Credit Card Cash Back,"Income (Salary, Interest Earned/Tax Refunds)",4.83,4.83,,True,False
+2025-09,2025-09-02,NFCU Checking,Daycare,Daycare,-100.00,,100.00,False,True
+2025-08,2025-08-29,Lending Club Savings,Income (Interest Earned),"Income (Salary, Interest Earned/Tax Refunds)",30.17,30.17,,True,False

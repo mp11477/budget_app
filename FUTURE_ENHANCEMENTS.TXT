@@ -1,0 +1,24 @@
+1) Fetch transactions automatically from plaid 
+2) Graphs/Charts similar to Excel
+3) Transaction Recurring templates 
+4) Splitting transactions between categories
+5) Exporting to CSV or PDF
+6) Additional dark mode improvements
+7) Stylistic changes to make it feel more polished
+8) Bulk editing features
+9) Logging 
+10) Error handling
+11) Protections against accidental deletions
+12) Automatically update charge/loan accounts with interest
+13) Add a way to display credit limits + percentage of credit being used fields
+14) Recategorize Category: Interest Charges
+
+                            Subcategories: Credit Card Interest, Loan Interest
+
+                            Category: Bank Fees
+
+                            Subcategories: ATM Fee, Monthly Maintenance, etc.
+    
+    for better granularity in regard to fees being paid.
+15)Income vs Spend Charts
+16)Bulk validator script to help flag mismatches (e.g. a LOAN_PAYMENT with no corresponding TRANSFER) or if you want to auto-classify some of these cases (Reference to Transaction Type Matrix).
