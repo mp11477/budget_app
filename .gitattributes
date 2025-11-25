@@ -1,0 +1,31 @@
+# Normalize all text files to LF in the repo
+* text=auto eol=lf
+
+# Python files (always LF)
+*.py text eol=lf
+
+# Django templates
+*.html text eol=lf
+
+# Stylesheets & JS
+*.css text eol=lf
+*.js text eol=lf
+
+# Markdown & docs
+*.md text eol=lf
+
+# Shell scripts (LF required)
+*.sh text eol=lf
+
+# Batch files (Windows)
+*.bat text eol=crlf
+
+# Images remain binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+
+# SQLite stays binary
+*.sqlite3 binary
