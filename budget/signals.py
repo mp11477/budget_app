@@ -7,6 +7,8 @@ from .models import GigCompanyEntry
 def sync_gig_entry_to_transaction(sender, instance: GigCompanyEntry, **kwargs):
     """
     Ensure each GigCompanyEntry has a matching income Transaction.
+    Uses credit (income) and the company's configured payout account
+    and income_subcategory
     """
     from .models import Transaction  # avoid circular import
 
@@ -14,7 +16,11 @@ def sync_gig_entry_to_transaction(sender, instance: GigCompanyEntry, **kwargs):
     company = instance.company
 
     # Decide what amount you want to post to the budget:
-    amount = instance.gross_earnings  # you historically used total earnings per company
+    amount = instance.gross_earnings or 0 # you historically used total earnings per company
+
+     # Require a payout account and subcategory, otherwise bail out quietly
+    if not company.payout_account or not company.income_subcategory:
+        return
 
     # Create or update the linked Transaction
     if instance.income_transaction:
@@ -23,24 +29,27 @@ def sync_gig_entry_to_transaction(sender, instance: GigCompanyEntry, **kwargs):
         tx.account = company.payout_account
         tx.amount = amount
         tx.description = f"Gig earnings - {company.code}"
-        tx.category = company.income_category
+        tx.subcategory = company.income_subcategory
+        tx.cleared = False
+        tx.write_off = False
         # if you have transaction_type:
         # tx.transaction_type = Transaction.Type.INCOME  # adjust to your enum
         tx.save()
     else:
+        # Create a new transaction
         tx = Transaction.objects.create(
-            date=shift.date,
             account=company.payout_account,
-            amount=amount,
+            date=shift.date,
             description=f"Gig earnings - {company.code}",
-            category=company.income_category,
-            # transaction_type=Transaction.Type.INCOME,
+            debit=None,
+            credit=amount,
+            subcategory=company.income_subcategory,
+            cleared=False,
+            write_off=False,
         )
+        # Link it back to the GigCompanyEntry without re-triggering recursion
         instance.income_transaction = tx
-        # avoid infinite recursion: update without re-triggering logic if needed
-        GigCompanyEntry.objects.filter(pk=instance.pk).update(
-            income_transaction=tx
-        )
+        GigCompanyEntry.objects.filter(pk=instance.pk).update(income_transaction=tx)
 
 
 @receiver(post_delete, sender=GigCompanyEntry)

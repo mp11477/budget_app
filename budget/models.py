@@ -1,7 +1,9 @@
 # models.py
 from django.db import models
 from django.utils import timezone
-from datetime import datetime, timedelta
+from django.contrib.auth.models import User
+from datetime import datetime, date
+from decimal import Decimal
 
 class Account(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -32,10 +34,16 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.is_expense:
+            self.is_income = False
+        super().save(*args, **kwargs)
 
 class SubCategory(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    
 
     class Meta:
         ordering = ('name',)
@@ -43,10 +51,7 @@ class SubCategory(models.Model):
     def __str__(self):
         return self.name
     
-    def save(self, *args, **kwargs):
-        if self.is_expense:
-            self.is_income = False
-        super().save(*args, **kwargs)
+    
 
 class Transfer(models.Model):
     from_account = models.ForeignKey(Account, related_name='transfers_out', on_delete=models.CASCADE)
@@ -157,7 +162,7 @@ class GigShift(models.Model):
 
     miles = models.DecimalField(max_digits=7, decimal_places=2)
     mpg = models.DecimalField(max_digits=4, decimal_places=1)
-    gas_price = models.DecimalField(max_digits=4, decimal_places=2)
+    gas_price = models.DecimalField(max_digits=4, decimal_places=3)
 
     # optional shorthand notes like "WM/DD/UE"
     company_mix_note = models.CharField(
@@ -176,7 +181,7 @@ class GigShift(models.Model):
         ordering = ["-date", "-start_time"]
 
     def __str__(self):
-        return f"{self.date} ({self.start_time}–{self.end_time})"
+        return f"{self.date} ({self.start_time}-{self.end_time})"
 
     # ---------- SHIFT-LEVEL CALCULATED FIELDS ----------
 
@@ -201,8 +206,8 @@ class GigShift(models.Model):
 
     @property
     def fuel_cost(self):
-        if not self.mpg:
-            return 0
+        if not self.mpg or not self.gas_price:
+            return 0.0
         return (float(self.miles) / float(self.mpg)) * float(self.gas_price)
 
     # ----- AGGREGATES FROM PER-COMPANY ROWS -----
@@ -229,31 +234,33 @@ class GigShift(models.Model):
 
     @property
     def difference(self):
-        return self.total_gross - self.projected_earnings
+        # projected_earnings is already a float/int, so cast total_gross to float
+        return float(self.total_gross or 0) - float(self.projected_earnings or 0)
 
     @property
     def net_after_gas(self):
-        return self.total_gross - self.fuel_cost
+        # both as floats
+        return float(self.total_gross or 0) - float(self.fuel_cost or 0)
 
     @property
     def gross_per_hour(self):
-        return self.total_gross / self.hours if self.hours else 0
+        return (float(self.total_gross or 0) / self.hours) if self.hours else 0.0
 
     @property
     def net_per_hour(self):
-        return self.net_after_gas / self.hours if self.hours else 0
+        return (float(self.net_after_gas or 0) / self.hours) if self.hours else 0.0
 
     @property
     def gross_per_mile(self):
-        return self.total_gross / self.miles if self.miles else 0
+        return (float(self.total_gross or 0) / float(self.miles)) if self.miles else 0.0
 
     @property
     def net_per_mile(self):
-        return self.net_after_gas / self.miles if self.miles else 0
+        return (float(self.net_after_gas or 0) / float(self.miles)) if self.miles else 0.0
 
     @property
     def tip_percent_overall(self):
-        return (self.total_tips_count / self.total_deliveries) if self.total_deliveries else 0
+        return (100*(self.total_tips_count / self.total_deliveries)) if self.total_deliveries else 0
 
     @property
     def avg_tip_overall(self):
@@ -261,7 +268,27 @@ class GigShift(models.Model):
 
     @property
     def deduction(self):
-        return float(self.miles) * float(self.mileage_deduction_rate)
+        # also keep this as float for consistency
+        return float(self.miles or 0) * float(self.mileage_deduction_rate or 0)
+    
+    #---Mileage deduction property uses MileageRate model and utility function---
+    @property
+    def effective_mileage_rate(self) -> Decimal:
+        """
+        Rate in $/mile, determined by the shift date.
+        """
+        if not self.date:
+            return Decimal("0")
+        return get_mileage_rate_for_date(self.date)
+    
+    @property
+    def effective_deduction(self) -> Decimal:
+        """
+        Deduction amount = miles * effective rate.
+        """
+        miles = self.miles or Decimal("0")
+        rate = self.effective_mileage_rate or Decimal("0")
+        return miles * rate
 
 
 class GigCompany(models.Model):
@@ -274,10 +301,17 @@ class GigCompany(models.Model):
         on_delete=models.PROTECT,
         help_text="Which account receives this company's payouts"
     )
-    income_category = models.ForeignKey(
-        "Category", 
-        on_delete=models.PROTECT,
-        help_text="Usually your 'Salary - Gig Work' category"
+    # income_subcategory = models.ForeignKey(
+    #     "SubCategory", 
+    #     on_delete=models.PROTECT,
+    #     help_text="Subcategory to use for income transactions (e.g. 'Salary - Gig Work')"
+    # )
+
+    income_subcategory = models.ForeignKey(
+        "SubCategory",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
@@ -298,8 +332,14 @@ class GigCompanyEntry(models.Model):
 
     deliveries = models.IntegerField()
     tips_count = models.IntegerField(help_text="Number of deliveries that had a tip")
-    tips_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    earnings_before_tips = models.DecimalField(max_digits=7, decimal_places=2)
+    tips_amount = models.DecimalField(
+        max_digits=7, decimal_places=2, 
+        default=0,
+    )
+    earnings_before_tips = models.DecimalField(
+        max_digits=7, decimal_places=2,
+        default=0,
+    )
     gross_earnings = models.DecimalField(
         max_digits=7, decimal_places=2,
         help_text="Base pay + tips for this company during this shift"
@@ -328,3 +368,196 @@ class GigCompanyEntry(models.Model):
     @property
     def avg_tip(self):
         return (self.tips_amount / self.deliveries) if self.deliveries else 0
+       
+    def save(self, *args, **kwargs):
+        """
+        Always keep earnings_before_tips = gross_earnings - tips_amount.
+        """
+        gross = self.gross_earnings or 0
+        tips = self.tips_amount or 0
+        self.earnings_before_tips = gross - tips
+        super().save(*args, **kwargs)
+
+class MileageRate(models.Model):
+    """
+    Stores IRS (or your chosen) mileage deduction rate with an effective date.
+    Example: 2025-01-01 → $0.67 per mile
+    """
+    effective_date = models.DateField(
+        help_text="Date this rate becomes effective (inclusive)."
+    )
+    rate = models.DecimalField(
+        max_digits=5,  # e.g. 0.670 or 1.234
+        decimal_places=3,
+        help_text="Deduction per mile in dollars, e.g. 0.670",
+    )
+    note = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Optional note (e.g. 'IRS 2025 standard rate')",
+    )
+
+    class Meta:
+        ordering = ["-effective_date"]
+        verbose_name = "Mileage rate"
+        verbose_name_plural = "Mileage rates"
+        # You usually only need one row per effective date
+        constraints = [
+            models.UniqueConstraint(
+                fields=["effective_date"],
+                name="unique_mileage_rate_per_effective_date",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.effective_date} → {self.rate} $/mile"
+    
+
+def get_mileage_rate_for_date(on_date: date) -> Decimal:
+    """
+    Returns the mileage rate that applies on `on_date`.
+    Chooses the latest MileageRate with effective_date <= on_date.
+    Returns Decimal('0') if nothing is configured.
+    """
+    from .models import MileageRate  # if this is in a separate utils module, remove this import
+
+    qs = MileageRate.objects.filter(effective_date__lte=on_date).order_by("-effective_date")
+    row = qs.first()
+    if row is None:
+        return Decimal("0")
+    return row.rate
+
+class CalendarAccount(models.Model):
+    PROVIDERS = [
+        ("google", "Google"),
+        ("icloud", "iCloud (CalDAV)"),
+        ("outlook", "Outlook (Graph)"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    provider = models.CharField(max_length=20, choices=PROVIDERS)
+    display_name = models.CharField(max_length=120, blank=True)
+    # Store tokens/credentials securely (see notes below)
+    credentials_json = models.JSONField(default=dict)  # encrypted at rest ideally
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.provider} ({self.display_name or 'account'})"
+
+class CalendarSource(models.Model):
+    """
+    A specific calendar within an account (e.g., 'Personal', 'Work', 'Family').
+    """
+    account = models.ForeignKey(CalendarAccount, on_delete=models.CASCADE)
+    external_calendar_id = models.CharField(max_length=255)  # Google calendarId / CalDAV URL / Outlook id
+    name = models.CharField(max_length=255)
+    timezone = models.CharField(max_length=64, default="America/New_York")
+    is_primary = models.BooleanField(default=False)
+    last_synced_at = models.DateTimeField(null=True, blank=True)
+    sync_cursor = models.CharField(max_length=255, blank=True)  # optional, provider-dependent
+
+    def __str__(self):
+        return f"{self.account.provider}: {self.name}"
+
+class CalendarEvent(models.Model):
+    """
+    Your unified event record.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    source = models.ForeignKey(CalendarSource, on_delete=models.SET_NULL, null=True, blank=True)
+
+    external_event_id = models.CharField(max_length=255, blank=True)  # provider event id / UID
+    title = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True)
+    notes = models.TextField(blank=True)
+
+    start_dt = models.DateTimeField()
+    end_dt = models.DateTimeField()
+    all_day = models.BooleanField(default=False)
+    status = models.CharField(max_length=32, default="confirmed")  # confirmed/cancelled/tentative
+    event_type = models.CharField(max_length=20, default="normal")  # normal/special
+    updated_at = models.DateTimeField(auto_now=True)
+
+    created_by = models.CharField(max_length=20, blank=True, default="")
+    last_edited_by = models.CharField(max_length=20, blank=True, default="")
+
+    EVENT_PEOPLE = [
+        ("mike", "Mike"),
+        ("wife", "Stef"),
+        ("kid1", "Max"),
+        ("kid2", "Leo"),
+    ]
+
+    person = models.CharField(
+        max_length=20,
+        choices=EVENT_PEOPLE,
+        default="mike",
+    )
+
+    # Conflict handling
+    last_synced_at = models.DateTimeField(null=True, blank=True)
+    provider_etag = models.CharField(max_length=255, blank=True)  # Google etag or similar
+    provider_last_modified = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "start_dt"]),
+            models.Index(fields=["external_event_id"]),
+        ]  
+        
+    def __str__(self):
+        return f"{self.title} ({self.start_dt})"
+
+class CalendarSpecial(models.Model):
+    SPECIAL_TYPES = [
+        ("birthday", "Birthday"),
+        ("anniversary", "Anniversary"),
+        ("holiday", "Holiday"),
+        ("milestone", "Milestone"),
+        ("reminder", "Reminder"),
+    ]
+
+    title = models.CharField(max_length=255)
+    date = models.DateField()
+
+    special_type = models.CharField(max_length=20, choices=SPECIAL_TYPES, default="reminder")
+    person = models.CharField(max_length=50, blank=True)
+
+    recurring_yearly = models.BooleanField(default=True)
+    notes = models.TextField(blank=True)
+
+    # optional: if you want to control display color separate from person
+    color_key = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.date})"
+    
+class CalendarRuleSpecial(models.Model):
+    """
+    Specials that are computed from a rule each year (Easter, Thanksgiving, etc.).
+    """
+    title = models.CharField(max_length=255)
+
+    RULES = [
+        ("easter", "Easter (Western)"),
+        ("good_friday", "Good Friday"),
+        ("thanksgiving_us", "Thanksgiving (US)"),
+        ("mothers_day_us", "Mother's Day (US)"),
+        ("fathers_day_us", "Father's Day (US)"),
+        ("memorial_day_us", "Memorial Day (US)"),
+        ("labor_day_us", "Labor Day (US)"),
+        ("mlk_day_us", "MLK Day (US)"),
+        ("presidents_day_us", "Presidents Day (US)"),
+    ]
+    rule_key = models.CharField(max_length=50, choices=RULES)
+    title_override = models.CharField(max_length=255, blank=True)  # optional custom label
+
+    # optional metadata consistent with your other specials
+    special_type = models.CharField(max_length=20, choices=CalendarSpecial.SPECIAL_TYPES, default="holiday")
+    person = models.CharField(max_length=50, blank=True)  # allow extended family names/keys
+    notes = models.TextField(blank=True)
+    color_key = models.CharField(max_length=20, blank=True)
+
+    is_enabled = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title_override or self.get_rule_key_display()

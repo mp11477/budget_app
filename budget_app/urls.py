@@ -1,10 +1,11 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from budget import views  
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", include("budget.urls")),  # <-- THIS makes calendar routes live
     path('dashboard_test/', views.dashboard_test, name='dashboard_test'),
     path('dashboard/', views.dashboard, name='dashboard'),  
     path('account/<int:account_id>/transactions/', views.account_transactions, name='account_transactions'),

@@ -1,19 +1,32 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.timezone import now
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import Sum, Q, Case, When, Value, F, DecimalField
 from django.db.models.functions import ExtractMonth, ExtractYear, TruncMonth
 from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
-from django.views.decorators.http import require_POST
-from django.utils.dateformat import format
-from .models import Account, Transaction, Transfer, Category, SubCategory
-from datetime import date, datetime, timedelta
-import calendar
-from calendar import month_name, monthrange
+from django.utils import timezone
+from django.utils.dateformat import format as date_format
+from django.utils.dateparse import parse_datetime
+from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from collections import defaultdict, OrderedDict
 from decimal import Decimal
-from .forms import TransactionForm, TransferForm
-from datetime import date, timedelta
+from pathlib import Path
+from .calendar_utils import inject_specials_into_events_by_day
+from .calendar_weather import get_cached_weather
+from .forms import TransactionForm, TransferForm, GigShiftForm, GigCompanyFormSet, MileageRateForm
+from .models import (Account, Transaction, Transfer, Category, SubCategory, GigShift, GigCompany, MileageRate, CalendarEvent, CalendarSpecial,
+            CalendarRuleSpecial)
+
+import calendar, json, datetime
+from calendar import month_name, monthrange
+from datetime import date, time, datetime, timedelta
+from functools import wraps
 
 def dashboard_test(request):
     return render(request, 'dashboard_test.html', {})
@@ -90,7 +103,6 @@ def get_month_choices():
         {"value": str(i), "name": month_name[i]} for i in range(1, 13)
     ]
 
-
 def get_year_range():
     return [str(y) for y in range(2023, 2027)]
 
@@ -107,7 +119,6 @@ def get_subcategory_choices(transactions):
         ).distinct().order_by('name')  # Optional: sort alphabetically
 
     return [(subcat.name, subcat.name) for subcat in subcategories]
-
 
 def apply_transaction_filters(transactions, month, year, cleared, write_off, cat_name, sub_cat_name, search):
     if month:
@@ -166,7 +177,6 @@ def calculate_totals(transactions):
         "amount": net_amount
     }
 
-
 def account_transactions(request, account_id):
     account = get_object_or_404(Account, id=account_id)
     cleared = request.GET.get("cleared")
@@ -209,7 +219,6 @@ def account_transactions(request, account_id):
 
     return render(request, "transactions.html", context)
 
-
 def deposit_summary_transactions(request):
     deposit_accounts = Account.objects.filter(active=True, account_type="Deposit")
     transactions = Transaction.objects.filter(account__in=deposit_accounts).order_by('date')
@@ -248,7 +257,6 @@ def deposit_summary_transactions(request):
         "totals": totals,
     })
 
-
 def loan_summary_transactions(request):
     loan_accounts = Account.objects.filter(active=True).exclude(account_type="Deposit")
     transactions = Transaction.objects.filter(account__in=loan_accounts).order_by('date')
@@ -286,7 +294,6 @@ def loan_summary_transactions(request):
         "sub_cat_name_choices": get_subcategory_choices(transactions),
         "totals": totals,
     })
-
 
 def complex_algorithm(request):
     today = date.today()
@@ -481,7 +488,6 @@ def complex_algorithm(request):
         'current_year': current_year,
         'selected_month': selected_month,
     })
-
 
 def add_transaction(request):
     form = TransactionForm(request.POST or None)
@@ -830,3 +836,928 @@ def get_monthly_balances():
 
     return balances
 
+def gig_entry(request):
+    """
+    Create a new gig shift + per-company entries.
+    """
+    if request.method == "POST":
+        action = request.POST.get("action", "save")  # "save" or "save_add"
+        shift_form = GigShiftForm(request.POST)
+        formset = GigCompanyFormSet(request.POST)
+
+        if shift_form.is_valid() and formset.is_valid():
+            try:
+                with transaction.atomic():
+                    shift = shift_form.save()
+                    formset.instance = shift
+                    formset.save()
+
+                    # --- Auto-fill company_mix_note from companies on this shift ---
+                    codes_qs = (
+                        shift.company_entries
+                        .filter(company__isnull=False)
+                        .values_list("company__code", flat=True)
+                        .distinct()
+                    )
+                    codes = sorted(codes_qs)
+                    shift.company_mix_note = "/".join(codes)
+                    shift.save(update_fields=["company_mix_note"])
+
+                if action == "save_add":
+                    messages.success(request, "Shift saved. You can add another one.")
+                    return redirect("gig_entry")
+                else:
+                    messages.success(request, "Shift saved.")
+                    return redirect("gig_summary")
+            except Exception:
+                shift_form.add_error(
+                    None,
+                    "An unexpected error occurred while saving this shift. "
+                    "Nothing was saved. Please try again.",
+                )
+        # invalid forms → fall through and re-render with errors
+    else:
+        shift_form = GigShiftForm(initial={"date": timezone.now().date()})
+        formset = GigCompanyFormSet()
+
+    return render(
+        request,
+        "gig_entry.html",
+        {"shift_form": shift_form, "formset": formset},
+    )
+
+def _month_range(year: int, month: int):
+    start = date(year, month, 1)
+    if month == 12:
+        end = date(year + 1, 1, 1)
+    else:
+        end = date(year, month + 1, 1)
+    return start, end
+
+def _next_month(d: date) -> date:
+    """Helper: first day of the next month."""
+    if d.month == 12:
+        return d.replace(year=d.year + 1, month=1, day=1)
+    return d.replace(month=d.month + 1, day=1)
+
+def gig_summary(request):
+    today = timezone.localdate()
+    current_month_start = today.replace(day=1)
+
+    # --- 1) Parse requested month (YYYY-MM) or default to current month ---
+    month_param = request.GET.get("month")
+    if month_param:
+        try:
+            year, month = map(int, month_param.split("-"))
+            selected_month_start = date(year, month, 1)
+        except Exception:
+            selected_month_start = current_month_start
+    else:
+        selected_month_start = current_month_start
+
+    selected_month_end = _next_month(selected_month_start)
+
+    # --- 2) Get list of months that actually have gig shifts (for dropdown) ---
+    all_dates = (
+        GigShift.objects
+        .order_by("-date")
+        .values_list("date", flat=True)
+        .distinct()
+    )
+    months = sorted({d.replace(day=1) for d in all_dates}, reverse=True)
+
+    # --- 3) Base queryset for the selected month ---
+    base_qs = (
+        GigShift.objects
+        .filter(date__gte=selected_month_start, date__lt=selected_month_end)
+        .prefetch_related("company_entries", "company_entries__company")
+    )
+
+    using_fallback = False
+
+    # If no shifts for requested month, fall back to most recent month with data
+    if not base_qs.exists() and months:
+        fallback_start = months[0]
+        if fallback_start != selected_month_start:
+            using_fallback = True
+            selected_month_start = fallback_start
+            selected_month_end = _next_month(selected_month_start)
+            base_qs = (
+                GigShift.objects
+                .filter(date__gte=selected_month_start, date__lt=selected_month_end)
+                .prefetch_related("company_entries", "company_entries__company")
+            )
+
+    shifts_qs = base_qs
+
+    # --- 4) Company filter (by code) ---
+    company_code = request.GET.get("company", "ALL")
+
+    # Companies that appear in this month (from base_qs, before company filter)
+    companies_for_month = (
+        GigCompany.objects
+        .filter(gig_entries__shift__in=base_qs)
+        .distinct()
+        .order_by("code")
+    )
+
+    if company_code and company_code != "ALL":
+        shifts_qs = shifts_qs.filter(company_entries__company__code=company_code).distinct()
+
+    # --- 5) Chart data based on filtered shifts ---
+    labels = []
+    gross_data = []
+    net_data = []
+    miles_data = []
+    hourly_gross_data = []
+    hourly_net_data = []
+
+    ordered_shifts = shifts_qs.order_by("date", "start_time")
+
+    for shift in ordered_shifts:
+        labels.append(shift.date.strftime("%m/%d"))
+        gross_data.append(float(shift.total_gross or 0))
+        net_data.append(float(shift.net_after_gas or 0))
+        miles_data.append(float(shift.miles or 0))
+        hourly_gross_data.append(float(shift.gross_per_hour or 0))
+        hourly_net_data.append(float(shift.net_per_hour or 0))
+
+    context = {
+        "shifts": ordered_shifts,
+        "selected_month": selected_month_start,
+        "current_month": current_month_start,
+        "months": months,
+        "using_fallback": using_fallback,
+
+        # chart data as JSON strings
+        "chart_labels": json.dumps(labels),
+        "chart_gross": json.dumps(gross_data),
+        "chart_net": json.dumps(net_data),
+        "chart_miles": json.dumps(miles_data),
+        "chart_hourly_gross": json.dumps(hourly_gross_data),
+        "chart_hourly_net": json.dumps(hourly_net_data),
+
+        # company filter context
+        "company_code": company_code,
+        "companies": companies_for_month,
+    }
+
+    return render(request, "gig_summary.html", context)
+
+@login_required
+def mileage_rate_settings(request):
+    """
+    Simple page to view and add mileage rates.
+    """
+    rates = MileageRate.objects.all()  # ordered by -effective_date due to Meta.ordering
+
+    if request.method == "POST":
+        form = MileageRateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Mileage rate saved.")
+            return redirect("mileage_rate_settings")
+    else:
+        form = MileageRateForm()
+
+    return render(
+        request,
+        "mileage_rate.html",
+        {
+            "form": form,
+            "rates": rates,
+        },
+    )
+
+#Calendar Views
+User = get_user_model()  #remember what the User model is, so I can query it later
+
+@ensure_csrf_cookie
+def main_calendar(request):
+    """
+    Main calendar view showing all events.
+    """
+    events = 'Test Events Data'  # Placeholder for actual event data retrieval logic
+
+    # image directory for calendar page backgrounds
+    # 1. Get the absolute path to your static images folder
+    photos_dir = Path(settings.BASE_DIR) / "static" / "budget" / "calendar_photos"
+      
+    # match jpg/JPG/jpeg/JPEG (and optionally png)
+    exts = {".jpg", ".jpeg", ".png"}
+    image_files = [p for p in photos_dir.iterdir() if p.is_file() and p.suffix.lower() in exts]
+
+    # Convert to STATIC-relative paths for `{% static ... %}`
+    image_list = [f"budget/calendar_photos/{p.name}" for p in image_files]
+
+    weather_ctx = get_cached_weather()
+
+    # Pass daily events to template
+    owner = get_calendar_owner()  # same owner logic you're using elsewhere
+    today = timezone.localdate()
+    start_dt = timezone.make_aware(datetime.combine(today, time.min))
+    end_dt = timezone.make_aware(datetime.combine(today, time.max))
+
+    today_events = (CalendarEvent.objects
+        .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
+        .order_by("start_dt"))
+        
+    context = {
+    "events": events if events else [],
+    "image_list": image_list if image_list else [],
+    "today_events": today_events,
+    "today": today,
+    **weather_ctx,
+}
+
+    context.update(kiosk_context(request))
+    return render(request, 'main_calendar.html', context)
+
+@require_GET
+def weather_fragment(request):
+    """
+    Returns rendered HTML for just the weather block.
+    """
+    weather_ctx = get_cached_weather()
+    html = render_to_string("partials/_weather_block.html", weather_ctx, request=request)
+    return JsonResponse({"ok": True, "html": html})
+
+def get_calendar_owner():
+    # 1) If explicitly configured, try it
+    username = getattr(settings, "KIOSK_CALENDAR_OWNER_USERNAME", None)
+    if username:
+        owner = User.objects.filter(username=username).first()
+        if owner:
+            return owner
+
+    # 2) Fallback: first superuser (works on wall tablet + admin setups)
+    owner = User.objects.filter(is_superuser=True).order_by("id").first()
+    if owner:
+        return owner
+
+    # 3) Final fallback: first user
+    owner = User.objects.order_by("id").first()
+    if owner:
+        return owner
+
+    raise RuntimeError(
+        "No users exist in this database. Create a superuser with: python manage.py createsuperuser"
+    )
+
+@ensure_csrf_cookie
+def calendar_day(request):
+    owner = get_calendar_owner()
+
+    today = timezone.localdate()   # actual today
+    day = today                    # default context day = today
+    
+    date_str = request.GET.get("date")
+    if date_str:
+        try:
+            day = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+
+    start_dt = timezone.make_aware(datetime.combine(day, time.min))
+    end_dt = timezone.make_aware(datetime.combine(day, time.max))
+
+    prev_day = day - timedelta(days=1)
+    next_day = day + timedelta(days=1)
+
+    events = (CalendarEvent.objects
+              .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
+              .order_by("start_dt"))
+    
+    all_day_events = []
+    event_blocks = []
+    for e in events:
+        if e.all_day:
+            all_day_events.append(e)
+            continue
+
+        s = timezone.localtime(e.start_dt)
+        en = timezone.localtime(e.end_dt)
+
+        start_min = s.hour * 60 + s.minute
+        end_min = en.hour * 60 + en.minute
+
+        # guard
+        if end_min <= start_min:
+            end_min = start_min + 30
+
+        event_blocks.append({
+            "id": e.id,
+            "title": e.title,
+            "person": e.person,
+            # "all_day": e.all_day,
+            "location": e.location,
+            "notes": e.notes,
+            "start_dt": s,
+            "end_dt": en,
+            "top": start_min,                  # px, 1px per minute
+            "height": max(28, end_min - start_min),
+        })
+
+    #Calendar day view columns:
+    # Build overlap groups (simple sweep)
+    blocks = sorted(event_blocks, key=lambda b: (b["top"], b["top"] + b["height"]))
+
+    active = []
+    for b in blocks:
+        b_start = b["top"]
+        b_end = b["top"] + b["height"]   #optional; not needed
+
+        # drop inactive
+        active = [a for a in active if (a["top"] + a["height"]) > b_start]
+
+        # find used columns
+        used = {a["col"] for a in active if "col" in a}
+        col = 0
+        while col in used:
+            col += 1
+        b["col"] = col
+
+        active.append(b)
+
+        # compute current max columns among active
+        max_cols = max(a["col"] for a in active) + 1
+        for a in active:
+            a["col_count"] = max_cols
+
+    # special day handling
+    special_items = []
+
+    # fixed-date
+    for s in CalendarSpecial.objects.all():
+        occ = date(day.year, s.date.month, s.date.day) if s.recurring_yearly else s.date
+        if occ == day:
+            special_items.append({
+                "title": s.title,
+                "color_key": s.color_key,
+                "special_type": s.special_type,
+                "person": s.person,
+                "notes": s.notes,
+            })
+
+    # rule-based
+    for rs in CalendarRuleSpecial.objects.filter(is_enabled=True):
+        occ = compute_rule_date(rs.rule_key, day.year)
+        if occ == day:
+            special_items.append({
+                "title": rs.title_override or rs.get_rule_key_display(),
+                "color_key": rs.color_key,
+                "special_type": rs.special_type,
+                "person": rs.person,
+                "notes": rs.notes,
+            })
+
+    context = {
+        "today": today,
+        "day": day,
+        "prev_day": prev_day,
+        "next_day": next_day,
+        "events": events,               # keep if you want for lists / all-day
+        "all_day_events": all_day_events,
+        "event_blocks": blocks,         # for grid
+        "hours": range(24),
+        "special_items": special_items,
+    }
+
+    context.update(kiosk_context(request))
+    return render(request, "calendar_day.html", context)
+
+@ensure_csrf_cookie
+def calendar_week(request):
+    owner = get_calendar_owner()
+
+    today = timezone.localdate()  # actual today
+    day = today                   # context day defaults to today
+
+    date_str = request.GET.get("date")
+    if date_str:
+        try:
+            day = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+
+    # Make Sunday the first day of the week
+    # Python weekday(): Mon=0..Sun=6
+    # We want an offset where Sun -> 0, Mon -> 1, ... Sat -> 6
+    sunday_offset = (day.weekday() + 1) % 7
+    week_start = day - timedelta(days=sunday_offset)
+    week_end = week_start + timedelta(days=6)
+
+    start_dt = timezone.make_aware(datetime.combine(week_start, time.min))
+    end_dt = timezone.make_aware(datetime.combine(week_end, time.max))
+
+    prev_week = week_start - timedelta(days=7)
+    next_week = week_start + timedelta(days=7)
+
+    events = (CalendarEvent.objects
+              .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
+              .order_by("start_dt"))
+
+    # group events by date
+    events_by_day = {}
+    for e in events:
+        d = timezone.localtime(e.start_dt).date()
+        events_by_day.setdefault(d, []).append(e)
+
+    days = [week_start + timedelta(days=i) for i in range(7)]
+
+    inject_specials_into_events_by_day(events_by_day, week_start, week_end)
+    
+    context = {
+        "today": today,
+        "day": day,  # handy for links
+        "week_start": week_start,
+        "week_end": week_end,
+        "prev_week": prev_week,
+        "next_week": next_week,
+        "days": days,
+        "events_by_day": events_by_day,
+        
+        }
+
+    context.update(kiosk_context(request))
+    return render(request, "calendar_week.html", context)
+
+@ensure_csrf_cookie
+def calendar_month(request):
+    # pick month/year from querystring or default to current
+    owner = get_calendar_owner()
+
+    today = timezone.localdate()
+    year = int(request.GET.get("y", today.year))
+    month = int(request.GET.get("m", today.month))
+
+    prev_y, prev_m = add_month(year, month, -1)
+    next_y, next_m = add_month(year, month, +1)
+
+    first_day = date(year, month, 1)
+    _, last_day_num = monthrange(year, month)
+    last_day = date(year, month, last_day_num)
+
+    # build grid start (Sunday) -> grid end (Saturday)
+    grid_start = first_day - timedelta(days=(first_day.weekday() + 1) % 7)
+    grid_end = last_day + timedelta(days=(6 - ((last_day.weekday() + 1) % 7)))
+
+    start_dt = timezone.make_aware(datetime.combine(grid_start, datetime.min.time()))
+    end_dt = timezone.make_aware(datetime.combine(grid_end, datetime.max.time()))
+
+    events = (CalendarEvent.objects
+              .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
+              .order_by("start_dt"))
+
+    # group by date for easy template rendering
+    events_by_day = {}
+    for e in events:
+        day = timezone.localtime(e.start_dt).date()
+        events_by_day.setdefault(day, []).append(e)
+
+    inject_specials_into_events_by_day(events_by_day, grid_start, grid_end)
+
+    # build list of weeks (each week is 7 dates)
+    days = []
+    d = grid_start
+    while d <= grid_end:
+        days.append(d)
+        d += timedelta(days=1)
+
+    weeks = [days[i:i+7] for i in range(0, len(days), 7)]
+
+    context = {
+        "weeks": weeks,
+        "events_by_day": events_by_day,
+        "year": year,
+        "month": month,
+        "today": today,
+        "prev_y": prev_y, "prev_m": prev_m,
+        "next_y": next_y, "next_m": next_m,
+    }
+    context.update(kiosk_context(request))
+    return render(request, "calendar_month.html", context)
+        
+def kiosk_edit_required(view_func):
+    @wraps(view_func)
+    def _wrapped(request, *args, **kwargs):
+        if not can_user_edit(request):
+            # Optional: preserve kiosk=1 when redirecting
+            if kiosk_enabled(request):
+                return redirect("/calendar/?kiosk=1")
+            return redirect("calendar_month")
+        return view_func(request, *args, **kwargs)
+    return _wrapped
+    
+def kiosk_context(request):
+    is_kiosk = kiosk_enabled(request)
+    by = request.session.get("kiosk_unlocked_by", "N/A")
+    labels = getattr(settings, "KIOSK_PIN_LABELS", {})
+    label = labels.get(by, by)
+
+    until_str = request.session.get("kiosk_unlocked_until")
+    until_disp = None
+    if until_str:
+        until = parse_datetime(until_str)
+        if until and timezone.is_naive(until):
+            until = timezone.make_aware(until)
+        if until:
+            until_disp = date_format(timezone.localtime(until), "g:i A") #e.g. "3:45 PM"
+    
+    return {
+        "is_kiosk": is_kiosk,
+        "kiosk_qs": "kiosk=1" if is_kiosk else "",
+        "can_edit": can_user_edit(request),
+        "kiosk_unlocked_by": by,
+        "kiosk_unlocked_label": label,
+        "kiosk_unlocked_until_display": until_disp,
+    }
+
+def kiosk_is_unlocked(request):
+    until_str = request.session.get("kiosk_unlocked_until")
+    if not until_str:
+        return False
+
+    until = parse_datetime(until_str)
+    if until is None:
+        return False
+
+    if timezone.is_naive(until):
+        until = timezone.make_aware(until)
+
+    return timezone.now() < until
+
+def kiosk_unlock(request):
+    if request.method != "POST":
+        return JsonResponse({"ok": False}, status=405)
+
+    pin = (request.POST.get("pin") or "").strip()
+    return_to = request.POST.get("return_to") or "/calendar/"
+
+    pins = getattr(settings, "KIOSK_PINS", {})
+    matched_key = None
+    for key, configured_pin in pins.items():
+        if pin == str(configured_pin):
+            matched_key = key
+            break
+
+    if not matched_key:
+        ctx = kiosk_context(request)
+        context = {"error": "Invalid PIN.", "return_to": return_to}
+        context.update(ctx)
+        return render(request, "kiosk_unlock.html", context, status=403)
+
+    mins = int(getattr(settings, "KIOSK_UNLOCK_MINUTES", 10))
+    until = timezone.now() + timedelta(minutes=mins)
+    request.session["kiosk_unlocked_until"] = until.isoformat()
+    request.session["kiosk_unlocked_by"] = matched_key
+
+    if "kiosk=1" not in return_to:
+        joiner = "&" if "?" in return_to else "?"
+        return_to = f"{return_to}{joiner}kiosk=1"
+
+    return redirect(return_to)
+
+def kiosk_unlocked_by(request):
+    return request.session.get("kiosk_unlocked_by")
+
+def kiosk_unlock_page(request):
+    """
+    Shows the PIN entry page (GET).
+    The actual unlock happens in kiosk_unlock() via POST.
+    """
+    ctx = kiosk_context(request)
+    is_kiosk = ctx.get("is_kiosk", False)
+    default_return = "/calendar/?kiosk=1" if is_kiosk else "/calendar/"
+    return_to = request.GET.get("return_to") or default_return
+
+    context = {
+        "return_to": return_to,
+        "error": request.GET.get("error", ""),
+        "hide_kiosk_bar": True,
+    }
+    context.update(ctx)
+    return render(request, "kiosk_unlock.html", context)
+
+@require_POST
+def kiosk_lock(request):
+    request.session.pop("kiosk_unlocked_until", None)
+    request.session.pop("kiosk_unlocked_by", None)
+    request.session.modified = True
+    return JsonResponse({"ok": True})
+    
+def kiosk_enabled(request) -> bool:
+    if request.GET.get("kiosk") == "1":
+        request.session["kiosk_enabled"] = True
+        return True
+
+    if request.GET.get("kiosk") == "0":
+        request.session["kiosk_enabled"] = False
+        return False
+
+    if "kiosk_enabled" not in request.session and looks_like_tablet(request):
+        request.session["kiosk_enabled"] = True
+
+    return bool(request.session.get("kiosk_enabled", False))
+
+def looks_like_tablet(request) -> bool:
+    ua = (request.META.get("HTTP_USER_AGENT") or "").lower()
+    
+    # obvious tablets
+    if any(x in ua for x in ["ipad", "android"]) and "mobile" not in ua:
+        return True
+    return False
+
+def edit_actor(request) -> str:
+    # Server edits: not kiosk => "server"
+    if not kiosk_enabled(request):
+        return "server"
+
+    # Kiosk edits: whoever unlocked (mike/wife)
+    return request.session.get("kiosk_unlocked_by") or "kiosk"
+
+def add_month(year, month, delta):
+    # delta = -1 or +1
+    new_month = month + delta
+    new_year = year
+    if new_month == 0:
+        new_month = 12
+        new_year -= 1
+    elif new_month == 13:
+        new_month = 1
+        new_year += 1
+    return new_year, new_month
+
+@ensure_csrf_cookie
+@kiosk_edit_required
+def calendar_event_create(request):
+    owner = get_calendar_owner()
+
+    ctx = kiosk_context(request)
+    is_kiosk = ctx.get("is_kiosk", False)
+
+    default_return = "/calendar/?kiosk=1" if is_kiosk else "/calendar/"
+    return_to = request.GET.get("return_to") or default_return
+
+    # date prefill: ?date=YYYY-MM-DD
+    date_str = request.GET.get("date")
+    default_date = timezone.localdate()
+    if date_str:
+        try:
+            default_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            pass
+
+    if request.method == "POST":
+        # IMPORTANT: for POST, take return_to from the hidden input first
+        return_to = request.POST.get("return_to") or return_to
+
+        title = (request.POST.get("title") or "").strip()
+        notes = (request.POST.get("notes") or "").strip()
+        location = (request.POST.get("location") or "").strip()
+        person = request.POST.get("person", "mike")
+        all_day = request.POST.get("all_day") == "on"
+
+        if not title:
+            context = {"date": default_date, "return_to": return_to, "event": None, "error": "Title is required."}
+            context.update(ctx)
+            return render(request, "calendar_event_form.html", context)
+
+        if all_day:
+            start_dt = timezone.make_aware(datetime.combine(default_date, time.min))
+            end_dt = timezone.make_aware(datetime.combine(default_date, time.max))
+        else:
+            start_time = request.POST.get("start_time", "09:00")
+            end_time = request.POST.get("end_time", "10:00")
+
+            st = datetime.strptime(start_time, "%H:%M").time()
+            et = datetime.strptime(end_time, "%H:%M").time()
+
+            if et <= st:
+                context = {"date": default_date, "return_to": return_to, "event": None, "error": "End time must be after start time."}
+                context.update(ctx)
+                return render(request, "calendar_event_form.html", context)
+
+            start_dt = timezone.make_aware(datetime.combine(default_date, st))
+            end_dt = timezone.make_aware(datetime.combine(default_date, et))
+
+        event = CalendarEvent.objects.create(
+            user=owner,
+            title=title,
+            person=person,
+            start_dt=start_dt,
+            end_dt=end_dt,
+            all_day=all_day,
+            notes=notes,
+            location=location,
+        )
+
+        actor = edit_actor(request)
+        event.created_by = actor
+        event.last_edited_by = actor
+        event.save(update_fields=["created_by", "last_edited_by"])
+
+        return redirect(return_to)
+
+    # GET
+    context = {"date": default_date, "return_to": return_to, "event": None}
+    context.update(ctx)
+    return render(request, "calendar_event_form.html", context)
+
+@ensure_csrf_cookie
+@kiosk_edit_required
+def calendar_event_edit(request, event_id):
+    owner = get_calendar_owner()
+    event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
+
+    if request.method == "POST":
+        title = request.POST.get("title", "").strip()
+        notes = request.POST.get("notes", "").strip()
+        location = request.POST.get("location", "").strip()
+        person = request.POST.get("person", "mike")
+        all_day = request.POST.get("all_day") == "on"
+
+        if not title:
+            return render(request, "calendar_event_form.html", {
+                "date": event.start_dt.date(),
+                "return_to": request.POST.get("return_to", "/calendar/"),
+                "error": "Title is required.",
+                "event": event,
+            })
+        
+        # date is locked for MVP; we can add change-date later
+        d = event.start_dt.date()
+
+        if all_day:
+            start_dt = timezone.make_aware(datetime.combine(d, time.min))
+            end_dt = timezone.make_aware(datetime.combine(d, time.max))
+        else:
+            st = datetime.strptime(request.POST.get("start_time", "09:00"), "%H:%M").time()
+            et = datetime.strptime(request.POST.get("end_time", "10:00"), "%H:%M").time()
+            if et <= st:
+                return render(request, "calendar_event_form.html", {
+                    "date": d,
+                    "return_to": request.POST.get("return_to", "/calendar/"),
+                    "error": "End time must be after start time.",
+                    "event": event,
+                })
+            start_dt = timezone.make_aware(datetime.combine(d, st))
+            end_dt = timezone.make_aware(datetime.combine(d, et))
+
+        event.title = title
+        event.notes = notes
+        event.location = location
+        event.person = person
+        event.all_day = all_day
+        event.start_dt = start_dt
+        event.end_dt = end_dt
+        if not event.created_by:
+            event.created_by = edit_actor(request)
+        event.last_edited_by = edit_actor(request)
+
+        event.save()
+
+        return redirect(request.POST.get("return_to", "/calendar/"))
+    
+    context = {
+        "date": event.start_dt.date(),
+        "return_to": request.GET.get("return_to", "/calendar/"),
+        "event": event,
+        }
+    context.update(kiosk_context(request))
+    return render(request, "calendar_event_form.html", context)
+
+@ensure_csrf_cookie
+@kiosk_edit_required
+def calendar_event_delete(request, event_id):
+    owner = get_calendar_owner()
+    event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
+
+    ctx = kiosk_context(request)
+    is_kiosk = ctx.get("is_kiosk", False)
+
+    default_return = "/calendar/?kiosk=1" if is_kiosk else "/calendar/"
+    return_to = request.GET.get("return_to") or default_return
+
+    if request.method == "POST":
+        event.delete()
+        return redirect(request.POST.get("return_to") or default_return)
+    
+    context = {
+        "event": event,
+        "return_to": return_to,
+    }
+
+    context.update(ctx)
+    return render(request, "calendar_event_delete.html", context)
+
+def calendar_event_detail(request, event_id):
+    owner = get_calendar_owner()
+    event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
+
+    ctx = kiosk_context(request)
+    is_kiosk = ctx.get("is_kiosk", False)
+
+    default_return = "/calendar/?kiosk=1" if is_kiosk else "/calendar/"
+    return_to = request.GET.get("return_to") or default_return
+
+    context = {
+        "event": event,
+        "return_to": return_to,
+    }
+    context.update(ctx)
+    return render(request, "calendar_event_detail.html", context)
+
+def can_user_edit(request):
+    # Server (not kiosk) = always editable
+    if not kiosk_enabled(request):
+        return True
+
+    # Tablet kiosk = only editable if unlocked
+    return kiosk_is_unlocked(request)
+
+def calendar_entry(request):
+    today = timezone.localdate().strftime("%Y-%m-%d")
+    if looks_like_tablet(request):
+        return redirect(f"/calendar/week/?date={today}&kiosk=1")
+    return redirect(f"/calendar/month/?y={timezone.localdate().year}&m={timezone.localdate().month}")
+
+#--- Date rule computations for calendar specials ---
+def nth_weekday_of_month(year: int, month: int, weekday: int, n: int) -> date:
+    """
+    weekday: Mon=0..Sun=6
+    n: 1..5
+    """
+    d = date(year, month, 1)
+    # move forward to first desired weekday
+    while d.weekday() != weekday:
+        d += timedelta(days=1)
+    # then jump (n-1) weeks
+    return d + timedelta(days=7*(n-1))
+
+def last_weekday_of_month(year: int, month: int, weekday: int) -> date:
+    d = date(year, month+1, 1) - timedelta(days=1) if month < 12 else date(year+1, 1, 1) - timedelta(days=1)
+    while d.weekday() != weekday:
+        d -= timedelta(days=1)
+    return d
+
+def easter_western(year: int) -> date:
+    """
+    Anonymous Gregorian algorithm (Meeus/Jones/Butcher).
+    """
+    a = year % 19
+    b = year // 100
+    c = year % 100
+    d = b // 4
+    e = b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19*a + b - d - g + 15) % 30
+    i = c // 4
+    k = c % 4
+    l = (32 + 2*e + 2*i - h - k) % 7
+    m = (a + 11*h + 22*l) // 451
+    month = (h + l - 7*m + 114) // 31
+    day = ((h + l - 7*m + 114) % 31) + 1
+    return date(year, month, day)
+
+def compute_rule_date(rule_key: str, year: int) -> date:
+    if rule_key == "easter":
+        return easter_western(year)
+    
+    if rule_key == "good_friday":
+        return easter_western(year) - timedelta(days=2)
+
+    if rule_key == "thanksgiving_us":
+        # 4th Thursday of November
+        return nth_weekday_of_month(year, 11, weekday=3, n=4)
+
+    if rule_key == "mothers_day_us":
+        # 2nd Sunday of May
+        return nth_weekday_of_month(year, 5, weekday=6, n=2)
+
+    if rule_key == "fathers_day_us":
+        # 3rd Sunday of June
+        return nth_weekday_of_month(year, 6, weekday=6, n=3)
+
+    if rule_key == "memorial_day_us":
+        # last Monday of May
+        return last_weekday_of_month(year, 5, weekday=0)
+
+    if rule_key == "labor_day_us":
+        # 1st Monday of September
+        return nth_weekday_of_month(year, 9, weekday=0, n=1)
+
+    if rule_key == "mlk_day_us":
+        # 3rd Monday of January
+        return nth_weekday_of_month(year, 1, weekday=0, n=3)
+
+    if rule_key == "presidents_day_us":
+        # 3rd Monday of February
+        return nth_weekday_of_month(year, 2, weekday=0, n=3)
+    
+    raise ValueError(f"Unknown rule_key: {rule_key}")
+
+@require_GET
+def health_ping(request):
+    return JsonResponse({"ok": True})

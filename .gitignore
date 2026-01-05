@@ -12,6 +12,11 @@ venv/
 # Django
 *.sqlite3
 /staticfiles/
+# keep media files out of git
+/static/budget/calendar_photos/  
 /media/
+
+# Local helper scripts
+print_dir_tree_script.py
 
 /*.log

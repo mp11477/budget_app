@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-   <title>{% block title %}My Budget App{% endblock %}</title>
+  <title>{% block title %}My Budget App{% endblock %}</title>
+
+  <!-- vendor libs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  {% block extra_styles %}{% endblock %}
+  {% block head_extra %}{% endblock %}
+    
+  
   <style type="text/tailwindcss">
  
   /* Scoped heading defaults (only affect content, not sidebar) */
@@ -14,11 +24,16 @@
    }
  </style>
 
-</style>
-  <!-- Optional: Material Icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-  
+  <!-- Optional: Material Icons -->
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /> 
+   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <!-- Optional: Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
 <style>
   /* Site-wide heading defaults */
    
@@ -155,17 +170,32 @@
 
   main p { line-height: 1.6; }
 
+  /* Hide sidebar only in kiosk mode (tablet) */
+body.kiosk #sidebar { display: none !important; }
+
+/* Remove the left offset that assumes sidebar exists */
+body.kiosk main { margin-left: 0 !important; }
 
 </style>
 
 </head>
 
-<body class="!bg-[#d8e2e9] text-gray-900">
+<body class="!bg-[#d8e2e9] text-gray-900 {% if is_kiosk %}kiosk{% endif %}">
+  {% if is_kiosk and can_edit %}
+    <div class="text-xs text-gray-600">
+      Editing unlocked by:
+      {{ kiosk_unlocked_label|default:"Unknown" }}
+      {% if kiosk_unlocked_until_display %}
+        (until {{ kiosk_unlocked_until_display }})
+      {% endif %}
+    </div>
+  {% endif %}
 
 <!-- Shell -->
 <div class="min-h-screen flex">
         
   <!-- Mobile toggle (shown < md) -->
+   {% if not is_kiosk %}
   <button
     class="md:hidden p-3 m-2 rounded bg-[#3c4e61] text-[#f9f7f7] shadow"
     aria-controls="sidebar"
@@ -174,11 +204,13 @@
   >
     ☰ Menu
   </button>
+  {% endif %}
 
+  {% if not is_kiosk %}
   <!-- Sidebar -->
   <nav id="sidebar"
        class="w-64 bg-[#3c4e61] text-[#f9f7f7] shadow-md flex flex-col justify-between font-sans 
-              fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 ">
+              fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 sidebar">
     {% with current=request.resolver_match.url_name %}
 
     <div>
@@ -218,10 +250,44 @@
           Gig Data
         </div>
         <li>
-          <a href="{% url 'charts' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
-              {% if current == 'charts' %}!bg-[#A9B8C1] !text-white{% endif %}">
-            <span class="material-icons text-green-500 mr-3">bar_chart</span>
-            Mileage entry
+          <a href="{% url 'gig_entry' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'gig_entry' %}!bg-[#A9B8C1] !text-white{% endif %}">
+            <span class="material-icons text-green-500 mr-3">add_task</span>
+            Gig Shift Data Entry
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'gig_summary' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'gig_summary' %}!bg-[#A9B8C1] !text-white{% endif %}">
+            <span class="material-icons text-green-500 mr-3">summarize</span>
+            Gig Shift Summary by Month
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'mileage_rate_settings' %}" 
+              class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'mileage_rate_settings' %}!bg-[#A9B8C1] !text-white{% endif %}">
+            <span class="material-icons text-green-500 mr-3">directions_car</span>
+            Mileage Deduction Update
+          </a>
+        </li>
+        <hr class="my-2 border-gray-400/40"></hr>
+        <div class="text-[10px] tracking-wide text-gray-400 mt-3 mb-1 px-2">
+          Calendar + Scheduling
+        </div>
+        <li>
+          <a href="{% url 'calendar_home' %}{% if kiosk_qs %}?{{ kiosk_qs }}{% endif %}" 
+              class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'calendar_home' %}!bg-[#A9B8C1] !text-white{% endif %}">
+            <span class="material-icons text-green-500 mr-3">view_agenda</span>
+            Calendar Daily Summary
+          </a>
+        </li>
+        <li>
+        <a href="{% url 'calendar_month' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'calendar_month' %}!bg-[#A9B8C1] !text-white{% endif %}">
+            <span class="material-icons text-green-500 mr-3">calendar_view_month</span>
+            Monthly Calendar
           </a>
         </li>
         
@@ -234,23 +300,87 @@
     </div>
     {% endwith %}
   </nav>
+  {% endif %}
 
   <!-- Main Content Area -->
   <!-- Allow pages to add classes to <main> -->
-    <main class="flex-1 p-8 md:ml-64 {% block main_class %}{% endblock %}">
-    {% block content %}
-    
-    {% endblock %}
+    <main class="flex-1 p-8 {% if not is_kiosk %}md:ml-64{% endif %} {% block main_class %}{% endblock %}">
 
+      {% if is_kiosk and not hide_kiosk_bar %}
+        <div class="flex justify-end px-6 pt-4 gap-2">
+          {% if can_edit %}
+            <button
+              type="button"
+              class="px-3 py-1 rounded bg-gray-200/80 text-sm"
+              onclick="kioskLockNow()">  <!--JS function defined below to lock kiosk immediately-->
+              Lock
+            </button>
+          {% else %}
+            <a class="px-3 py-1 rounded bg-yellow-200/80 text-sm"
+              href="{% url 'kiosk_unlock_page' %}?return_to={{ request.get_full_path|urlencode }}">
+              Unlock
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    {% block content %}
+   
     {# Optional page-specific head/scripts #}
-    {% block head_extra %}{% endblock %}
-    {% block scripts %}{% endblock %}
+    
+   {% endblock %}
     </main>
   
 </div>
+
+{% block scripts %}
+  {{ block.super }}
+      {% if is_kiosk %}
+          <script>
+              (function() {
+                const LOCK_AFTER_MS = 5 * 60 * 1000; // 5 minutes (kiosk inactivity auto-lock)
+                let timer = null;
+
+                function getCookie(name) {
+                  const v = `; ${document.cookie}`;
+                  const parts = v.split(`; ${name}=`);
+                  if (parts.length === 2) return parts.pop().split(';').shift();
+                }
+
+                async function doLockAndRedirect() {
+                  try {
+                    await fetch("{% url 'kiosk_lock' %}", {
+                      method: "POST",
+                      headers: { "X-CSRFToken": getCookie("csrftoken") },
+                      credentials: "same-origin",
+                    });
+                  } catch (e) {}
+                  window.location.replace("{% url 'calendar_home' %}?kiosk=1");
+                }
+
+                // ✅ Make it callable from onclick="kioskLockNow()"
+                window.kioskLockNow = async function kioskLockNow() {
+                  await doLockAndRedirect();
+                }
+
+                // auto timeout logic
+                function resetTimer() {
+                  if (timer) clearTimeout(timer);
+                  timer = setTimeout(doLockAndRedirect, LOCK_AFTER_MS);
+                }
+
+                ["touchstart","touchmove","mousedown","mousemove","keydown","scroll"].forEach(evt => {
+                  window.addEventListener(evt, resetTimer, { passive: true });
+                });
+
+                resetTimer();
+              })();
+          </script>
+        {% endif %}
+  {% endblock %}
+
 </body>
- {% block extra_styles %}
- {% endblock %}
+
 </html>
   
   

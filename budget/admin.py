@@ -1,9 +1,24 @@
 from django.contrib import admin
-from .models import Account, Category, SubCategory, Transaction, Transfer
+from .models import Account, Category, SubCategory, Transaction, Transfer, GigCompany, GigShift, GigCompanyEntry, CalendarSpecial, CalendarRuleSpecial
 
 # Simple registrations (no custom admin behavior)
 admin.site.register(Category)
 admin.site.register(SubCategory)
+
+@admin.register(GigCompany)
+class GigCompanyAdmin(admin.ModelAdmin):
+    list_display = ("code", "name", "payout_account")
+    search_fields = ("code", "name")
+
+@admin.register(GigShift)
+class GigShiftAdmin(admin.ModelAdmin):
+    list_display = ("date", "start_time", "end_time", "miles")
+    list_filter = ("date",)
+
+@admin.register(GigCompanyEntry)
+class GigCompanyEntryAdmin(admin.ModelAdmin):
+    list_display = ("shift", "company", "deliveries", "gross_earnings")
+    list_filter = ("company",)
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
@@ -57,3 +72,15 @@ class TransferAdmin(admin.ModelAdmin):
     # def delete_queryset(self, request, queryset):
     #     for obj in queryset:
     #         obj.delete()
+
+@admin.register(CalendarSpecial)
+class CalendarSpecialAdmin(admin.ModelAdmin):
+    list_display = ("title", "date", "special_type", "person", "recurring_yearly")
+    list_filter = ("special_type", "person", "recurring_yearly")
+    search_fields = ("title",)
+
+@admin.register(CalendarRuleSpecial)
+class CalendarRuleSpecialAdmin(admin.ModelAdmin):
+    list_display = ("rule_key", "is_enabled", "title_override", "color_key")
+    list_editable = ("is_enabled", "color_key")
+    search_fields = ("rule_key", "title_override")
