@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-6 max-w-xl">
+  <h1 class="text-xl font-bold">Delete event?</h1>
+  <p class="mt-2">{{ event.title }}</p>
+
+  <form method="post" class="mt-4 flex gap-2">
+    {% csrf_token %}
+    <input type="hidden" name="return_to" value="{{ return_to }}{% if kiosk_qs %}&{{ kiosk_qs }}{% endif %}">
+    <button class="px-4 py-2 rounded bg-red-600 text-white">Delete</button>
+    <a class="px-4 py-2 rounded bg-gray-200" href="{{ return_to }}{% if kiosk_qs %}&{{ kiosk_qs }}{% endif %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

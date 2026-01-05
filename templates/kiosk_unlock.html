@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-6 max-w-sm mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Enter PIN</h1>
+
+  {% if error %}
+    <div class="mb-3 p-2 rounded bg-red-100 text-red-800 text-sm">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="{% url 'kiosk_unlock' %}" class="space-y-3">
+    {% csrf_token %}
+    <input type="hidden" name="return_to" value="{{ return_to }}"/>
+
+    <label class="block text-sm font-semibold">PIN</label>
+    <input
+      name="pin"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      class="w-full p-2 rounded border text-lg tracking-widest"
+      maxlength="4"
+      autofocus
+      required
+    />
+
+    <button class="w-full px-4 py-2 rounded bg-yellow-200/80 font-semibold">
+      Unlock
+    </button>
+
+    <a class="block text-center text-sm underline mt-2" href="{{ return_to }}">
+      Cancel
+    </a>
+  </form>
+</div>
+{% endblock %}
