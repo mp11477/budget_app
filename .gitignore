@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+*.pyc
 
 # Environments
 .env
@@ -11,12 +12,17 @@ venv/
 
 # Django
 *.sqlite3
+*.sqlite3.BACKUP
+db.sqlite3
+db.sqlite3-journal
+.DS_Store
 /staticfiles/
 # keep media files out of git
-/static/budget/calendar_photos/  
-/media/
+/staticfiles/
+/static/**/calendar_photos/
 
 # Local helper scripts
 print_dir_tree_script.py
 
 /*.log
+*.log
