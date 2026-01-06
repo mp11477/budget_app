@@ -64,6 +64,8 @@ CACHES = {
 
 INSTALLED_APPS = [
     'budget.apps.BudgetConfig',
+    "jobtracker.apps.JobtrackerConfig",
+    "calendar_app.apps.CalendarAppConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

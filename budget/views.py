@@ -1071,7 +1071,7 @@ def main_calendar(request):
 }
 
     context.update(kiosk_context(request))
-    return render(request, 'main_calendar.html', context)
+    return render(request, 'calendar_home.html', context)
 
 @require_GET
 def weather_fragment(request):
