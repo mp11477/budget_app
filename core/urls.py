@@ -9,6 +9,10 @@ urlpatterns = [
 
     # calendar app owns these routes
     path("calendar/", include("calendar_app.urls")),
+
+    #gigs app owns these routes
+    path("gigs/", include("gigs.urls")),
+    
     # path("jobtracker/", include("jobtracker.urls")),
 ]
     

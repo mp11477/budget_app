@@ -3,11 +3,6 @@ from . import views
 
 urlpatterns = [
    
-    path('gig-entry/', views.gig_entry, name='gig_entry'),
-    path('gig-summary/', views.gig_summary, name='gig_summary'),
-    path('mileage-rate/', views.mileage_rate_settings, name='mileage_rate_settings'),
-
-
     ### Additional budget-related routes ###
     path("dashboard_test/", views.dashboard_test, name="dashboard_test"),
     path("dashboard/", views.dashboard, name="dashboard"),

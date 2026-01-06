@@ -882,7 +882,7 @@ def gig_entry(request):
 
     return render(
         request,
-        "gig_entry.html",
+        "gigs/gig_entry.html",
         {"shift_form": shift_form, "formset": formset},
     )
 
@@ -1002,7 +1002,7 @@ def gig_summary(request):
         "companies": companies_for_month,
     }
 
-    return render(request, "gig_summary.html", context)
+    return render(request, "gigs/gig_summary.html", context)
 
 @login_required
 def mileage_rate_settings(request):
@@ -1022,7 +1022,7 @@ def mileage_rate_settings(request):
 
     return render(
         request,
-        "mileage_rate_settings.html",
+        "gigs/mileage_rate_settings.html",
         {
             "form": form,
             "rates": rates,
