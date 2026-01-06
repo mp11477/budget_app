@@ -12,7 +12,8 @@ urlpatterns = [
 
     #gigs app owns these routes
     path("gigs/", include("gigs.urls")),
-    
-    # path("jobtracker/", include("jobtracker.urls")),
+
+    # Jobtracker app owns these routes
+    path("jobtracker/", include("jobtracker.urls")),
 ]
     

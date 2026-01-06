@@ -41,6 +41,10 @@ else:
 
 print(f"[settings.py] Using database file: {db_file}")
 
+# Check the database in the shell just to be sure using these commands
+# python manage.py shell -c "from django.conf import settings; print(settings.DATABASES['default']['NAME'])"
+# python manage.py showmigrations [app_label] (ex:  python manage.py showmigrations jobtracker)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
