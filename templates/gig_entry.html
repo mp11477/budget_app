@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto p-4 lg:p-6">
+  <h1 class="text-2xl font-bold mb-4">Gig Shift Entry</h1>
+  <p class="text-sm text-gray-600 mb-6">
+    Enter your shift details and per-company earnings. When saved, this shift
+    will be available in your gig summary, and each company’s earnings can be
+    tied into your budget transactions.
+  </p>
+
+  {# ---------------- SHIFT FORM ---------------- #}
+  <div class="bg-white shadow rounded-xl p-4 lg:p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4">Shift Details</h2>
+
+    {% if shift_form.non_field_errors %}
+      <div class="mb-4 text-sm text-red-600">
+        {{ shift_form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            Date
+          </label>
+          {{ shift_form.date }}
+          {{ shift_form.date.errors }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            Start Time
+          </label>
+          {{ shift_form.start_time }}
+          {{ shift_form.start_time.errors }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            End Time
+          </label>
+          {{ shift_form.end_time }}
+          {{ shift_form.end_time.errors }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            Miles
+          </label>
+          {{ shift_form.miles }}
+          {{ shift_form.miles.errors }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            MPG
+          </label>
+          {{ shift_form.mpg }}
+          {{ shift_form.mpg.errors }}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1">
+            Gas Price
+          </label>
+          {{ shift_form.gas_price }}
+          {{ shift_form.gas_price.errors }}
+        </div>
+
+        <div class="md:col-span-3 text-xs text-gray-500">
+        Company mix will be auto-filled based on the companies you enter below
+        (e.g. "DD/WM/UE"). You don’t need to type it manually.
+        </div>
+
+        <div class="md:col-span-3 text-xs text-gray-500 mt-2">
+        Mileage deduction is calculated automatically using your configured IRS rate
+        for the shift date. You don’t need to enter it here.
+        </div>
+
+      </div>
+
+      {# ---------------- COMPANY FORMSET ---------------- #}
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold">Per-Company Earnings</h2>
+          <p class="text-xs text-gray-500">
+            One row per company you worked with this shift
+            (e.g. DoorDash, Uber Eats, Walmart Spark).
+          </p>
+        </div>
+
+        {{ formset.management_form }}
+
+        {% if formset.non_form_errors %}
+          <div class="mb-3 text-sm text-red-600">
+            {{ formset.non_form_errors }}
+          </div>
+        {% endif %}
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-xs border border-slate-200 rounded-lg overflow-hidden">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="px-2 py-2 text-left font-semibold border-b border-slate-200">
+                  Company
+                </th>
+                <th class="px-2 py-2 text-right font-semibold border-b border-slate-200">
+                  Deliveries
+                </th>
+                <th class="px-2 py-2 text-right font-semibold border-b border-slate-200">
+                  Gross Earnings
+                </th>
+                <th class="px-2 py-2 text-right font-semibold border-b border-slate-200">
+                  Tips #
+                </th>
+                <th class="px-2 py-2 text-right font-semibold border-b border-slate-200">
+                  Tip $
+                </th>
+                <th class="px-2 py-2 text-right font-semibold border-b border-slate-200">
+                  Earnings before Tips
+                </th>
+                <th class="px-2 py-2 text-center font-semibold border-b border-slate-200">
+                  Remove
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for form in formset %}
+                <tr class="border-b border-slate-100">
+                  {# include hidden id field for editing existing rows #}
+                  {{ form.id }}
+
+                  <td class="px-2 py-2 align-top">
+                    {{ form.company }}
+                    {% if form.company.errors %}
+                      <div class="text-red-600 text-[11px]">
+                        {{ form.company.errors }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td class="px-2 py-2 text-right align-top">
+                    {{ form.deliveries }}
+                    {% if form.deliveries.errors %}
+                      <div class="text-red-600 text-[11px]">
+                        {{ form.deliveries.errors }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td class="px-2 py-2 text-right align-top">
+                    {{ form.gross_earnings }}
+                    {% if form.gross_earnings.errors %}
+                      <div class="text-red-600 text-[11px]">
+                        {{ form.gross_earnings.errors }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td class="px-2 py-2 text-right align-top">
+                    {{ form.tips_count }}
+                    {% if form.tips_count.errors %}
+                      <div class="text-red-600 text-[11px]">
+                        {{ form.tips_count.errors }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td class="px-2 py-2 text-right align-top">
+                    {{ form.tips_amount }}
+                    {% if form.tips_amount.errors %}
+                      <div class="text-red-600 text-[11px]">
+                        {{ form.tips_amount.errors }}
+                      </div>
+                    {% endif %}
+                  </td>
+
+                  <td class="px-2 py-2 text-right align-top">
+                    <input type="text"
+                            class="earnings-before-tips w-full text-right bg-slate-50 border border-slate-200 rounded px-1 py-0.5 text-xs"
+                            readonly>
+                    <div class="text-[10px] text-gray-400">
+                        Auto: Gross - Tip $
+                    </div>
+                  </td>
+
+
+                  <td class="px-2 py-2 text-center align-top">
+                    {% if form.DELETE %}
+                      <label class="inline-flex items-center gap-1 text-[11px] text-gray-600">
+                        {{ form.DELETE }}
+                        <span>Delete</span>
+                      </label>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-2 text-[11px] text-gray-500">
+          Leave unused rows blank. Use “Delete” on existing rows
+          to remove them from a saved shift.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-end gap-3">
+        <a href="{% url 'gig_summary' %}"
+            class="inline-flex items-center px-4 py-2 text-sm rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50">
+            Cancel
+        </a>
+
+        <!-- New: Save & Add Another -->
+        <button type="submit"
+                name="action"
+                value="save_add"
+                class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg border border-emerald-600 text-emerald-700 bg-white hover:bg-emerald-50">
+            Save &amp; Add Another
+        </button>
+
+        <!-- Existing: Save + go to summary -->
+        <button type="submit"
+                name="action"
+                value="save"
+                class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">
+            Save Shift
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function updateRowCalculations(row) {
+    const grossInput = row.querySelector(".gross-earnings");
+    const tipsCountInput = row.querySelector(".tips-count");
+    const tipsAmountInput = row.querySelector(".tips-amount");
+    const ebtInput = row.querySelector(".earnings-before-tips");
+
+    if (!grossInput || !tipsCountInput || !tipsAmountInput || !ebtInput) return;
+
+    const tipsCount = parseInt(tipsCountInput.value, 10) || 0;
+
+    if (tipsCount <= 0) {
+      // Readonly so value is still submitted
+      tipsAmountInput.readOnly = true;
+      tipsAmountInput.value = "0.00";
+      tipsAmountInput.classList.add("bg-slate-100", "text-slate-400");
+    } else {
+      tipsAmountInput.readOnly = false;
+      tipsAmountInput.classList.remove("bg-slate-100", "text-slate-400");
+      if (!tipsAmountInput.value) {
+        tipsAmountInput.value = "0.00";
+      }
+    }
+
+    const gross = parseFloat(grossInput.value) || 0;
+    const tips = parseFloat(tipsAmountInput.value) || 0;
+    const ebt = gross - tips;
+    ebtInput.value = ebt.toFixed(2);
+  }
+
+  function initGigRowCalculations() {
+    const rows = document.querySelectorAll("table tbody tr");
+    rows.forEach((row) => {
+      const grossInput = row.querySelector(".gross-earnings");
+      const tipsCountInput = row.querySelector(".tips-count");
+      const tipsAmountInput = row.querySelector(".tips-amount");
+
+      if (!grossInput || !tipsCountInput || !tipsAmountInput) return;
+
+      const handler = () => updateRowCalculations(row);
+
+      grossInput.addEventListener("input", handler);
+      tipsCountInput.addEventListener("input", handler);
+      tipsAmountInput.addEventListener("input", handler);
+
+      // Initialize state
+      updateRowCalculations(row);
+    });
+  }
+
+  function initTimeValidation() {
+    const startInput = document.querySelector("input[name='start_time']");
+    const endInput = document.querySelector("input[name='end_time']");
+    if (!startInput || !endInput) return;
+
+    // Create a small error message element under the time fields
+    const errorMsg = document.createElement("div");
+    errorMsg.className = "text-xs text-red-600 mt-1";
+    // Attach under the end time input’s parent
+    endInput.parentElement.appendChild(errorMsg);
+
+    function checkTimes() {
+      errorMsg.textContent = "";
+      startInput.setCustomValidity("");
+      endInput.setCustomValidity("");
+
+      if (!startInput.value || !endInput.value) return;
+
+      // For <input type="time">, the values are "HH:MM"
+      if (endInput.value <= startInput.value) {
+        const msg = "End time must be later than start time.";
+        errorMsg.textContent = msg;
+        endInput.setCustomValidity(msg);
+      }
+    }
+
+    startInput.addEventListener("input", checkTimes);
+    endInput.addEventListener("input", checkTimes);
+    startInput.addEventListener("change", checkTimes);
+    endInput.addEventListener("change", checkTimes);
+
+    // Initial check in case there are prefilled values
+    checkTimes();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initGigRowCalculations();  // your existing per-row logic
+    initTimeValidation();      // new time validation
+  });
+</script>
+
+
+{% endblock %}

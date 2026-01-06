@@ -1,0 +1,618 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto p-4 lg:p-6">
+  <!-- HEADER + FILTERS -->
+  <div class="mb-4 justify-center text-center">
+    <!-- Title-->
+    <div class="mx-auto">
+      <h1 class="text-2xl font-bold">
+        Gig Summary - {{ selected_month|date:"F Y" }}
+      </h1>
+    </div>
+
+    <!-- Filters row -->
+    <div class="mt-4 flex justify-center">
+      <form method="get" class="flex flex-wrap items-center gap-3 text-xs md:text-sm">
+        <!-- Month group: label + select stay together -->
+        <div class="flex items-center gap-1">
+          <label class="text-xs text-gray-600">Month:</label>
+          <select name="month"
+                  class="border border-slate-300 rounded-xl px-2 py-1 text-sm"
+                  onchange="this.form.submit()">
+            {% if months %}
+              {% for month in months %}
+                {% with month_value=month|date:"Y-m" %}
+                  <option value="{{ month_value }}"
+                    {% if selected_month and month|date:"Y-m" == selected_month|date:"Y-m" %}
+                      selected
+                    {% endif %}
+                  >
+                    {{ month|date:"F Y" }}
+                  </option>
+                {% endwith %}
+              {% endfor %}
+            {% else %}
+              <option value="">No data yet</option>
+            {% endif %}
+          </select>
+        </div>
+
+        <!-- Company group: label + select stay together -->
+        <div class="flex items-center gap-1">
+          <label class="text-xs text-gray-600">Company:</label>
+          <select name="company"
+                  class="border border-slate-300 rounded-xl px-2 py-1 text-sm"
+                  onchange="this.form.submit()">
+            <option value="ALL"
+              {% if company_code == "ALL" or not company_code %}
+                selected
+              {% endif %}
+            >
+              All Companies
+            </option>
+            {% for company in companies %}
+              <option value="{{ company.code }}"
+                {% if company_code == company.code %}
+                  selected
+                {% endif %}
+              >
+                {{ company.code }} - {{ company.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <div class="flex items-center justify-center min-h-16">
+    <!-- Fallback Note -->
+    {% if using_fallback %}
+      <p class="text-xs text-red-600 italic" >
+        No gig shifts recorded for {{ current_month|date:"F Y" }} yet. 
+        Defaulting to most recent month with entries instead.
+      </p>
+    {% endif %} 
+    </div>
+
+    <!-- MONTHLY CHART (same container as header/table) -->
+    {% if shifts %}
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold text-slate-700 mb-3">
+          Earnings vs Net vs Miles ({{ selected_month|date:"F Y" }})
+        </h2>
+        <div class="bg-white border border-slate-200 rounded-xl p-3">
+          <canvas id="gigEarningsChart" class="w-full" height="240"></canvas>
+        </div>
+      </div>
+
+      <!-- New Hourly chart -->
+    <div class="mb-6">
+        <h2 class="text-sm font-semibold text-slate-700 mb-3">
+        Hourly Gross &amp; Net ({{ selected_month|date:"F Y" }})
+        </h2>
+        <div class="bg-white border border-slate-200 rounded-xl p-3">
+        <canvas id="gigHourlyChart" class="w-full" height="220"></canvas>
+        </div>
+    </div>
+
+    {% endif %}
+  </div>  <!-- end header + filters block -->
+
+  <!-- DAILY SUMMARY LABEL -->
+  {% if shifts %}
+    <p class="mt-6 text-sm font-semibold text-center text-slate-700">
+      {% if company_code and company_code != "ALL" %}
+        Daily Summary for 
+        {% for company in companies %}
+          {% if company.code == company_code %}
+            {{ company.name }} ({{ company.code }})
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        Daily Summary for All Companies
+      {% endif %}
+    </p>
+  {% endif %}
+
+  <!-- TABLE -->
+  {% if shifts %}
+    <div class="mt-8 flex items-center justify-center">
+      <table
+        class="w-full text-xs border border-slate-200 rounded-xl overflow-hidden"
+        id="gigTable"
+      >
+        <thead class="bg-slate-100">
+          <tr>
+            <th class="px-2 py-2 text-center whitespace-nowrap">Date</th>
+            <th class="px-2 py-2 text-center">Time</th>
+            <th class="px-2 py-2 text-center">Hours</th>
+            <th class="px-2 py-2 text-center">Miles</th>
+            <th class="px-2 py-2 text-center">MPG</th>
+            <th class="px-2 py-2 text-center">Gas Price</th>
+            <th class="px-2 py-2 text-center">Company</th>
+            <th class="px-2 py-2 text-center">Gross</th>
+            <th class="px-2 py-2 text-center">Gross/Hr</th>
+            <th class="px-2 py-2 text-center">Net</th>
+            <th class="px-2 py-2 text-center">Net/Hr</th>
+            <th class="px-2 py-2 text-center">Deliveries</th>
+            <th class="px-2 py-2 text-center">Earnings pre Tips</th>
+            <th class="px-2 py-2 text-center">Tipped Deliveries</th>
+            <th class="px-2 py-2 text-center">% Del w/Tips</th>
+            <th class="px-2 py-2 text-center">Tip Earnings</th>
+            <th class="px-2 py-2 text-center">Avg Tip</th>
+            <th class="px-2 py-2 text-center">Gross $/Mile</th>
+            <th class="px-2 py-2 text-center">Net $/Mile</th>
+            <th class="px-2 py-2 text-center">Deduction</th>
+            <th class="px-2 py-2 text-center">IRS Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for shift in shifts %}
+            <tr class="border-t border-slate-200 shift-row">
+              <td class="px-2 py-2 text-center whitespace-nowrap">
+                {{ shift.date|date:"m/d/y" }}
+              </td>
+              <td class="px-2 py-2 text-center whitespace-nowrap">
+                {{ shift.start_time }} - {{ shift.end_time }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.hours|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.miles }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.mpg|floatformat:1 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.gas_price|floatformat:3 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.company_mix_note }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.total_gross|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.gross_per_hour|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.net_after_gas|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.net_per_hour|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.total_deliveries }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.total_earnings_before_tips|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.total_tips_count }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                {{ shift.tip_percent_overall|floatformat:0 }}%
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.total_tips_amount|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.avg_tip_overall|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.gross_per_mile|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.net_per_mile|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.effective_deduction|floatformat:2 }}
+              </td>
+              <td class="px-2 py-2 text-center">
+                ${{ shift.effective_mileage_rate|floatformat:2 }}
+              </td>
+            </tr>
+            <tr class="bg-slate-50 detail-row">
+            <td colspan="21" class="px-2 py-1">
+                <details class="text-xs">
+                <summary class="cursor-pointer text-slate-700">
+                    Per-company breakdown
+                </summary>
+                <div class="mt-2">
+                    <table class="w-full text-[11px] border border-slate-200 rounded">
+                    <thead class="bg-slate-100">
+                        <tr>
+                        <th class="px-2 py-1 text-left">Company</th>
+                        <th class="px-2 py-1 text-right">Deliveries</th>
+                        <th class="px-2 py-1 text-right">Gross</th>
+                        <th class="px-2 py-1 text-right">Tips</th>
+                        <th class="px-2 py-1 text-right">Earnings before Tips</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in shift.company_entries.all %}
+                        <tr>
+                            <td class="px-2 py-1">
+                            {{ entry.company.code }} - {{ entry.company.name }}
+                            </td>
+                            <td class="px-2 py-1 text-right">
+                            {{ entry.deliveries }}
+                            </td>
+                            <td class="px-2 py-1 text-right">
+                            ${{ entry.gross_earnings|floatformat:2 }}
+                            </td>
+                            <td class="px-2 py-1 text-right">
+                            ${{ entry.tips_amount|floatformat:2 }}
+                            </td>
+                            <td class="px-2 py-1 text-right">
+                            ${{ entry.earnings_before_tips|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-2 py-1 text-xs text-slate-500">
+                            No per-company data for this shift.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+                </details>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot class="bg-slate-300 font-bold">
+          <tr>
+            <td class="px-2 py-2 bg-slate-400"></td>
+            <td class="px-2 py-2 bg-slate-400"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalHoursCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalMilesCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgMPGCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgGasPriceCell"></td>
+            <td class="px-2 py-2 bg-slate-400"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalGrossCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgGrossPerHourCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalNetAfterGasCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgNetPerHourCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalDeliveriesCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalEarningsBeforeTipsCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalTippedDeliveriesCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="pctDeliveriesWithTipsCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalTipEarningsCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgTipCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgGrossPerMileCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="avgNetPerMileCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-350" id="totalDeductionCell"></td>
+            <td class="px-2 py-2 text-center bg-slate-400"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+                
+  {% else %}
+    <p class="text-sm text-gray-600">
+      No gig shifts recorded for this month yet.
+      <a href="{% url 'gig_entry' %}" class="text-emerald-700 underline">
+        Add your first shift
+      </a>.
+    </p>
+  {% endif %}
+</div>  <!-- end max-w-5xl wrapper -->
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // ---------------------------
+    // 1) SUMMARY FOOTER CALCULATIONS
+    // ---------------------------
+    const table = document.getElementById("gigTable");
+    if (table) {
+      const rows = table.querySelectorAll("tbody tr.shift-row");
+      if (rows.length) {
+        // Running totals
+        let totalHours = 0;
+        let totalMiles = 0;
+        let totalGross = 0;
+        let totalNetAfterGas = 0;
+        let totalDeliveries = 0;
+        let totalEarningsBeforeTips = 0;
+        let totalTippedDeliveries = 0;
+        let totalTipEarnings = 0;
+        let totalDeduction = 0;
+
+        // For averages
+        let sumGasPrice = 0;
+        let gasPriceCount = 0;
+        let totalGallons = 0;   // for overall MPG
+
+        function parseCellNumber(cell) {
+          if (!cell) return 0;
+          const text = cell.textContent
+            .replace(/[\$,]/g, "")  // remove $ and commas
+            .replace("%", "")       // remove %
+            .trim();
+          const value = parseFloat(text);
+          return isNaN(value) ? 0 : value;
+        }
+
+        rows.forEach((row) => {
+          const cells = row.children;
+
+          const hours = parseCellNumber(cells[2]);            // Hours
+          const miles = parseCellNumber(cells[3]);            // Miles
+          const mpg = parseCellNumber(cells[4]);              // MPG
+          const gasPrice = parseCellNumber(cells[5]);         // Gas Price
+          const gross = parseCellNumber(cells[7]);            // Gross
+          const netAfterGas = parseCellNumber(cells[9]);      // Net after Gas
+          const deliveries = parseCellNumber(cells[11]);      // Deliveries
+          const earningsBeforeTips = parseCellNumber(cells[12]); // Earnings before tips
+          const tippedDeliveries = parseCellNumber(cells[13]);   // Tipped deliveries
+          const tipEarnings = parseCellNumber(cells[15]);     // Tip earnings
+          const deduction = parseCellNumber(cells[19]);       // Deduction
+
+          totalHours += hours;
+          totalMiles += miles;
+          totalGross += gross;
+          totalNetAfterGas += netAfterGas;
+          totalDeliveries += deliveries;
+          totalEarningsBeforeTips += earningsBeforeTips;
+          totalTippedDeliveries += tippedDeliveries;
+          totalTipEarnings += tipEarnings;
+          totalDeduction += deduction;
+
+          if (gasPrice > 0) {
+            sumGasPrice += gasPrice;
+            gasPriceCount += 1;
+          }
+
+          if (mpg > 0 && miles > 0) {
+            // gallons = miles / mpg
+            totalGallons += miles / mpg;
+          }
+        });
+
+        // Helper to set plain numeric text
+        function setNumber(id, value, decimals = 2) {
+          const cell = document.getElementById(id);
+          if (!cell) return;
+          const n = value || 0;
+          cell.textContent = n.toFixed(decimals);
+        }
+
+        // Helper to set currency with $
+        function setCurrency(id, value, decimals = 2) {
+          const cell = document.getElementById(id);
+          if (!cell) return;
+          const n = value || 0;
+          cell.textContent = "$" + n.toFixed(decimals);
+        }
+
+        // Helper to set percentage with %
+        function setPercent(id, value, decimals = 1) {
+          const cell = document.getElementById(id);
+          if (!cell) return;
+          const n = value || 0;
+          cell.textContent = n.toFixed(decimals) + "%";
+        }
+
+        // Totals
+        setNumber("totalHoursCell", totalHours, 2);
+        setNumber("totalMilesCell", totalMiles, 2);
+        setCurrency("totalGrossCell", totalGross, 2);
+        setCurrency("totalNetAfterGasCell", totalNetAfterGas, 2);
+        setNumber("totalDeliveriesCell", totalDeliveries, 0);
+        setCurrency("totalEarningsBeforeTipsCell", totalEarningsBeforeTips, 2);
+        setNumber("totalTippedDeliveriesCell", totalTippedDeliveries, 0);
+        setCurrency("totalTipEarningsCell", totalTipEarnings, 2);
+        setCurrency("totalDeductionCell", totalDeduction, 2);
+
+        // Averages / derived metrics
+        const avgGasPrice = gasPriceCount > 0 ? (sumGasPrice / gasPriceCount) : 0;
+        setCurrency("avgGasPriceCell", avgGasPrice, 3);
+
+        const avgMPG = (totalGallons > 0 && totalMiles > 0)
+          ? (totalMiles / totalGallons)
+          : 0;
+        setNumber("avgMPGCell", avgMPG, 1);
+
+        const avgGrossPerHour = totalHours > 0 ? (totalGross / totalHours) : 0;
+        setCurrency("avgGrossPerHourCell", avgGrossPerHour, 2);
+
+        const avgNetPerHour = totalHours > 0 ? (totalNetAfterGas / totalHours) : 0;
+        setCurrency("avgNetPerHourCell", avgNetPerHour, 2);
+
+        const pctDeliveriesWithTips =
+          totalDeliveries > 0 ? (totalTippedDeliveries / totalDeliveries) * 100 : 0;
+        setPercent("pctDeliveriesWithTipsCell", pctDeliveriesWithTips, 1);
+
+        const avgTip = totalTippedDeliveries > 0
+          ? (totalTipEarnings / totalTippedDeliveries)
+          : 0;
+        setCurrency("avgTipCell", avgTip, 2);
+
+        const avgGrossPerMile =
+          totalMiles > 0 ? (totalGross / totalMiles) : 0;
+        setCurrency("avgGrossPerMileCell", avgGrossPerMile, 2);
+
+        const avgNetPerMile =
+          totalMiles > 0 ? (totalNetAfterGas / totalMiles) : 0;
+        setCurrency("avgNetPerMileCell", avgNetPerMile, 2);
+      }
+    }
+
+    // ---------------------------
+    // 2) CHART: EARNINGS VS NET VS MILES
+    // ---------------------------
+    const chartCanvas = document.getElementById("gigEarningsChart");
+    if (chartCanvas && typeof Chart !== "undefined") {
+      const labels = JSON.parse('{{ chart_labels|escapejs }}');
+      const grossData = JSON.parse('{{ chart_gross|escapejs }}');
+      const netData = JSON.parse('{{ chart_net|escapejs }}');
+      const milesData = JSON.parse('{{ chart_miles|escapejs }}');
+      const hourlyGrossData = JSON.parse('{{ chart_hourly_gross|escapejs }}');
+      const hourlyNetData = JSON.parse('{{ chart_hourly_net|escapejs }}');
+
+      if (labels.length) {
+        new Chart(chartCanvas, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Gross",
+                data: grossData,
+                yAxisID: "y",
+                type: "bar",
+                borderWidth: 1,
+              },
+              {
+                label: "Net after gas",
+                data: netData,
+                yAxisID: "y",
+                type: "bar",
+                borderWidth: 1,
+              },
+              {
+                label: "Miles",
+                data: milesData,
+                yAxisID: "y1",
+                type: "line",
+                borderWidth: 2,
+                tension: 0.2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              y: {
+                position: "left",
+                title: {
+                  display: true,
+                  text: "Dollars",
+                },
+              },
+              y1: {
+                position: "right",
+                grid: {
+                  drawOnChartArea: false,
+                },
+                title: {
+                  display: true,
+                  text: "Miles",
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) {
+                    const label = ctx.dataset.label || "";
+                    const value = ctx.parsed.y;
+                    if (label === "Miles") {
+                      return `${label}: ${value.toFixed(1)} mi`;
+                    }
+                    return `${label}: $${value.toFixed(2)}`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+    
+    const hourlyCanvas = document.getElementById("gigHourlyChart");
+    if (hourlyCanvas && typeof Chart !== "undefined" && labels.length) {
+    new Chart(hourlyCanvas, {
+        type: "line",
+        data: {
+        labels: labels,
+        datasets: [
+            {
+            label: "Gross per hour",
+            data: hourlyGrossData,
+            borderWidth: 2,
+            tension: 0.2,
+            },
+            {
+            label: "Net per hour",
+            data: hourlyNetData,
+            borderWidth: 2,
+            tension: 0.2,
+            },
+        ],
+        },
+        options: {
+        responsive: true,
+        interaction: { mode: "index", intersect: false },
+        scales: {
+            y: {
+            title: {
+                display: true,
+                text: "Dollars per hour",
+            },
+            },
+        },
+        plugins: {
+            legend: { position: "top" },
+            tooltip: {
+            callbacks: {
+                label: function (ctx) {
+                const label = ctx.dataset.label || "";
+                const value = ctx.parsed.y;
+                return `${label}: $${value.toFixed(2)}`;
+                },
+            },
+            },
+        },
+        },
+    });
+    }
+    }
+  });
+     
+
+
+//   Column index mapping (for reference later)
+
+// Given the current table:
+
+// Index	Column
+// 0	Date
+// 1	Time
+// 2	Hours
+// 3	Miles
+// 4	MPG
+// 5	Gas Price
+// 6	Company
+// 7	Gross
+// 8	Gross/Hr
+// 9	Net after Gas
+// 10	Net/Hr
+// 11	Deliveries
+// 12	Earnings before Tips
+// 13	Tipped Deliveries
+// 14	% Deliveries w/Tips
+// 15	Tip Earnings
+// 16	Average Tip
+// 17	Gross $/Mile
+// 18	Net $/Mile
+// 19	Deduction
+// 20	IRS Rate
+
+// If you later reorder columns, just update the indices in the JS accordingly.
+
+</script>
+{% endblock %}

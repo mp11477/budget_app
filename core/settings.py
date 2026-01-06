@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -102,7 +102,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/New_York'
@@ -138,7 +138,7 @@ KIOSK_UNLOCK_MINUTES = 5  # unlock duration in minutes
 ''' Directory structure:
 #this is the PROJECT directory tree for budget_app
 budget_app/
-└── config/
+└── core/
     ├── settings.py
     ├── urls.py
     ├── wsgi.py

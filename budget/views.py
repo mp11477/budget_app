@@ -1022,7 +1022,7 @@ def mileage_rate_settings(request):
 
     return render(
         request,
-        "mileage_rate.html",
+        "mileage_rate_settings.html",
         {
             "form": form,
             "rates": rates,
