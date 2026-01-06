@@ -19,7 +19,7 @@
         <p class="text-lg font-normal">Humidity: {{ humidity }}</p>
         <p class="text-lg font-normal">Wind: {{ wind_direction }} {{ wind_speed }}</p>
         {% if weather_updated_at %}
-          <p class="text-xs text-gray-700 mt-2 text-right">Updated {{ weather_updated_at }}</p>
+          <p class="text-xs text-gray-700 mt-2 text-right">Updated at {{ weather_updated_at }}</p>
         {% endif %}
       </div>
     {% endif %}
