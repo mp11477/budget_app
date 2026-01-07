@@ -8,6 +8,7 @@ from django.db.models.functions import ExtractMonth, ExtractYear, TruncMonth
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateformat import format as date_format
 from django.utils.dateparse import parse_datetime
@@ -17,8 +18,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from collections import defaultdict, OrderedDict
 from decimal import Decimal
 from pathlib import Path
-from .calendar_utils import inject_specials_into_events_by_day
-from .calendar_weather import get_cached_weather
+from calendar_app.specials import inject_specials_into_events_by_day, compute_rule_date
+from calendar_app.weather import get_cached_weather
 from .forms import TransactionForm, TransferForm, GigShiftForm, GigCompanyFormSet, MileageRateForm
 from .models import (Account, Transaction, Transfer, Category, SubCategory, GigShift, GigCompany, MileageRate, CalendarEvent, CalendarSpecial,
             CalendarRuleSpecial)
@@ -87,14 +88,14 @@ def dashboard(request):
         'sub_cat_name': sub_cat_name,
         }
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'budget/dashboard.html', context)
 
 @require_POST
 def mark_transaction_cleared(request, tx_id):
     transaction = get_object_or_404(Transaction, id=tx_id)
     transaction.cleared = True
     transaction.save()
-    return redirect('dashboard')
+    return redirect('budget:dashboard')
 
 def get_month_choices():
     return [
@@ -165,7 +166,7 @@ def update_subcategory(request, txn_id):
         if subcategory:
             txn.subcategory = subcategory
             txn.save()
-    return redirect('dashboard')
+    return redirect('budget:dashboard')
 
 def calculate_totals(transactions):
     debit_total = transactions.aggregate(total=Sum('debit'))['total'] or 0
@@ -217,7 +218,7 @@ def account_transactions(request, account_id):
         
     }
 
-    return render(request, "transactions.html", context)
+    return render(request, "budget/transactions.html", context)
 
 def deposit_summary_transactions(request):
     deposit_accounts = Account.objects.filter(active=True, account_type="Deposit")
@@ -240,7 +241,7 @@ def deposit_summary_transactions(request):
     transactions = apply_transaction_filters(transactions, month, year, cleared, write_off, cat_name, sub_cat_name, search)
     totals = calculate_totals(transactions)
 
-    return render(request, "transactions.html", {
+    return render(request, "budget/transactions.html", {
         "account": None,
         "transactions": transactions,
         "month": month,
@@ -278,7 +279,7 @@ def loan_summary_transactions(request):
     transactions = apply_transaction_filters(transactions, month, year, cleared, write_off, cat_name, sub_cat_name, search)
     totals = calculate_totals(transactions)
 
-    return render(request, "transactions.html", {
+    return render(request, "budget/transactions.html", {
         "account": None,
         "transactions": transactions,
         "month": month,
@@ -482,7 +483,7 @@ def complex_algorithm(request):
 
     monthly_data.reverse()
 
-    return render(request, 'complex_algorithm.html', {
+    return render(request, 'budget/complex_algorithm.html', {
         'monthly_data': monthly_data,
         'current_month': current_month,
         'current_year': current_year,
@@ -502,9 +503,9 @@ def add_transaction(request):
             transaction = form.save()
             if 'save_and_add_another' in request.POST:
                 return redirect(f"{request.path}?account_id={transaction.account.id}")
-            return redirect('dashboard')
+            return redirect('budget:dashboard')
 
-    return render(request, 'add_transaction.html', {
+    return render(request, 'budget/add_transaction.html', {
         'form': form,
         'recent_transactions': recent_transactions,
     })
@@ -528,7 +529,7 @@ def add_transfer(request):
 
             if 'save_and_add_another' in request.POST:
                 return redirect(f"{request.path}?from_account={transfer.from_account.id}&to_account={transfer.to_account.id}")
-            return redirect('dashboard')
+            return redirect('budget:dashboard')
         
         else:
             form = TransferForm()
@@ -786,7 +787,7 @@ def charts_view(request):
         }
     
  
-    return render(request, "charts.html", context)
+    return render(request, "budget/charts.html", context)
 
 def get_monthly_balances():
     deposit_accounts = Account.objects.filter(account_type='Deposit')
@@ -865,10 +866,10 @@ def gig_entry(request):
 
                 if action == "save_add":
                     messages.success(request, "Shift saved. You can add another one.")
-                    return redirect("gig_entry")
+                    return redirect("gigs:gig_entry")
                 else:
                     messages.success(request, "Shift saved.")
-                    return redirect("gig_summary")
+                    return redirect("gigs:gig_summary")
             except Exception:
                 shift_form.add_error(
                     None,
@@ -1071,7 +1072,7 @@ def main_calendar(request):
 }
 
     context.update(kiosk_context(request))
-    return render(request, 'calendar_home.html', context)
+    return render(request, 'calendar/calendar_home.html', context)
 
 @require_GET
 def weather_fragment(request):
@@ -1224,7 +1225,7 @@ def calendar_day(request):
     }
 
     context.update(kiosk_context(request))
-    return render(request, "calendar_day.html", context)
+    return render(request, "calendar/calendar_day.html", context)
 
 @ensure_csrf_cookie
 def calendar_week(request):
@@ -1280,7 +1281,7 @@ def calendar_week(request):
         }
 
     context.update(kiosk_context(request))
-    return render(request, "calendar_week.html", context)
+    return render(request, "calendar/calendar_week.html", context)
 
 @ensure_csrf_cookie
 def calendar_month(request):
@@ -1336,7 +1337,7 @@ def calendar_month(request):
         "next_y": next_y, "next_m": next_m,
     }
     context.update(kiosk_context(request))
-    return render(request, "calendar_month.html", context)
+    return render(request, "calendar/calendar_month.html", context)
         
 def kiosk_edit_required(view_func):
     @wraps(view_func)
@@ -1344,8 +1345,9 @@ def kiosk_edit_required(view_func):
         if not can_user_edit(request):
             # Optional: preserve kiosk=1 when redirecting
             if kiosk_enabled(request):
-                return redirect("/calendar/?kiosk=1")
-            return redirect("calendar_month")
+                url = reverse("calendar:calendar_home")
+                return redirect(f"{url}?kiosk=1")
+            return redirect("calendar:calendar_month")
         return view_func(request, *args, **kwargs)
     return _wrapped
     
@@ -1367,6 +1369,8 @@ def kiosk_context(request):
     return {
         "is_kiosk": is_kiosk,
         "kiosk_qs": "kiosk=1" if is_kiosk else "",
+        "kiosk_qs_prefix": "?kiosk=1" if is_kiosk else "",
+        "kiosk_qs_amp": "&kiosk=1" if is_kiosk else "",
         "can_edit": can_user_edit(request),
         "kiosk_unlocked_by": by,
         "kiosk_unlocked_label": label,
@@ -1405,7 +1409,7 @@ def kiosk_unlock(request):
         ctx = kiosk_context(request)
         context = {"error": "Invalid PIN.", "return_to": return_to}
         context.update(ctx)
-        return render(request, "kiosk_unlock.html", context, status=403)
+        return render(request, "calendar/kiosk_unlock.html", context, status=403)
 
     mins = int(getattr(settings, "KIOSK_UNLOCK_MINUTES", 10))
     until = timezone.now() + timedelta(minutes=mins)
@@ -1437,7 +1441,7 @@ def kiosk_unlock_page(request):
         "hide_kiosk_bar": True,
     }
     context.update(ctx)
-    return render(request, "kiosk_unlock.html", context)
+    return render(request, "calendar/kiosk_unlock.html", context)
 
 @require_POST
 def kiosk_lock(request):
@@ -1521,7 +1525,7 @@ def calendar_event_create(request):
         if not title:
             context = {"date": default_date, "return_to": return_to, "event": None, "error": "Title is required."}
             context.update(ctx)
-            return render(request, "calendar_event_form.html", context)
+            return render(request, "calendar/calendar_event_form.html", context)
 
         if all_day:
             start_dt = timezone.make_aware(datetime.combine(default_date, time.min))
@@ -1536,7 +1540,7 @@ def calendar_event_create(request):
             if et <= st:
                 context = {"date": default_date, "return_to": return_to, "event": None, "error": "End time must be after start time."}
                 context.update(ctx)
-                return render(request, "calendar_event_form.html", context)
+                return render(request, "calendar/calendar_event_form.html", context)
 
             start_dt = timezone.make_aware(datetime.combine(default_date, st))
             end_dt = timezone.make_aware(datetime.combine(default_date, et))
@@ -1562,7 +1566,7 @@ def calendar_event_create(request):
     # GET
     context = {"date": default_date, "return_to": return_to, "event": None}
     context.update(ctx)
-    return render(request, "calendar_event_form.html", context)
+    return render(request, "calendar/calendar_event_form.html", context)
 
 @ensure_csrf_cookie
 @kiosk_edit_required
@@ -1578,7 +1582,7 @@ def calendar_event_edit(request, event_id):
         all_day = request.POST.get("all_day") == "on"
 
         if not title:
-            return render(request, "calendar_event_form.html", {
+            return render(request, "calendar/calendar_event_form.html", {
                 "date": event.start_dt.date(),
                 "return_to": request.POST.get("return_to", "/calendar/"),
                 "error": "Title is required.",
@@ -1595,7 +1599,7 @@ def calendar_event_edit(request, event_id):
             st = datetime.strptime(request.POST.get("start_time", "09:00"), "%H:%M").time()
             et = datetime.strptime(request.POST.get("end_time", "10:00"), "%H:%M").time()
             if et <= st:
-                return render(request, "calendar_event_form.html", {
+                return render(request, "calendar/calendar_event_form.html", {
                     "date": d,
                     "return_to": request.POST.get("return_to", "/calendar/"),
                     "error": "End time must be after start time.",
@@ -1625,7 +1629,7 @@ def calendar_event_edit(request, event_id):
         "event": event,
         }
     context.update(kiosk_context(request))
-    return render(request, "calendar_event_form.html", context)
+    return render(request, "calendar/calendar_event_form.html", context)
 
 @ensure_csrf_cookie
 @kiosk_edit_required
@@ -1649,7 +1653,7 @@ def calendar_event_delete(request, event_id):
     }
 
     context.update(ctx)
-    return render(request, "calendar_event_delete.html", context)
+    return render(request, "calendar/calendar_event_delete.html", context)
 
 def calendar_event_detail(request, event_id):
     owner = get_calendar_owner()
@@ -1666,7 +1670,7 @@ def calendar_event_detail(request, event_id):
         "return_to": return_to,
     }
     context.update(ctx)
-    return render(request, "calendar_event_detail.html", context)
+    return render(request, "calendar/calendar_event_detail.html", context)
 
 def can_user_edit(request):
     # Server (not kiosk) = always editable
@@ -1681,82 +1685,6 @@ def calendar_entry(request):
     if looks_like_tablet(request):
         return redirect(f"/calendar/week/?date={today}&kiosk=1")
     return redirect(f"/calendar/month/?y={timezone.localdate().year}&m={timezone.localdate().month}")
-
-#--- Date rule computations for calendar specials ---
-def nth_weekday_of_month(year: int, month: int, weekday: int, n: int) -> date:
-    """
-    weekday: Mon=0..Sun=6
-    n: 1..5
-    """
-    d = date(year, month, 1)
-    # move forward to first desired weekday
-    while d.weekday() != weekday:
-        d += timedelta(days=1)
-    # then jump (n-1) weeks
-    return d + timedelta(days=7*(n-1))
-
-def last_weekday_of_month(year: int, month: int, weekday: int) -> date:
-    d = date(year, month+1, 1) - timedelta(days=1) if month < 12 else date(year+1, 1, 1) - timedelta(days=1)
-    while d.weekday() != weekday:
-        d -= timedelta(days=1)
-    return d
-
-def easter_western(year: int) -> date:
-    """
-    Anonymous Gregorian algorithm (Meeus/Jones/Butcher).
-    """
-    a = year % 19
-    b = year // 100
-    c = year % 100
-    d = b // 4
-    e = b % 4
-    f = (b + 8) // 25
-    g = (b - f + 1) // 3
-    h = (19*a + b - d - g + 15) % 30
-    i = c // 4
-    k = c % 4
-    l = (32 + 2*e + 2*i - h - k) % 7
-    m = (a + 11*h + 22*l) // 451
-    month = (h + l - 7*m + 114) // 31
-    day = ((h + l - 7*m + 114) % 31) + 1
-    return date(year, month, day)
-
-def compute_rule_date(rule_key: str, year: int) -> date:
-    if rule_key == "easter":
-        return easter_western(year)
-    
-    if rule_key == "good_friday":
-        return easter_western(year) - timedelta(days=2)
-
-    if rule_key == "thanksgiving_us":
-        # 4th Thursday of November
-        return nth_weekday_of_month(year, 11, weekday=3, n=4)
-
-    if rule_key == "mothers_day_us":
-        # 2nd Sunday of May
-        return nth_weekday_of_month(year, 5, weekday=6, n=2)
-
-    if rule_key == "fathers_day_us":
-        # 3rd Sunday of June
-        return nth_weekday_of_month(year, 6, weekday=6, n=3)
-
-    if rule_key == "memorial_day_us":
-        # last Monday of May
-        return last_weekday_of_month(year, 5, weekday=0)
-
-    if rule_key == "labor_day_us":
-        # 1st Monday of September
-        return nth_weekday_of_month(year, 9, weekday=0, n=1)
-
-    if rule_key == "mlk_day_us":
-        # 3rd Monday of January
-        return nth_weekday_of_month(year, 1, weekday=0, n=3)
-
-    if rule_key == "presidents_day_us":
-        # 3rd Monday of February
-        return nth_weekday_of_month(year, 2, weekday=0, n=3)
-    
-    raise ValueError(f"Unknown rule_key: {rule_key}")
 
 @require_GET
 def health_ping(request):

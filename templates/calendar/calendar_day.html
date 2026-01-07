@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .cal-event{
+    top: calc(var(--top) * 1px);
+    height: calc(var(--h) * 1px);
+    min-height: 28px;
+    left: calc((var(--col) * 100%) / var(--cols) + 8px);
+    width: calc((100% / var(--cols)) - 16px);
+    overflow: hidden;
+  }
+  /* Make short events less “padded” so text fits better */
+  .cal-event.short {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+</style>
+
+<div class="p-6">
+
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h1 class="text-2xl font-bold">
+        Day View: {{ day|date:"l, F j, Y" }}
+        {% if day == today %}
+          <span class="ml-2 text-sm px-2 py-1 rounded bg-yellow-200">Today</span>
+        {% endif %}
+
+        <div class="mt-2 flex gap-3 text-xs">
+          <span class="px-2 py-1 rounded bg-blue-200/90">Mike</span>
+          <span class="px-2 py-1 rounded bg-pink-200/90">Stef</span>
+          <span class="px-2 py-1 rounded bg-green-200/90">Max</span>
+          <span class="px-2 py-1 rounded bg-purple-200/90">Leo</span>
+        </div>
+
+      </h1>
+
+     <div class="mt-1 flex gap-3 text-sm">
+        <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center" 
+          href="{% url 'calendar:calendar_month' %}?y={{ day|date:'Y' }}&m={{ day|date:'n' }}{{ kiosk_qs_amp }}"
+           aria-label="Previous Week">
+          <span class="material-symbols-outlined">calendar_month</span>
+          <!-- Optional: Add text label next to icon, like "Prev" or "Previous Month" -->
+    </a>
+        <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+          href="{% url 'calendar:calendar_week' %}?date={{ day|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+          aria-label="Current Week">
+          <span class="material-symbols-outlined">calendar_view_week</span>
+          <!-- Optional: Add text label next to icon, like "Current" or "Current Week" -->
+      </a>
+        <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+          href="{% url 'calendar:calendar_day' %}?date={{ day|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+          aria-label="Next Week">
+          <span class="material-symbols-outlined">calendar_view_day</span>
+          <!-- Optional: Add text label next to icon, like "Next" or "Next Month" -->
+      </a>
+      </div>
+    </div>
+
+    <div class="flex gap-2">
+      <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+         href="{% url 'calendar:calendar_day' %}?date={{ prev_day|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+          aria-label="Previous Day">
+            <span class="material-symbols-outlined">arrow_left</span>
+            <!-- Optional: Add text label next to icon, like "Prev" or "Previous Month" -->
+      </a>
+      <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+         href="{% url 'calendar:calendar_day' %}?date={{ today|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+         aria-label="Today">
+            <span class="material-symbols-outlined">today</span>
+            <!-- Optional: Add text label next to icon, like "Current" or "Current Week" -->
+      </a>
+
+      <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+         href="{% url 'calendar:calendar_day' %}?date={{ next_day|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+         aria-label="Next Day">
+            <span class="material-symbols-outlined">arrow_right</span>
+            <!-- Optional: Add text label next to icon, like "Next" or "Next Month" -->
+      </a>
+    </div>
+  </div>
+
+  <!-- Calendar Home button -->
+  <div class="flex justify-end mt-4 mb-3">
+    <a class="px-3 py-1 rounded bg-blue-200/80"
+      href="{% url 'calendar:calendar_home' %}{{ kiosk_qs_prefix }}"
+      aria-label="Home">
+        <span class="material-symbols-outlined">home</span>
+    </a>
+  </div>
+     
+    <!--Holidays/Birthdays/etc...-->
+      {% if special_items %}
+      
+        <div class="flex justify-end mt-4 mb-3">  
+          {% for s in special_items %}
+            <div class="rounded p-2 text-xs
+              {% if s.color_key|lower == 'orange' %}bg-orange-200/90
+              {% elif s.color_key|lower == 'red' %}bg-red-200/90
+              {% elif s.color_key|lower == 'blue' %}bg-blue-200/90
+              {% elif s.color_key|lower == 'green' %}bg-green-200/90
+              {% elif s.color_key|lower == 'purple' %}bg-purple-200/90
+              {% elif s.color_key|lower == 'pink' %}bg-pink-200/90
+              {% else %}bg-gray-200/90{% endif %}">
+              <span class="font-semibold">All day</span> — {{ s.title }}
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+    <!-- All-day events (separate strip at top) -->
+        {% if all_day_events %}
+        <div class="mt-2 mb-3 flex flex-col gap-2">
+          {% for e in all_day_events %}
+            <div class="rounded p-2 text-xs shadow
+              {% if e.person == 'mike' %}bg-blue-200/90
+              {% elif e.person == 'wife' %}bg-pink-200/90
+              {% elif e.person == 'kid1' %}bg-green-200/90
+              {% elif e.person == 'kid2' %}bg-purple-200/90
+              {% else %}bg-gray-200/90{% endif %}">
+              <span class="font-semibold">All day</span> — 
+              <a class="underline"
+                href="{% url 'calendar:calendar_event_detail' e.id %}?return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
+                {{ e.title }}
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      
+      {% endif %}
+
+  <!-- Main calendar grid -->
+    {% if events %}
+      <div class="space-y-2">
+        <div class="mt-4 relative rounded border bg-white/70 overflow-hidden">
+      <div class="grid grid-cols-[70px_1fr] gap-2">
+      <!-- hour labels -->
+      <div>
+        {% for h in hours %}
+          <div class="h-[60px] flex items-start justify-end pr-2 text-xs text-gray-600">
+            {% if h == 0 %}12 AM
+            {% elif h < 12 %}{{ h }} AM
+            {% elif h == 12 %}12 PM
+            {% else %}{{ h|add:"-12" }} PM
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- timeline -->
+      <div class="relative border rounded bg-white/70 overflow-hidden">
+        <div class="relative" style="height: 1440px;">
+          {% for h in hours %}
+            <div class="h-[60px] border-b border-gray-200"></div>
+          {% endfor %}
+
+          <!-- EVENTS OVERLAY -->
+          {% for e in event_blocks %}
+              
+            <div class="cal-event {% if e.height < 45 %}short{% endif %} absolute rounded p-2 text-xs leading-tight shadow overflow-hidden
+              {% if e.person == 'mike' %}bg-blue-200/90
+              {% elif e.person == 'wife' %}bg-pink-200/90
+              {% elif e.person == 'kid1' %}bg-green-200/90
+              {% elif e.person == 'kid2' %}bg-purple-200/90
+              {% else %}bg-gray-200/90{% endif %}"
+              style="--top: {{ e.top }}; --h: {{ e.height }}; --col: {{ e.col }}; --cols: {{ e.col_count }};">
+              <div class="font-semibold">
+                <a class="underline"
+                  href="{% url 'calendar:calendar_event_detail' e.id %}?return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
+                  {{ e.title }}
+                </a>
+              </div>
+              <div class="opacity-80">{{ e.start_dt|date:"g:i A" }} - {{ e.end_dt|date:"g:i A" }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  
+  {% else %}
+    <div class="p-4 rounded bg-white/60 border">
+      No events scheduled.
+    </div>
+  {% endif %}
+
+</div>
+
+{% if can_edit %}
+  <a href="{% url 'calendar:calendar_event_create' %}?date={{ day|default:today|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}"
+     class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-gray-900 text-white shadow-lg text-lg">
+    + Add Event
+  </a>
+{% endif %}
+
+{% if is_kiosk %}
+<script>
+
+</script>
+{% endif %}
+{% endblock %}

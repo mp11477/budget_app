@@ -1,6 +1,8 @@
 from django.urls import include, path
 from . import views
 
+app_name = "budget"
+
 urlpatterns = [
    
     ### Additional budget-related routes ###

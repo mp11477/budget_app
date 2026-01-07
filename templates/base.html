@@ -225,21 +225,21 @@ body.kiosk main { margin-left: 0 !important; }
        <!--Material icons can be found at https://fonts.google.com/icons -->
       <ul class="p-2 space-y-1 text-[12px] leading-3">
         <li>
-          <a href="{% url 'dashboard' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+          <a href="{% url 'budget:dashboard' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'dashboard' %}!bg-[#A9B8C1] !text-white{% endif %}"> 
             <span class="material-icons text-green-500 mr-3">dashboard</span>
             Dashboard
           </a>
         </li>
         <li>
-          <a href="{% url 'complex_algorithm' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+          <a href="{% url 'budget:complex_algorithm' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'complex_algorithm' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">attach_money</span>
             Stef's Complex Algorithm
           </a>
         </li>
         <li>
-          <a href="{% url 'charts' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+          <a href="{% url 'budget:charts' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'charts' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">bar_chart</span>
             Spending Analysis
@@ -250,21 +250,21 @@ body.kiosk main { margin-left: 0 !important; }
           Gig Data
         </div>
         <li>
-          <a href="{% url 'gig_entry' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+          <a href="{% url 'gigs:gig_entry' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'gig_entry' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">add_task</span>
             Gig Shift Data Entry
           </a>
         </li>
         <li>
-          <a href="{% url 'gig_summary' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+          <a href="{% url 'gigs:gig_summary' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'gig_summary' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">summarize</span>
             Gig Shift Summary by Month
           </a>
         </li>
         <li>
-          <a href="{% url 'mileage_rate_settings' %}" 
+          <a href="{% url 'gigs:mileage_rate_settings' %}{{ kiosk_qs_prefix }}" 
               class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'mileage_rate_settings' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">directions_car</span>
@@ -276,7 +276,7 @@ body.kiosk main { margin-left: 0 !important; }
           Calendar + Scheduling
         </div>
         <li>
-          <a href="{% url 'calendar_home' %}{% if kiosk_qs %}?{{ kiosk_qs }}{% endif %}" 
+          <a href="{% url 'calendar:calendar_home' %}{{ kiosk_qs_amp }}" 
               class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'calendar_home' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">view_agenda</span>
@@ -284,7 +284,7 @@ body.kiosk main { margin-left: 0 !important; }
           </a>
         </li>
         <li>
-        <a href="{% url 'calendar_month' %}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+        <a href="{% url 'calendar:calendar_month' %}{{ kiosk_qs_prefix }}" class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
               {% if current == 'calendar_month' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">calendar_view_month</span>
             Monthly Calendar
@@ -317,7 +317,7 @@ body.kiosk main { margin-left: 0 !important; }
             </button>
           {% else %}
             <a class="px-3 py-1 rounded bg-yellow-200/80 text-sm"
-              href="{% url 'kiosk_unlock_page' %}?return_to={{ request.get_full_path|urlencode }}">
+              href="{% url 'calendar:kiosk_unlock_page' %}?return_to={{ request.get_full_path|urlencode }}">
               Unlock
             </a>
           {% endif %}
@@ -349,13 +349,13 @@ body.kiosk main { margin-left: 0 !important; }
 
                 async function doLockAndRedirect() {
                   try {
-                    await fetch("{% url 'kiosk_lock' %}", {
+                    await fetch("{% url 'calendar:kiosk_lock' %}", {
                       method: "POST",
                       headers: { "X-CSRFToken": getCookie("csrftoken") },
                       credentials: "same-origin",
                     });
                   } catch (e) {}
-                  window.location.replace("{% url 'calendar_home' %}?kiosk=1");
+                  window.location.replace("{% url 'calendar:calendar_home' %}?kiosk=1");
                 }
 
                 // ✅ Make it callable from onclick="kioskLockNow()"

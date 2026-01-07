@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-6 max-w-xl">
+  <h1 class="text-2xl font-bold mb-4">Add Event ({{ date }})</h1>
+
+  <form method="post" class="space-y-3" id="eventForm">
+    {% csrf_token %}
+    <input type="hidden" name="return_to" value="{{ return_to }}"/>
+
+    <div>
+      <label class="block text-sm font-semibold">Title</label>
+      <input name="title" class="w-full p-2 rounded border" value="{{ event.title|default:'' }}" required />
+    </div>
+
+    <!--Person selection-->
+    <div>
+      <label class="block text-sm font-semibold">Person</label>
+      <select name="person" class="w-full p-2 rounded border">
+        <option value="mike" {% if event.person == "mike" %}selected{% endif %}>Mike</option>
+        <option value="wife" {% if event.person == "wife" %}selected{% endif %}>Stef</option>
+        <option value="kid1" {% if event.person == "kid1" %}selected{% endif %}>Max</option>
+        <option value="kid2" {% if event.person == "kid2" %}selected{% endif %}>Leo</option>
+      </select>
+    </div>
+
+    <!-- All-day toggle -->
+    <div class="flex items-center gap-2">
+      <input id="allDay" name="all_day" type="checkbox" {% if event.all_day %}checked{% endif %} class="h-4 w-4">
+      <label for="allDay" class="text-sm font-semibold">All day</label>
+    </div>
+
+    <!-- Time inputs -->
+    <div class="flex gap-3" id="timeRow">
+      <div class="flex-1">
+        <label class="block text-sm font-semibold">Start</label>
+        <input id="startTime" name="start_time" type="time" class="w-full p-2 rounded border" value="{{ event.start_dt|date:'H:i'|default:'09:00' }}" required />
+      </div>
+      <div class="flex-1">
+        <label class="block text-sm font-semibold">End</label>
+        <input id="endTime" name="end_time" type="time" class="w-full p-2 rounded border" value="{{ event.end_dt|date:'H:i'|default:'10:00' }}" required />
+      </div>
+    </div>
+
+    <!-- Inline error -->
+    <p id="timeError" class="text-sm text-red-600 hidden">
+      End time must be after start time.
+    </p>
+
+    <div>
+      <label class="block text-sm font-semibold">Location</label>
+      <input name="location" class="w-full p-2 rounded border" value="{{ event.location|default:'' }}" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold">Notes</label>
+      <textarea name="notes" class="w-full p-2 rounded border" rows="4">{{ event.notes|default:'' }}</textarea>
+    </div>
+
+    <div class="flex gap-2">
+      <button class="px-4 py-2 rounded bg-gray-800 text-white">Save</button>
+      <a class="px-4 py-2 rounded bg-gray-200" href="{{ return_to }}{{ kiosk_qs_amp }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  const allDay = document.getElementById("allDay");
+  const timeRow = document.getElementById("timeRow");
+  const startTime = document.getElementById("startTime");
+  const endTime = document.getElementById("endTime");
+  const form = document.getElementById("eventForm");
+  const timeError = document.getElementById("timeError");
+
+  function setTimeInputsEnabled(enabled) {
+    startTime.required = enabled;
+    endTime.required = enabled;
+    startTime.disabled = !enabled;
+    endTime.disabled = !enabled;
+    timeRow.style.opacity = enabled ? "1" : "0.6";
+    timeRow.style.pointerEvents = enabled ? "auto" : "none";
+    if (!enabled) {
+      timeError.classList.add("hidden");
+    }
+  }
+
+  allDay.addEventListener("change", () => {
+    setTimeInputsEnabled(!allDay.checked);
+  });
+
+  function isEndAfterStart() {
+    // "HH:MM" strings compare correctly lexicographically
+    return endTime.value > startTime.value;
+  }
+
+  startTime.addEventListener("change", () => {
+    if (allDay.checked) return;
+    // if end time is <= start time, bump end by 1 hour
+    if (endTime.value <= startTime.value) {
+      const [h, m] = startTime.value.split(":").map(Number);
+      const newEnd = `${String((h + 1) % 24).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+      endTime.value = newEnd;
+    }
+  });
+
+  form.addEventListener("submit", (e) => {
+    if (allDay.checked) return;
+
+    if (!isEndAfterStart()) {
+      e.preventDefault();
+      timeError.classList.remove("hidden");
+    } else {
+      timeError.classList.add("hidden");
+    }
+  });
+
+  // initialize
+  setTimeInputsEnabled(true);
+</script>
+{% endblock %}

@@ -1,5 +1,8 @@
 from django.urls import path
 from budget import views  # TEMP: reuse existing view funcs without moving code yet
+#from calendar_app import views   ---Turn this on after moving calendar views to calendar_app and deleting from budget---
+
+app_name = "calendar"
 
 urlpatterns = [
     path("", views.main_calendar, name="calendar_home"),  # /calendar/

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% load budget_extras %}
+
+{% if error %}
+  <p class="text-red-600 font-semibold">{{ error }}</p>
+{% endif %}
+
+<div class="flex items-center justify-between mb-4">
+  <div>
+    <h1 class="text-2xl font-bold">Calendar ({{ month }}/{{ year }})
+
+      <div class="mt-2 flex gap-3 text-xs">
+        <span class="px-2 py-1 rounded bg-blue-200/90">Mike</span>
+        <span class="px-2 py-1 rounded bg-pink-200/90">Stef</span>
+        <span class="px-2 py-1 rounded bg-green-200/90">Max</span>
+        <span class="px-2 py-1 rounded bg-purple-200/90">Leo</span>
+      </div>
+
+    </h1>
+
+    <!-- View mode links -->
+    <div class="mt-1 flex gap-3 text-sm">
+      <a href="{% url 'calendar:calendar_month' %}?y={{ year }}&m={{ month }}{{ kiosk_qs_amp }}"
+         aria-label="Month View" class="p-2 hover:bg-white rounded transition" title="Month View">
+        <span class="material-symbols-outlined">calendar_month</span>
+      </a>
+
+      <a href="{% url 'calendar:calendar_week' %}?date={{ today|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+        aria-label="Week View" class="p-2 hover:bg-white rounded transition" title="Week View">
+        <span class="material-symbols-outlined">calendar_view_week</span>
+      </a>
+
+      <a href="{% url 'calendar:calendar_day' %}?date={{ today|date:'Y-m-d' }}{{ kiosk_qs_amp }}"
+         aria-label="Day View" class="p-2 hover:bg-white rounded transition" title="Day View">
+        <span class="material-symbols-outlined">calendar_view_day</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Month navigation -->
+  <div class="flex gap-2">
+      <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+        href="{% url 'calendar:calendar_month' %}?y={{ prev_y }}&m={{ prev_m }}{{ kiosk_qs_amp }}"
+        aria-label="Previous Month">
+          <span class="material-symbols-outlined">navigate_before</span>
+          <!-- Optional: Add text label next to icon, like "Prev" or "Previous Month" -->
+    </a>
+
+    <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+       href="{% url 'calendar:calendar_month' %}{{ kiosk_qs_amp }}"
+      aria-label="Current Month">
+          <span class="material-symbols-outlined">today</span>
+          <!-- Optional: Add text label next to icon, like "Prev" or "Previous Month" -->
+    </a>
+
+    <a class="px-3 py-1 rounded bg-gray-200/80 flex items-center"
+       href="{% url 'calendar:calendar_month' %}?y={{ next_y }}&m={{ next_m }}{{ kiosk_qs_amp }}"
+       aria-label="Next Month">
+        <span class="material-symbols-outlined">navigate_next</span>
+        <!-- Optional: Add text label next to icon, like "Next" or "Next Month" -->
+    </a>
+  </div>
+</div>
+
+<!-- Calendar Home button -->
+<div class="flex justify-end mt-4">
+  <a class="px-3 py-1 rounded bg-blue-200/80"
+     href="{% url 'calendar:calendar_home' %}{{ kiosk_qs_prefix }}"
+     aria-label="Home">
+      <span class="material-symbols-outlined">home</span>
+  </a>
+</div>
+
+
+  <div class="grid grid-cols-7 gap-2 text-sm">
+    <div class="font-bold">Sun</div><div class="font-bold">Mon</div><div class="font-bold">Tue</div>
+    <div class="font-bold">Wed</div><div class="font-bold">Thu</div><div class="font-bold">Fri</div>
+    <div class="font-bold">Sat</div>
+
+    {% for week in weeks %}
+      {% for d in week %}
+        <div class="min-h-[110px] rounded-lg p-2 border
+            {% if d == today %}bg-yellow-100 ring-2 ring-yellow-400 border-yellow-400{% else %}bg-white/70{% endif %}">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">{{ d.day }}</div>
+            <!-- We'll wire this to an add-event form next -->
+             {% if can_edit %}
+                <a class="text-xs underline"
+                  href="{% url 'calendar:calendar_event_create' %}?date={{ d|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}"">
+                  Add
+                </a>
+              {% endif %}
+          </div>
+
+          {% with day_events=events_by_day|get_item:d %}
+            {% if day_events %}
+                {% for e in day_events %}
+                      <div class="mt-1 text-xs p-1 rounded
+                        {% if e.is_special %}
+                            {% if e.color_key|lower == 'orange' %}bg-orange-200/90
+                            {% elif e.color_key|lower == 'red' %}bg-red-200/90
+                            {% elif e.color_key|lower == 'blue' %}bg-blue-200/90
+                            {% elif e.color_key|lower == 'green' %}bg-green-200/90
+                            {% elif e.color_key|lower == 'purple' %}bg-purple-200/90
+                            {% elif e.color_key|lower == 'pink' %}bg-pink-200/90
+                            {% else %}bg-gray-200/90{% endif %}
+                        {% else %}
+                            {% if e.person == 'mike' %}bg-blue-200/90
+                            {% elif e.person == 'wife' %}bg-pink-200/90
+                            {% elif e.person == 'kid1' %}bg-green-200/90
+                            {% elif e.person == 'kid2' %}bg-purple-200/90
+                            {% else %}bg-gray-200/90{% endif %}
+                        {% endif %}
+                      ">
+                        
+                        {% if e.all_day %}
+                            <span class="font-semibold">All day</span> —
+                            {% if e.id %}
+                                <a class="underline"
+                                href="{% url 'calendar:calendar_event_detail' e.id %}?return_to=/calendar/?y={{ year }}&m={{ month }}{{ kiosk_qs_amp }}">
+                                {{ e.title }}
+                                </a>
+                            {% else %}
+                                {{ e.title }}
+                            {% endif %}
+                            {% else %}
+                            <span class="font-semibold">{{ e.start_dt|date:"g:i A" }}</span>
+                            - {{ e.end_dt|date:"g:i A" }} —
+                            {% if e.id %}
+                                <a class="underline"
+                                href="{% url 'calendar:calendar_event_detail' e.id %}?return_to=/calendar/?y={{ year }}&m={{ month }}{{ kiosk_qs_amp }}">
+                                {{ e.title }}
+                                </a>
+                            {% else %}
+                                {{ e.title }}
+                            {% endif %}
+                        {% endif %}
+                     </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+
+</script>
+
+{% endblock %}

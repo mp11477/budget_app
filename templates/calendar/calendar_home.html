@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Today's Events Summary Box -->
+<div class="fixed top-4 left-65 z-50 bg-white/60 backdrop-blur p-3 rounded-lg w-[340px]">
+  <div class="flex justify-between items-center">
+    <div class="font-bold">Today ({{ today|date:"m/d" }})</div>
+    <a class="text-sm underline"
+       href="{% url 'calendar:calendar_day' %}?date={{ today|date:'Y-m-d' }}{{ kiosk_qs_amp }}">
+      Open
+    </a>
+  </div>
+
+  {% if today_events %}
+    <div class="mt-2 space-y-2 text-sm text-black">
+      {% for e in today_events %}
+        <div class="p-2 rounded
+          {% if e.person == 'mike' %}bg-blue-200/90
+          {% elif e.person == 'wife' %}bg-pink-200/90
+          {% elif e.person == 'kid1' %}bg-green-200/90
+          {% elif e.person == 'kid2' %}bg-purple-200/90
+          {% else %}bg-gray-200/90{% endif %}">
+          {% if e.all_day %}
+            <b>All day</b> — {{ e.title }}
+          {% else %}
+            <b>{{ e.start_dt|date:"g:i A" }}</b> — {{ e.title }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="mt-2 text-sm text-gray-700">No appointments today.</div>
+  {% endif %}
+</div>
+
+<!-- Weather Block Inclusion -->
+<div id="weather-block">
+  {% include "partials/_weather_block.html" %}
+</div>
+
+<!-- Background Image Container -->
+<div id="dynamic-background-blur"
+     class="h-full w-full bg-cover bg-center fixed top-0 left-0 -z-20 blur-xl scale-110 opacity-50"></div>
+
+<div id="dynamic-background-div"
+     class="h-full w-full bg-contain bg-center bg-no-repeat fixed top-0 left-0 -z-10"></div>
+
+{{ image_list|json_script:"image-list" }}
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script>
+    (function () {
+      // ---------- rotating backgrounds ----------
+      const imageListEl = document.getElementById("image-list");
+      if (imageListEl) {
+        let imagePaths = [];
+        try {
+          imagePaths = JSON.parse(imageListEl.textContent || "[]");
+        } catch (e) {
+          imagePaths = [];
+        }
+
+        const staticPrefix = "{% get_static_prefix %}";
+        const images = imagePaths.map(p => staticPrefix + p);
+
+        function shuffle(arr) {
+          for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+          }
+        }
+
+        shuffle(images);
+        let currentImageIndex = -1;
+
+        function changeBackground() {
+          if (!images.length) return;
+          currentImageIndex = (currentImageIndex + 1) % images.length;
+          const imageUrl = images[currentImageIndex];
+
+          const mainEl = document.getElementById("dynamic-background-div");
+          const blurEl = document.getElementById("dynamic-background-blur");
+          if (mainEl) mainEl.style.backgroundImage = `url('${imageUrl}')`;
+          if (blurEl) blurEl.style.backgroundImage = `url('${imageUrl}')`;
+        }
+
+        changeBackground();
+        setInterval(changeBackground, 5000);
+      }
+
+      // ---------- Recover tablet if connection lost ----------
+      const PING_MS = 2 * 60 * 1000; // 2 minutes
+      setInterval(() => {
+        fetch("{% url 'calendar:health_ping' %}", { cache: "no-store" })
+          .then(r => { if (!r.ok) location.reload(); })
+          .catch(() => location.reload());
+      }, PING_MS);
+
+      // ---------- Weather refresh ----------
+      const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+
+      async function refreshWeather() {
+        const el = document.getElementById("weather-block");
+        if (!el) return;
+
+        try {
+          const r = await fetch("{% url 'calendar:weather_fragment' %}", { cache: "no-store" });
+          const data = await r.json();
+          if (data.ok && data.html) el.innerHTML = data.html;
+        } catch (e) {}
+      }
+
+      refreshWeather();
+      setInterval(refreshWeather, REFRESH_MS);
+    })();
+  </script>
+{% endblock %}
