@@ -540,7 +540,7 @@ def add_transfer(request):
         transfer.from_tx = next((tx for tx in txs if tx.account == transfer.from_account), None)
         transfer.to_tx = next((tx for tx in txs if tx.account == transfer.to_account), None)
 
-    return render(request, 'add_transfer.html', {
+    return render(request, 'budget/add_transfer.html', {
         'form': form,
         'recent_transfers': recent_transfers,
     })

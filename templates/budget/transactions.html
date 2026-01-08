@@ -11,7 +11,7 @@
     <th>All Accounts</th>
     {% endif %}
 </h1>
-<a href="{% url 'dashboard' %}" class="text-rose-700 justify-left flex items-center m-2 p-2">
+<a href="{% url 'budget:dashboard' %}" class="text-rose-700 justify-left flex items-center m-2 p-2">
                     <i class="material-icons text-rose-900 m-1">dashboard</i>
                  ← Back to Dashboard</a>
                
@@ -68,18 +68,18 @@
 
             {% if account %}
                     <!-- Reset for specific account -->
-                    <a href="{% url 'account_transactions' account.id %}" class="p-4 m-4 flex items-center justify-center">
+                    <a href="{% url 'budget:account_transactions' account.id %}" class="p-4 m-4 flex items-center justify-center">
                         <i class="material-icons text-green-500 mr-3">undo</i>Reset
                     </a>
             
                 {% else %} 
                     <!-- Reset for summary views -->
                     {% if request.resolver_match.view_name == 'deposit_summary_transactions' %}
-                        <a href="{% url 'deposit_summary_transactions' %}" class="p-4 m-4 flex items-center justify-center">
+                        <a href="{% url 'budget:deposit_summary_transactions' %}" class="p-4 m-4 flex items-center justify-center">
                         <i class="material-icons text-green-500 mr-3">undo</i>Reset
                     </a>
                     {% elif request.resolver_match.view_name == 'loan_summary_transactions' %}
-                        <a href="{% url 'loan_summary_transactions' %}" class="p-4 m-4 flex items-center justify-center">
+                        <a href="{% url 'budget:loan_summary_transactions' %}" class="p-4 m-4 flex items-center justify-center">
                         <i class="material-icons text-green-500 mr-3">undo</i>Reset
                     </a>
                     {% endif %}
