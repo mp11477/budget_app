@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from typing import Dict, List, Any, Set
 
 from django.utils import timezone
 
-from budget.models import CalendarSpecial, CalendarRuleSpecial
+from calendar_app.models import CalendarSpecial, CalendarRuleSpecial
 
 def aware_range(start_d: date, end_d: date) -> tuple[datetime, datetime]:
     """
@@ -71,7 +70,7 @@ def inject_specials_into_events_by_day(
     """
     years_to_check = years_spanned(start_d, end_d)
 
-    # Fixed-date specials
+    # --- Fixed-date specials ---
     for s in CalendarSpecial.objects.all():
         if s.recurring_yearly:
             for y in years_to_check:
@@ -99,7 +98,7 @@ def inject_specials_into_events_by_day(
                     "color_key": s.color_key,
                 })
 
-    # Rule specials
+    # --- Rule-based specials ---
     for rs in CalendarRuleSpecial.objects.filter(is_enabled=True):
         for y in years_to_check:
             occ = compute_rule_date(rs.rule_key, y)
@@ -113,6 +112,40 @@ def inject_specials_into_events_by_day(
                     "notes": rs.notes,
                     "color_key": rs.color_key,
                 })
+
+def get_special_items_for_day(day: date) -> list[dict]:
+    """
+    Return special items (fixed-date and rule-based) that occur on `day`.
+
+    Output shape matches what calendar_day.html expects for the "special_items" strip.
+    """
+    special_items: list[dict[str, Any]] = []
+
+    # Fixed-date specials
+    for s in CalendarSpecial.objects.all():
+        occ = date(day.year, s.date.month, s.date.day) if s.recurring_yearly else s.date
+        if occ == day:
+            special_items.append({
+                "title": s.title,
+                "color_key": s.color_key,
+                "special_type": s.special_type,
+                "person": s.person,
+                "notes": s.notes,
+            })
+
+    # Rule-based specials
+    for rs in CalendarRuleSpecial.objects.filter(is_enabled=True):
+        occ = compute_rule_date(rs.rule_key, day.year)
+        if occ == day:
+            special_items.append({
+                "title": rs.title_override or rs.get_rule_key_display(),
+                "color_key": rs.color_key,
+                "special_type": rs.special_type,
+                "person": rs.person,
+                "notes": rs.notes,
+            })
+
+    return special_items
 
 def nth_weekday_of_month(year: int, month: int, weekday: int, n: int) -> date:
     """

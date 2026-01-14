@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, Category, SubCategory, Transaction, Transfer, GigCompany, GigShift, GigCompanyEntry, CalendarSpecial, CalendarRuleSpecial
+from .models import Account, Category, SubCategory, Transaction, Transfer, GigCompany, GigShift, GigCompanyEntry
 
 # Simple registrations (no custom admin behavior)
 admin.site.register(Category)
@@ -73,14 +73,3 @@ class TransferAdmin(admin.ModelAdmin):
     #     for obj in queryset:
     #         obj.delete()
 
-@admin.register(CalendarSpecial)
-class CalendarSpecialAdmin(admin.ModelAdmin):
-    list_display = ("title", "date", "special_type", "person", "recurring_yearly")
-    list_filter = ("special_type", "person", "recurring_yearly")
-    search_fields = ("title",)
-
-@admin.register(CalendarRuleSpecial)
-class CalendarRuleSpecialAdmin(admin.ModelAdmin):
-    list_display = ("rule_key", "is_enabled", "title_override", "color_key")
-    list_editable = ("is_enabled", "color_key")
-    search_fields = ("rule_key", "title_override")
