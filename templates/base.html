@@ -181,6 +181,17 @@ body.kiosk main { margin-left: 0 !important; }
 </head>
 
 <body class="!bg-[#d8e2e9] text-gray-900 {% if is_kiosk %}kiosk{% endif %}">
+  {% if is_kiosk %}
+  <!-- Kiosk Offline Overlay -->
+  <div id="kiosk-offline-overlay"
+       class="hidden fixed inset-0 z-[9999] bg-black/70 text-white flex items-center justify-center">
+    <div class="text-center px-6">
+      <div class="text-2xl font-bold mb-2">Reconnecting…</div>
+      <div class="text-sm opacity-90">Waiting for the server to come back online.</div>
+    </div>
+  </div>
+  {% endif %}
+
   {% if is_kiosk and can_edit %}
     <div class="text-xs text-gray-600">
       Editing unlocked by:
@@ -338,6 +349,45 @@ body.kiosk main { margin-left: 0 !important; }
       {% if is_kiosk %}
           <script>
               (function() {
+
+                // ---------- Recover tablet if connection lost (global for all kiosk pages) ----------
+                const overlay = document.getElementById("kiosk-offline-overlay");
+                const PING_MS = 5 * 1000; // 5 seconds (faster recovery; adjust later if desired)
+
+                async function pingServer() {
+                  try {
+                    const r = await fetch("{% url 'calendar:health_ping' %}?t=" + Date.now(), { cache: "no-store" });
+                    if (!r.ok) throw new Error("bad status");
+                    // Server is reachable: hide overlay and (if we were previously offline) hard reload once.
+                    if (overlay) overlay.classList.add("hidden");
+                    return true;
+                  } catch (e) {
+                    // Server not reachable: show overlay, keep trying.
+                    if (overlay) overlay.classList.remove("hidden");
+                    return false;
+                  }
+                }
+
+                let wasOffline = false;
+
+                setInterval(async () => {
+                  const ok = await pingServer();
+
+                  if (!ok) {
+                    wasOffline = true;
+                    return;
+                  }
+
+                  // server is back
+                  if (wasOffline) {
+                    wasOffline = false;
+                    location.reload();
+                  }
+                }, PING_MS);
+
+                // run once immediately so it reacts quickly after a restart
+                pingServer();
+
                 const LOCK_AFTER_MS = 5 * 60 * 1000; // 5 minutes (kiosk inactivity auto-lock)
                 let timer = null;
 
