@@ -1,26 +1,19 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db import transaction
 from django.db.models import Sum, Q, Case, When, Value, F, DecimalField
 from django.db.models.functions import ExtractMonth, ExtractYear, TruncMonth
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from collections import defaultdict, OrderedDict
 from decimal import Decimal
 from datetime import date
 
-from .forms import TransactionForm, TransferForm, GigShiftForm, GigCompanyFormSet, MileageRateForm
-from .models import Account, Transaction, Transfer, Category, SubCategory, GigShift, GigCompany, MileageRate
+from .forms import TransactionForm, TransferForm
+from .models import Account, Transaction, Transfer, Category, SubCategory
 
-import calendar, json
+import calendar
 from calendar import month_name, monthrange
-
-def dashboard_test(request):
-    return render(request, 'dashboard_test.html', {})
 
 def dashboard(request):
     deposit_accounts = Account.objects.filter(active=True, account_type="Deposit")
@@ -827,195 +820,3 @@ def get_monthly_balances():
 
     return balances
 
-def gig_entry(request):
-    """
-    Create a new gig shift + per-company entries.
-    """
-    if request.method == "POST":
-        action = request.POST.get("action", "save")  # "save" or "save_add"
-        shift_form = GigShiftForm(request.POST)
-        formset = GigCompanyFormSet(request.POST)
-
-        if shift_form.is_valid() and formset.is_valid():
-            try:
-                with transaction.atomic():
-                    shift = shift_form.save()
-                    formset.instance = shift
-                    formset.save()
-
-                    # --- Auto-fill company_mix_note from companies on this shift ---
-                    codes_qs = (
-                        shift.company_entries
-                        .filter(company__isnull=False)
-                        .values_list("company__code", flat=True)
-                        .distinct()
-                    )
-                    codes = sorted(codes_qs)
-                    shift.company_mix_note = "/".join(codes)
-                    shift.save(update_fields=["company_mix_note"])
-
-                if action == "save_add":
-                    messages.success(request, "Shift saved. You can add another one.")
-                    return redirect("gigs:gig_entry")
-                else:
-                    messages.success(request, "Shift saved.")
-                    return redirect("gigs:gig_summary")
-            except Exception:
-                shift_form.add_error(
-                    None,
-                    "An unexpected error occurred while saving this shift. "
-                    "Nothing was saved. Please try again.",
-                )
-        # invalid forms → fall through and re-render with errors
-    else:
-        shift_form = GigShiftForm(initial={"date": timezone.now().date()})
-        formset = GigCompanyFormSet()
-
-    return render(
-        request,
-        "gigs/gig_entry.html",
-        {"shift_form": shift_form, "formset": formset},
-    )
-
-def _month_range(year: int, month: int):
-    start = date(year, month, 1)
-    if month == 12:
-        end = date(year + 1, 1, 1)
-    else:
-        end = date(year, month + 1, 1)
-    return start, end
-
-def _next_month(d: date) -> date:
-    """Helper: first day of the next month."""
-    if d.month == 12:
-        return d.replace(year=d.year + 1, month=1, day=1)
-    return d.replace(month=d.month + 1, day=1)
-
-def gig_summary(request):
-    today = timezone.localdate()
-    current_month_start = today.replace(day=1)
-
-    # --- 1) Parse requested month (YYYY-MM) or default to current month ---
-    month_param = request.GET.get("month")
-    if month_param:
-        try:
-            year, month = map(int, month_param.split("-"))
-            selected_month_start = date(year, month, 1)
-        except Exception:
-            selected_month_start = current_month_start
-    else:
-        selected_month_start = current_month_start
-
-    selected_month_end = _next_month(selected_month_start)
-
-    # --- 2) Get list of months that actually have gig shifts (for dropdown) ---
-    all_dates = (
-        GigShift.objects
-        .order_by("-date")
-        .values_list("date", flat=True)
-        .distinct()
-    )
-    months = sorted({d.replace(day=1) for d in all_dates}, reverse=True)
-
-    # --- 3) Base queryset for the selected month ---
-    base_qs = (
-        GigShift.objects
-        .filter(date__gte=selected_month_start, date__lt=selected_month_end)
-        .prefetch_related("company_entries", "company_entries__company")
-    )
-
-    using_fallback = False
-
-    # If no shifts for requested month, fall back to most recent month with data
-    if not base_qs.exists() and months:
-        fallback_start = months[0]
-        if fallback_start != selected_month_start:
-            using_fallback = True
-            selected_month_start = fallback_start
-            selected_month_end = _next_month(selected_month_start)
-            base_qs = (
-                GigShift.objects
-                .filter(date__gte=selected_month_start, date__lt=selected_month_end)
-                .prefetch_related("company_entries", "company_entries__company")
-            )
-
-    shifts_qs = base_qs
-
-    # --- 4) Company filter (by code) ---
-    company_code = request.GET.get("company", "ALL")
-
-    # Companies that appear in this month (from base_qs, before company filter)
-    companies_for_month = (
-        GigCompany.objects
-        .filter(gig_entries__shift__in=base_qs)
-        .distinct()
-        .order_by("code")
-    )
-
-    if company_code and company_code != "ALL":
-        shifts_qs = shifts_qs.filter(company_entries__company__code=company_code).distinct()
-
-    # --- 5) Chart data based on filtered shifts ---
-    labels = []
-    gross_data = []
-    net_data = []
-    miles_data = []
-    hourly_gross_data = []
-    hourly_net_data = []
-
-    ordered_shifts = shifts_qs.order_by("date", "start_time")
-
-    for shift in ordered_shifts:
-        labels.append(shift.date.strftime("%m/%d"))
-        gross_data.append(float(shift.total_gross or 0))
-        net_data.append(float(shift.net_after_gas or 0))
-        miles_data.append(float(shift.miles or 0))
-        hourly_gross_data.append(float(shift.gross_per_hour or 0))
-        hourly_net_data.append(float(shift.net_per_hour or 0))
-
-    context = {
-        "shifts": ordered_shifts,
-        "selected_month": selected_month_start,
-        "current_month": current_month_start,
-        "months": months,
-        "using_fallback": using_fallback,
-
-        # chart data as JSON strings
-        "chart_labels": json.dumps(labels),
-        "chart_gross": json.dumps(gross_data),
-        "chart_net": json.dumps(net_data),
-        "chart_miles": json.dumps(miles_data),
-        "chart_hourly_gross": json.dumps(hourly_gross_data),
-        "chart_hourly_net": json.dumps(hourly_net_data),
-
-        # company filter context
-        "company_code": company_code,
-        "companies": companies_for_month,
-    }
-
-    return render(request, "gigs/gig_summary.html", context)
-
-@login_required
-def mileage_rate_settings(request):
-    """
-    Simple page to view and add mileage rates.
-    """
-    rates = MileageRate.objects.all()  # ordered by -effective_date due to Meta.ordering
-
-    if request.method == "POST":
-        form = MileageRateForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Mileage rate saved.")
-            return redirect("mileage_rate_settings")
-    else:
-        form = MileageRateForm()
-
-    return render(
-        request,
-        "gigs/mileage_rate_settings.html",
-        {
-            "form": form,
-            "rates": rates,
-        },
-    )

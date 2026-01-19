@@ -1,5 +1,5 @@
 from django.urls import path
-from budget import views  # TEMP: keep using existing gig views for now
+from . import views  
 
 app_name = "gigs"
 

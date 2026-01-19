@@ -430,6 +430,8 @@ def calendar_event_create(request):
 def calendar_event_edit(request, event_id):
     owner = get_calendar_owner()
     event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
+    return_to = request.GET.get("return_to") or default_return
+
 
     is_kiosk = kiosk_enabled(request)
     default_return = calendar_home_url(is_kiosk)

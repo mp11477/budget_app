@@ -2,23 +2,37 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from .models import GigCompanyEntry
+from budget.models import Transaction  
+
+"""
+gigs.signals
+
+Signals that sync gig entries into the budget ledger.
+
+Current behavior:
+- When a GigCompanyEntry is saved, ensure there is a corresponding Transaction
+  representing gig income deposited into the company's configured payout account
+  under the configured income subcategory.
+- When a GigCompanyEntry is deleted, delete its linked Transaction (optional).
+
+Design note:
+We import Transaction inside the handler to avoid import-time circulars.
+"""
 
 @receiver(post_save, sender=GigCompanyEntry)
 def sync_gig_entry_to_transaction(sender, instance: GigCompanyEntry, **kwargs):
     """
-    Ensure each GigCompanyEntry has a matching income Transaction.
-    Uses credit (income) and the company's configured payout account
+    Ensure each GigCome) and the company's configured payout account
     and income_subcategory
     """
-    from .models import Transaction  # avoid circular import
-
+    
     shift = instance.shift
     company = instance.company
 
     # Decide what amount you want to post to the budget:
     amount = instance.gross_earnings or 0 # you historically used total earnings per company
 
-     # Require a payout account and subcategory, otherwise bail out quietly
+    # Require a payout account and subcategory, otherwise bail out quietly
     if not company.payout_account or not company.income_subcategory:
         return
 
@@ -27,11 +41,12 @@ def sync_gig_entry_to_transaction(sender, instance: GigCompanyEntry, **kwargs):
         tx = instance.income_transaction
         tx.date = shift.date
         tx.account = company.payout_account
-        tx.amount = amount
+        tx.credit = amount
         tx.description = f"Gig earnings - {company.code}"
         tx.subcategory = company.income_subcategory
         tx.cleared = False
         tx.write_off = False
+        tx.debit = None
         # if you have transaction_type:
         # tx.transaction_type = Transaction.Type.INCOME  # adjust to your enum
         tx.save()
