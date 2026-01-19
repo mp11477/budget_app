@@ -89,16 +89,16 @@
         }
 
         changeBackground();
-        setInterval(changeBackground, 5000);
+        setInterval(changeBackground, 10000); //-- 10 seconds //
       }
 
-      // ---------- Recover tablet if connection lost ----------
-      const PING_MS = 2 * 60 * 1000; // 2 minutes
-      setInterval(() => {
-        fetch("{% url 'calendar:health_ping' %}", { cache: "no-store" })
-          .then(r => { if (!r.ok) location.reload(); })
-          .catch(() => location.reload());
-      }, PING_MS);
+      // // ---------- Recover tablet if connection lost ----------
+      // const PING_MS = 2 * 60 * 1000; // 2 minutes
+      // setInterval(() => {
+      //   fetch("{% url 'calendar:health_ping' %}", { cache: "no-store" })
+      //     .then(r => { if (!r.ok) location.reload(); })
+      //     .catch(() => location.reload());
+      // }, PING_MS);
 
       // ---------- Weather refresh ----------
       const REFRESH_MS = 5 * 60 * 1000; // 5 minutes

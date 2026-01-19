@@ -6,7 +6,6 @@ app_name = "budget"
 urlpatterns = [
    
     ### Additional budget-related routes ###
-    path("dashboard_test/", views.dashboard_test, name="dashboard_test"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("account/<int:account_id>/transactions/", views.account_transactions, name="account_transactions"),
     path("summary/deposits/", views.deposit_summary_transactions, name="deposit_summary_transactions"),
