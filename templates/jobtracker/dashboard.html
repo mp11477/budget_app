@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="flex items-end justify-between gap-4 mb-4">
+    <div>
+      <h1 class="text-2xl font-semibold">JobTracker</h1>
+      <div class="text-sm text-gray-600">Today: {{ today }}</div>
+    </div>
+    <div class="flex gap-2">
+      <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"
+         href="{% url 'jobtracker:jobs_list' %}">Jobs</a>
+      <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"
+         href="{% url 'jobtracker:applications_list' %}">Applications</a>
+      <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"
+          href="{% url 'jobtracker:companies_list' %}">Companies</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="bg-white rounded-2xl shadow p-4 lg:col-span-1">
+      <div class="text-lg font-medium mb-2">Pipeline</div>
+      <ul class="text-sm space-y-1">
+        {% for row in pipeline %}
+          <li class="flex justify-between">
+            <a class="underline" href="{% url 'jobtracker:applications_list' %}?status={{ row.status }}">
+              {{ row.status }}
+            </a>
+            <span class="font-medium">{{ row.count }}</span>
+          </li>
+        {% empty %}
+          <li class="text-gray-500">No applications yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-4 lg:col-span-2">
+      <div class="text-lg font-medium mb-2">Follow-ups due</div>
+      <div class="text-sm text-gray-600 mb-3">
+        Showing up to 25 items needing attention.
+      </div>
+
+      <div class="divide-y">
+        {% for a in followups_due %}
+          <div class="py-3">
+            <div class="font-medium">
+              <a class="underline" href="{% url 'jobtracker:application_detail' a.id %}">
+                {{ a.job.company.name }} — {{ a.job.title }}
+              </a>
+            </div>
+            <div class="text-sm text-gray-600">
+              Status: {{ a.get_status_display }} · Follow-up: {{ a.next_followup_date }}
+            </div>
+          </div>
+        {% empty %}
+          <div class="py-6 text-sm text-gray-500">Nothing due right now. Nice.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

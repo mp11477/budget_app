@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6">
+  <h1 class="text-2xl font-semibold mb-2">JobTracker</h1>
+  <p class="text-sm text-gray-700 mb-6">
+    Track companies, jobs, applications, contacts, and follow-ups in one place.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+      <div class="text-lg font-medium">Jobs</div>
+      <div class="text-sm text-gray-600">Create and manage job postings you’re tracking.</div>
+    </a>
+
+    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+      <div class="text-lg font-medium">Applications</div>
+      <div class="text-sm text-gray-600">Track submissions, statuses, and outcomes.</div>
+    </a>
+
+    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+      <div class="text-lg font-medium">Companies</div>
+      <div class="text-sm text-gray-600">Organize employers and notes.</div>
+    </a>
+
+    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+      <div class="text-lg font-medium">Contacts</div>
+      <div class="text-sm text-gray-600">Recruiters, hiring managers, referrals.</div>
+    </a>
+  </div>
+
+  <div class="mt-6 text-sm text-gray-600">
+    Next: build CRUD pages and link these tiles to real routes.
+  </div>
+</div>
+{% endblock %}

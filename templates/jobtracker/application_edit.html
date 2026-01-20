@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="mb-4 flex gap-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:application_detail' app.id %}">
+      ← Back to Application
+    </a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-1">Edit Application</h1>
+  <div class="text-sm text-gray-600 mb-4">
+    {{ app.job.company.name }} — {{ app.job.title }}
+  </div>
+
+  <form method="post" class="bg-white rounded-2xl shadow p-4 space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <div class="text-xs text-gray-500">{{ field.help_text }}</div>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="text-xs text-red-600">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="flex gap-2">
+      <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Save</button>
+      <a href="{% url 'jobtracker:application_detail' app.id %}" class="px-4 py-2 rounded-xl bg-gray-200">
+        Cancel
+      </a>
+    </div>
+
+    <div class="text-xs text-gray-500 pt-2">
+      Note: setting Status to Rejected/Withdrawn automatically clears Next Follow-up.
+    </div>
+  </form>
+</div>
+{% endblock %}

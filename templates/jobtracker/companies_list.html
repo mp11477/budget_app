@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="mb-4 flex gap-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:dashboard' %}">← Back</a>
+    <a class="text-sm underline" href="{% url 'jobtracker:company_create' %}">+ Add Company</a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-4">Companies</h1>
+
+  <div class="bg-white rounded-2xl shadow overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="text-left p-3">Company</th>
+          <th class="text-right p-3">Jobs</th>
+          <th class="text-right p-3">Contacts</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y">
+        {% for c in companies %}
+          <tr>
+            <td class="p-3">
+              <a class="underline" href="{% url 'jobtracker:company_detail' c.id %}">
+                {{ c.name }}
+              </a>
+            </td>
+            <td class="p-3 text-right">{{ c.job_count }}</td>
+            <td class="p-3 text-right">{{ c.contact_count }}</td>
+          </tr>
+        {% empty %}
+          <tr><td class="p-3 text-gray-500" colspan="3">No companies yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

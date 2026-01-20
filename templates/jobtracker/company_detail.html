@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="mb-4 flex gap-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:companies_list' %}">← Back to Companies</a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-1">{{ company.name }}</h1>
+  {% if company.website %}
+    <div class="text-sm mb-4">
+      <a class="underline" href="{{ company.website }}" target="_blank" rel="noreferrer">{{ company.website }}</a>
+    </div>
+  {% else %}
+    <div class="text-sm text-gray-500 mb-4">No website on file.</div>
+  {% endif %}
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="bg-white rounded-2xl shadow p-4">
+      <div class="text-lg font-medium mb-2">Contacts</div>
+      <a class="text-sm underline" href="{% url 'jobtracker:contact_create' company.id %}">+ Add Contact</a>
+      <div class="divide-y">
+        {% for ct in contacts %}
+          <div class="py-2">
+            <div class="font-medium">{{ ct.name }}</div>
+            <div class="text-sm text-gray-600">
+              {% if ct.title %}{{ ct.title }}{% endif %}
+              {% if ct.email %}{% if ct.title %} · {% endif %}{{ ct.email }}{% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="py-4 text-sm text-gray-500">No contacts yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-4">
+      <div class="text-lg font-medium mb-2">Jobs</div>
+      <div class="divide-y">
+        {% for j in jobs %}
+          <div class="py-2">
+            <a class="underline font-medium" href="{% url 'jobtracker:job_detail' j.id %}">{{ j.title }}</a>
+            <div class="text-sm text-gray-600">{{ j.get_priority_display }}{% if j.location %} · {{ j.location }}{% endif %}</div>
+          </div>
+        {% empty %}
+          <div class="py-4 text-sm text-gray-500">No jobs yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-4">
+      <div class="text-lg font-medium mb-2">Applications</div>
+      <div class="divide-y">
+        {% for a in apps %}
+          <div class="py-2">
+            <a class="underline font-medium" href="{% url 'jobtracker:application_detail' a.id %}">
+              {{ a.job.title }}
+            </a>
+            <div class="text-sm text-gray-600">
+              {{ a.get_status_display }} · Applied {{ a.applied_date }}
+              {% if a.next_followup_date %} · Follow-up {{ a.next_followup_date }}{% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="py-4 text-sm text-gray-500">No applications yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
