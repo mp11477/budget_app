@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="mb-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:job_detail' job.id %}">
+      ← Back to Job
+    </a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-1">Edit Job</h1>
+  <div class="text-sm text-gray-600 mb-4">
+    {{ job.company.name }} — {{ job.title }}
+  </div>
+
+  <form method="post" class="bg-white rounded-2xl shadow p-4 space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <div class="text-xs text-gray-500">{{ field.help_text }}</div>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="text-xs text-red-600">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="flex gap-2">
+      <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Save</button>
+      <a href="{% url 'jobtracker:job_detail' job.id %}" class="px-4 py-2 rounded-xl bg-gray-200">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

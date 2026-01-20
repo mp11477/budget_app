@@ -1,6 +1,20 @@
 from django.db import models
 from django.utils import timezone
 
+"""
+jobtracker.models
+
+Job search tracking models.
+
+Flow:
+Company -> Job -> Application -> Communication
+Company -> Contact (people at the company)
+
+Design goals:
+- Minimal but useful fields for real job hunting.
+- Support follow-up reminders via next_followup_date.
+- Keep history of outreach via Communication.
+"""
 
 class Company(models.Model):
     name = models.CharField(max_length=200, unique=True)

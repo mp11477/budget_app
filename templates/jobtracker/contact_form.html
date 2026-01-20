@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="mb-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:company_detail' company.id %}">
+      ← Back to {{ company.name }}
+    </a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-4">Add Contact</h1>
+
+  <form method="post" class="bg-white rounded-2xl shadow p-4 space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+        {{ field }}
+        {% for error in field.errors %}
+          <div class="text-xs text-red-600">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="flex gap-2">
+      <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Save</button>
+      <a href="{% url 'jobtracker:company_detail' company.id %}" class="px-4 py-2 rounded-xl bg-gray-200">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

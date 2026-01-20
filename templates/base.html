@@ -301,6 +301,16 @@ body.kiosk main { margin-left: 0 !important; }
             Monthly Calendar
           </a>
         </li>
+        <hr class="my-2 border-gray-400/40"></hr>
+        <div class="text-[10px] tracking-wide text-gray-400 mt-3 mb-1 px-2">
+          Job Tracking
+        </div>
+        <li>
+          <a href="{% url 'jobtracker:dashboard' %}"  class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition">
+            <span class="material-icons text-green-500 mr-3">work</span>
+            JobTracker
+          </a>
+        </li>
         
         <!-- Add more links as needed -->
       </ul>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="mb-4 flex gap-4">
+    <a class="text-sm underline" href="{% url 'jobtracker:applications_list' %}">← Back to Applications</a>
+    <a class="text-sm underline" href="{% url 'jobtracker:job_detail' app.job.id %}">View Job</a>
+    <a class="text-sm underline" href="{% url 'jobtracker:application_edit' app.id %}">Edit Application</a>
+  </div>
+
+  <h1 class="text-2xl font-semibold mb-1">{{ app.job.company.name }} — {{ app.job.title }}</h1>
+  <div class="text-sm text-gray-600 mb-4">
+    Status: {{ app.get_status_display }} · Applied: {{ app.applied_date }}
+    {% if app.next_followup_date %} · Next follow-up: {{ app.next_followup_date }}{% endif %}
+    {% if app.last_contact_date %} · Last contact: {{ app.last_contact_date }}{% endif %}
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="bg-white rounded-2xl shadow p-4">
+      <div class="text-lg font-medium mb-3">Add Communication</div>
+
+      <form method="post" class="space-y-3">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+          <div>
+            <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+              <div class="text-xs text-gray-500">{{ field.help_text }}</div>
+            {% endif %}
+            {% for error in field.errors %}
+              <div class="text-xs text-red-600">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Save Communication</button>
+      </form>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-4">
+      <div class="text-lg font-medium mb-3">Communication History</div>
+
+      <div class="divide-y">
+        {% for c in comms %}
+          <div class="py-3">
+            <div class="font-medium">{{ c.summary }}</div>
+            <div class="text-sm text-gray-600">
+              {{ c.when }} · {{ c.get_method_display }} · {% if c.inbound %}Inbound{% else %}Outbound{% endif %}
+            </div>
+            {% if c.notes %}
+              <div class="text-sm whitespace-pre-wrap mt-2">{{ c.notes }}</div>
+            {% endif %}
+          </div>
+        {% empty %}
+          <div class="py-6 text-sm text-gray-500">No communications logged yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
