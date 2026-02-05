@@ -13,8 +13,10 @@ KIOSK_UNLOCK_HOURS = 1
 
 '''Weather API variables'''
 OPENWEATHER_API_KEY = "8701c16d491aaae7f8b3093b6770d835" # OpenWeatherMap API Key
-LAT = '40.4467'       # Current LAT for home location
-LON = '-79.8538'    # Current LONG for home location
+LAT = '40.4687'       # Current LAT for home location
+LON = '-79.7431'    # Current LONG for home location
+
+NWS_USER_AGENT = "BudgetAppCalendar/1.0 (mike@yourdomain.com)"  # <-- change this to your contact info per NWS guidelines
 '''End of Weather API'''
 
 def current_git_branch():

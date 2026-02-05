@@ -1,0 +1,38 @@
+{% load dict_extras %}
+
+<div class="cal-panel bottom-half">
+  <section class="smartcal-strip">
+
+    <div class="smartcal-dow">
+      {% for d in "SMTWTFS" %}
+        <div class="smartcal-dowItem">{{ d }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="smartcal-days">
+      {% for day in days %}
+        <div class="smartcal-day {% if day.is_today %}today{% endif %}">
+          <div class="day-num">{{ day.date.day }}</div>
+
+          {% with events=events_by_date|get_item:day.date %}
+            {% if events %}
+              {% for ev in events %}
+                <div class="event-chip person-{{ ev.person }}">
+                  <div class="event-time">
+                    {{ ev.start_dt|date:"g:i A" }}{% if ev.end_dt %}–{{ ev.end_dt|date:"g:i A" }}{% endif %}
+                  </div>
+                  <div class="event-title">
+                    {{ ev.title }} — {{ ev.get_person_display }}
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="event-chip empty">No events scheduled.</div>
+            {% endif %}
+          {% endwith %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </section>
+</div>

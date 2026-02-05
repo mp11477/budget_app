@@ -1,0 +1,60 @@
+<div class="cal-panel weather">
+  {% if weather_error %}
+    <p class="error">{{ weather_error }}</p>
+  {% elif current_temperature == "N/A" %}
+    <p class="error">Temperature data unavailable</p>
+  {% else %}
+
+    <div class="wind-wrapper">
+      <div class="wind-info">
+        <span class="material-symbols-outlined wind-icon">air</span>
+        <span class="wind-arrow" style="--wind-deg: {{ wind_deg_to }}deg;">↑</span>
+        {{ wind_display }}
+      </div>
+    </div>
+
+    <div class="temp">
+      <span>{{ current_temperature_display }}</span>
+      <img src="{{ weather_icon }}" alt="Weather Icon">
+    </div>
+
+    <div class="conditions">
+      Feels like: {{ feels_like }}<br>
+      {% if precipitation_1h and precipitation_1h > 0 %}
+        {{ description|title }} in past hour: {{ precipitation_1h }} in<br>
+      {% else %}
+        {{ description|title }}<br>
+      {% endif %}
+      Humidity: {{ humidity }}<br>
+      {% if weather_updated_at %}
+        <p class="updated"> Updated at {{ weather_updated_at }} </p>
+            {% if stale_due_to_error %}
+                <p class="updated">Using cached weather (last fetch failed).</p>
+            {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="forecast-row">
+      {% for day in forecast_list %}
+        <div class="forecast-card">
+          <div class="forecast-day">{{ day.day_label }}</div>
+          <img src="{{ day.icon }}" alt="icon" class="forecast-icon">
+          <div class="forecast-hi">{{ day.temp_high }}°</div>
+          <div class="forecast-lo">{{ day.temp_low }}°</div>
+
+          {% if day.precip %}
+            <img src="{{ day.precip.icon }}" alt="precip icon" class="forecast-icon">
+            <div class="forecast-small">
+              {{ day.precip.pop }}% {{ day.precip.kind }} {{ day.precip.time_of_day }}
+            </div>
+          {% elif day.pop > 0 %}
+            <div class="forecast-small">
+              Ch of Precip: {{ day.pop }}%
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  {% endif %}
+</div>

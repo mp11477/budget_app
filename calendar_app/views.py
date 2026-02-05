@@ -18,7 +18,7 @@ from .permissions import kiosk_enabled, kiosk_edit_required, edit_actor
 from .url_helpers import calendar_home_url
 
 from calendar_app.models import CalendarEvent 
-
+from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from calendar import monthrange
 
@@ -129,7 +129,7 @@ def main_calendar(request):
     # image directory for calendar page backgrounds
     # 1. Get the absolute path to your static images folder
     photos_dir = Path(settings.BASE_DIR) / "static" / "budget" / "calendar_photos"
-      
+         
     # match jpg/JPG/jpeg/JPEG (and optionally png)
     exts = {".jpg", ".jpeg", ".png"}
     image_files = []
@@ -150,11 +150,48 @@ def main_calendar(request):
     today_events = (CalendarEvent.objects
         .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
         .order_by("start_dt"))
-        
+    
+   # Build a 7-day strip starting Sunday
+    start = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday start
+    end = start + timedelta(days=6)
+
+    days = []
+    for i in range(7):
+        d = start + timedelta(days=i)
+        days.append({"date": d, "is_today": d == today})
+
+    start_dt = timezone.make_aware(datetime.combine(start, time.min))
+    end_dt = timezone.make_aware(datetime.combine(end, time.max))
+
+    week_events = (CalendarEvent.objects
+        .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
+        .order_by("start_dt")
+    )
+
+    events_by_date = defaultdict(list)
+    tz = timezone.get_current_timezone()
+
+    for ev in week_events:
+        ev_start = ev.start_dt.astimezone(tz).date()
+        ev_end = ev.end_dt.astimezone(tz).date()
+
+        d = max(ev_start, start)
+        last = min(ev_end, end)
+
+        while d <= last:
+            events_by_date[d].append(ev)
+            d += timedelta(days=1)
+
+    # Optional: keep today_events for your agenda section
+    today_events = events_by_date.get(today, [])
+           
     context = {
     "image_list": image_list if image_list else [],
     "today_events": today_events,
     "today": today,
+    "days": days,
+    "events_by_date": dict(events_by_date),
+    "owner": owner,
     **weather_ctx,
     }
 

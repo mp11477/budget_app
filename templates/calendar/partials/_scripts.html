@@ -1,0 +1,53 @@
+{% load static %}
+
+<script>
+(function () {
+  // ---------- rotating backgrounds ----------
+  const imageListEl = document.getElementById("image-list");
+  if (imageListEl) {
+    let imagePaths = [];
+    try { imagePaths = JSON.parse(imageListEl.textContent || "[]"); } catch (e) {}
+
+    const staticPrefix = "{% get_static_prefix %}";
+    const images = imagePaths.map(p => staticPrefix + p);
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    shuffle(images);
+    let currentImageIndex = -1;
+
+    function changeBackground() {
+      if (!images.length) return;
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      const imageUrl = images[currentImageIndex];
+      const mainEl = document.getElementById("dynamic-background-div");
+      if (mainEl) mainEl.style.setProperty("--bg-url", `url('${imageUrl}')`);
+    }
+
+    changeBackground();
+    setInterval(changeBackground, 10000);
+  }
+
+  // ---------- Weather refresh ----------
+  const REFRESH_MS = 5 * 60 * 1000;
+
+  async function refreshWeather() {
+    const el = document.getElementById("weather-block");
+    if (!el) return;
+
+    try {
+      const r = await fetch("{% url 'calendar:weather_fragment' %}", { cache: "no-store" });
+      const data = await r.json();
+      if (data.ok && data.html) el.innerHTML = data.html;
+    } catch (e) {}
+  }
+
+  refreshWeather();
+  setInterval(refreshWeather, REFRESH_MS);
+})();
+</script>

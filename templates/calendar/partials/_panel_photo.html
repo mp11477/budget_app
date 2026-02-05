@@ -1,0 +1,10 @@
+{% load static %}
+<div class="cal-panel middle-photo">
+  <header
+    id="dynamic-background-div"
+    class="background-container {% if not image_list %}fallback{% endif %}"
+    {% if image_list %}
+      style="--bg-url: url('{% static image_list|random %}');"
+    {% endif %}
+  ></header>
+</div>
