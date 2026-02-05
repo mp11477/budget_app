@@ -4,8 +4,8 @@
   <section class="smartcal-strip">
 
     <div class="smartcal-dow">
-      {% for d in "SMTWTFS" %}
-        <div class="smartcal-dowItem">{{ d }}</div>
+      {% for day in days %}
+        <div class="smartcal-dowItem">{{ day.date|date:"D"|slice:":3" }}</div>
       {% endfor %}
     </div>
 

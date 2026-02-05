@@ -144,26 +144,23 @@ def main_calendar(request):
     # Pass daily events to template
     owner = get_calendar_owner()  # same owner logic you're using elsewhere
     today = timezone.localdate()
-    start_dt = timezone.make_aware(datetime.combine(today, time.min))
-    end_dt = timezone.make_aware(datetime.combine(today, time.max))
-
-    today_events = (CalendarEvent.objects
-        .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
-        .order_by("start_dt"))
-    
-   # Build a 7-day strip starting Sunday
-    start = today - timedelta(days=(today.weekday() + 1) % 7)  # Sunday start
-    end = start + timedelta(days=6)
-
+        
+   # Build a rolling 7 day strip for the week overview panel (today + next 6 days)
+    window_start = today
+    window_end = today + timedelta(days=6)
+  
     days = []
-    for i in range(7):
-        d = start + timedelta(days=i)
-        days.append({"date": d, "is_today": d == today})
+    for i in range(7):  # today + next 6
+        d = today + timedelta(days=i)
+        days.append({
+            "date": d,
+            "is_today": (d == today),
+        })
 
-    start_dt = timezone.make_aware(datetime.combine(start, time.min))
-    end_dt = timezone.make_aware(datetime.combine(end, time.max))
+    start_dt = timezone.make_aware(datetime.combine(window_start, time.min))
+    end_dt   = timezone.make_aware(datetime.combine(window_end, time.max))
 
-    week_events = (CalendarEvent.objects
+    window_events = (CalendarEvent.objects
         .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
         .order_by("start_dt")
     )
@@ -171,12 +168,12 @@ def main_calendar(request):
     events_by_date = defaultdict(list)
     tz = timezone.get_current_timezone()
 
-    for ev in week_events:
+    for ev in window_events:
         ev_start = ev.start_dt.astimezone(tz).date()
         ev_end = ev.end_dt.astimezone(tz).date()
 
-        d = max(ev_start, start)
-        last = min(ev_end, end)
+        d = max(ev_start, window_start)
+        last = min(ev_end, window_end)
 
         while d <= last:
             events_by_date[d].append(ev)
