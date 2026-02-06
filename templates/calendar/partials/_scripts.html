@@ -34,6 +34,7 @@
   }
 
   // ---------- Weather refresh ----------
+  
   const REFRESH_MS = 5 * 60 * 1000;
 
   async function refreshWeather() {
@@ -41,13 +42,28 @@
     if (!el) return;
 
     try {
-      const r = await fetch("{% url 'calendar:weather_fragment' %}", { cache: "no-store" });
+      const r = await fetch("{% url 'calendar:weather_fragment' %}", {
+        cache: "no-store",
+        headers: { "X-Requested-With": "XMLHttpRequest" }
+      });
+
+      if (!r.ok) return;
+
       const data = await r.json();
-      if (data.ok && data.html) el.innerHTML = data.html;
-    } catch (e) {}
+      if (data.ok && data.html) {
+        el.innerHTML = data.html;           // ✅ inject the html field only
+      } else {
+        console.warn("Weather refresh failed: no html in response");
+      }
+    } catch (e) {
+      console.warn("Weather refresh failed:", e);
+    }
   }
 
-  refreshWeather();
-  setInterval(refreshWeather, REFRESH_MS);
+  // wait until DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    refreshWeather();                 // initial load
+    setInterval(refreshWeather, REFRESH_MS);
+  });
 })();
 </script>

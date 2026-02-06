@@ -95,7 +95,7 @@ def weather_fragment(request):
     The template rendered here MUST be a fragment (no {% extends %}).
     """
     weather_ctx = get_cached_weather()
-    html = render_to_string("partials/_weather_block.html", weather_ctx, request=request)
+    html = render_to_string('calendar/partials/_panel_weather.html', weather_ctx, request=request)
     return JsonResponse({"ok": True, "html": html})
 
 #Calendar Views

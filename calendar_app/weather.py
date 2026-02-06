@@ -204,8 +204,8 @@ def apply_openweather_current(ctx: Dict[str, Any], api_key: str, lat: Any, lon: 
     ctx["description"] = (w["weather"][0]["description"] or "").capitalize()
 
     icon = w["weather"][0]["icon"]
-    ctx["weather_icon"] = f"https://openweathermap.org/img/wn/{icon}@2x.png"
-
+    ctx["weather_icon"] = f'https://openweathermap.org/img/wn/{icon}@2x.png'
+    
     ctx["humidity"] = f'{w["main"]["humidity"]}%'
 
     ctx["wind_speed"] = f'{w["wind"]["speed"]}'
@@ -279,8 +279,9 @@ def fetch_openweather_daily_extras(lat: float, lon: float) -> Dict[str, Dict[str
         daytime = [s for s in slots if 9 <= int(s["time"][:2]) <= 18]
         icon_source = daytime if daytime else slots
         icon = Counter(s["icon"] for s in icon_source).most_common(1)[0][0]
-        day_icon = f"https://openweathermap.org/img/wn/{icon}@2x.png"
-
+        day_icon = f'https://openweathermap.org/img/wn/{icon}@2x.png'
+        
+        # description from mid-slot
         mid_slot = icon_source[len(icon_source) // 2]
         day_desc = (mid_slot.get("desc") or "").capitalize()
 
@@ -292,13 +293,14 @@ def fetch_openweather_daily_extras(lat: float, lon: float) -> Dict[str, Dict[str
         best = max(precip_slots, key=lambda s: s["pop"]) if precip_slots else None
 
         precip_info = None
+
         if best:
             kind = precip_kind(best.get("desc") or "")
             precip_info = {
                 "pop": int(round(best["pop"] * 100)),
                 "time_of_day": time_to_daypart(best["time"]),
                 "kind": kind,
-                "icon": f"https://openweathermap.org/img/wn/{best['icon']}@2x.png",
+                "icon": f'https://openweathermap.org/img/wn/{best["icon"]}@2x.png',
                 "desc": (best.get("desc") or "").capitalize(),
             }
 
@@ -349,7 +351,7 @@ def merge_daily_forecasts(
         merged.setdefault("icon", "")
         merged.setdefault("description", "")
         merged.setdefault("precip", None)
-               
+                      
         merged.setdefault("description", extras.get("description", ""))
     
         out.append(merged)
