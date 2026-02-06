@@ -4,7 +4,7 @@ from . import views
 app_name = "jobtracker"
 
 urlpatterns = [
-    path("", views.dashboard, name="dashboard"),
+    path("", views.dashboard, name="jobtracker_dashboard"),
     path("jobs/", views.jobs_list, name="jobs_list"),
     path("jobs/add/", views.job_create, name="job_create"),
     path("jobs/<int:job_id>/edit/", views.job_edit, name="job_edit"),
@@ -15,6 +15,7 @@ urlpatterns = [
     path("jobs/<int:job_id>/applications/add/", views.application_create_for_job, name="application_create_for_job"),
     path("applications/<int:app_id>/", views.application_detail, name="application_detail"),
     path("applications/<int:app_id>/edit/", views.application_edit, name="application_edit"),
+    path("applications/export.csv", views.applications_export_csv, name="applications_export_csv"),
 
     path("companies/add/", views.company_create, name="company_create"),
     path("companies/", views.companies_list, name="companies_list"),

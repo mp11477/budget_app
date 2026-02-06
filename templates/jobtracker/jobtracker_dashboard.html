@@ -23,7 +23,7 @@
         {% for row in pipeline %}
           <li class="flex justify-between">
             <a class="underline" href="{% url 'jobtracker:applications_list' %}?status={{ row.status }}">
-              {{ row.status }}
+              {{ row.label }}
             </a>
             <span class="font-medium">{{ row.count }}</span>
           </li>
@@ -34,7 +34,13 @@
     </div>
 
     <div class="bg-white rounded-2xl shadow p-4 lg:col-span-2">
-      <div class="text-lg font-medium mb-2">Follow-ups due</div>
+      <div class="flex items-baseline justify-between mb-2">
+        <div class="text-lg font-medium">
+          <a class="underline" href="{% url 'jobtracker:applications_list' %}?due=1">
+            Follow-ups due
+          </a>
+        </div>
+      </div>
       <div class="text-sm text-gray-600 mb-3">
         Showing up to 25 items needing attention.
       </div>

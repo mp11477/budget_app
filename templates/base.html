@@ -306,9 +306,10 @@ body.kiosk main { margin-left: 0 !important; }
           Job Tracking
         </div>
         <li>
-          <a href="{% url 'jobtracker:dashboard' %}"  class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition">
+          <a href="{% url 'jobtracker:jobtracker_dashboard' %}{{ kiosk_qs_prefix }}"  class="flex items-center gap-1 px-2 py-1 rounded-xl hover:bg-[#798A9A] transition
+              {% if current == 'jobtracker_dashboard' %}!bg-[#A9B8C1] !text-white{% endif %}">
             <span class="material-icons text-green-500 mr-3">work</span>
-            JobTracker
+            Job Tracker
           </a>
         </li>
         

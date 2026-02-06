@@ -69,7 +69,9 @@ class Application(models.Model):
         WITHDRAWN = "WITHDRAWN", "Withdrawn"
 
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applications")
-    applied_date = models.DateField(default=timezone.localdate)
+    applied_date = models.DateField(default=timezone.localdate)  #Used for filtering
+    applied_at = models.DateTimeField(null=True, blank=True)  #Timestamp proof of application
+
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.APPLIED)
 
     resume_version = models.CharField(max_length=120, blank=True)  # filename or tag
@@ -81,10 +83,20 @@ class Application(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ["-applied_at", "-applied_date", "-created_at"]
+
+    def save(self, *args, **kwargs):
+        # If applied_at is set, keep applied_date aligned
+        if self.applied_at:
+            new_date = timezone.localtime(self.applied_at).date()
+            if self.applied_date != new_date:
+                self.applied_date = new_date
+        super().save(*args, **kwargs)   
+
     def __str__(self) -> str:
         return f"{self.job} ({self.status})"
-
-
+      
 class Communication(models.Model):
     class Method(models.TextChoices):
         EMAIL = "EMAIL", "Email"

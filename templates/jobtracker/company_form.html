@@ -7,6 +7,10 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
 
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    
     {% for field in form %}
       <div>
         <label class="block text-sm font-medium mb-1">{{ field.label }}</label>
@@ -19,7 +23,10 @@
 
     <div class="flex gap-2">
       <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Save</button>
-      <a href="{% url 'jobtracker:jobs_list' %}" class="px-4 py-2 rounded-xl bg-gray-200">Cancel</a>
+      <a href="{% if next %}{{ next }}{% else %}{% url 'jobtracker:companies_list' %}{% endif %}"
+        class="px-4 py-2 rounded-xl bg-gray-200">
+        Cancel
+      </a>
     </div>
   </form>
 </div>

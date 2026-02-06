@@ -8,12 +8,12 @@
   </p>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+    <a href="{% url 'jobtracker:jobs_list' %}" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
       <div class="text-lg font-medium">Jobs</div>
-      <div class="text-sm text-gray-600">Create and manage job postings you’re tracking.</div>
+      <div class="text-sm text-gray-600">Create and manage job postings you're tracking.</div>
     </a>
 
-    <a href="#" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
+    <a href="{% url 'jobtracker:applications_list' %}" class="block rounded-2xl bg-white shadow p-4 hover:shadow-md transition">
       <div class="text-lg font-medium">Applications</div>
       <div class="text-sm text-gray-600">Track submissions, statuses, and outcomes.</div>
     </a>

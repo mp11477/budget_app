@@ -9,7 +9,7 @@
 
   <h1 class="text-2xl font-semibold mb-1">{{ app.job.company.name }} — {{ app.job.title }}</h1>
   <div class="text-sm text-gray-600 mb-4">
-    Status: {{ app.get_status_display }} · Applied: {{ app.applied_date }}
+    Status: {{ app.get_status_display }} · Applied: {{ app.applied_at|date:"n/j/Y g:i A" }}
     {% if app.next_followup_date %} · Next follow-up: {{ app.next_followup_date }}{% endif %}
     {% if app.last_contact_date %} · Last contact: {{ app.last_contact_date }}{% endif %}
   </div>

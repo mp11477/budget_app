@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-6">
-  <div class="mb-4 flex gap-4">
-    <a class="text-sm underline" href="{% url 'jobtracker:dashboard' %}">← Back</a>
-    <a class="text-sm underline" href="{% url 'jobtracker:company_create' %}">+ Add Company</a>
-  </div>
+<div class="max-w-6xl mx-auto px-2 py-6">
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4">
+    <h1 class="text-2xl font-semibold">Companies</h1>
 
-  <h1 class="text-2xl font-semibold mb-4">Companies</h1>
+   <div class="flex gap-2">
+      <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"
+        href="{% url 'jobtracker:jobtracker_dashboard' %}">
+        Back
+      </a>
+
+      <a href="{% url 'jobtracker:company_create' %}"
+        class="px-3 py-2 rounded-xl bg-emerald-600 text-white shadow hover:shadow-md transition text-sm">
+        + Add Company
+      </a>
+      </div>
+  </div>
 
   <div class="bg-white rounded-2xl shadow overflow-hidden">
     <table class="w-full text-sm">
