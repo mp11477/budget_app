@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import Job, Company, Application, Communication, Contact
 
 
@@ -49,31 +50,11 @@ class ApplicationForm(forms.ModelForm):
         required=True,
     )
 
-    def __init__(self, *args, job_locked=None, **kwargs):
-        """
-        If job_locked is provided:
-        - preselect that job
-        - disable the dropdown so the user can’t change it
-        """
-        super().__init__(*args, **kwargs)
-        if job_locked is not None:
-            self.fields["job"].initial = job_locked
-            self.fields["job"].disabled = True
-
-    def clean_job(self):
-        """
-        If the job field is disabled, Django won't post it. Ensure we return the initial job.
-        """
-        job = self.cleaned_data.get("job")
-        if job is None and self.fields["job"].disabled:
-            return self.fields["job"].initial
-        return job
-
     class Meta:
         model = Application
         fields = [
             "job",
-            "applied_date",
+            "applied_at",
             "status",
             "resume_version",
             "cover_letter_version",
@@ -83,7 +64,35 @@ class ApplicationForm(forms.ModelForm):
         widgets = {
             "resume_version": forms.TextInput(attrs={"placeholder": "e.g., Resume_v3_QA"}),
             "cover_letter_version": forms.TextInput(attrs={"placeholder": "e.g., CL_Tobii_2026-01"}),
+            "applied_at": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
+
+    def __init__(self, *args, job_locked=None, **kwargs):
+        """
+        If job_locked is provided:
+        - preselect that job
+        - disable the dropdown so the user can’t change it
+        Also defaults applied_at to "now" on new records.
+        """
+        super().__init__(*args, **kwargs)
+
+        # lock job if requested
+        if job_locked is not None:
+            self.fields["job"].initial = job_locked
+            self.fields["job"].disabled = True
+
+        # default applied_at
+        if not self.instance.pk and not self.initial.get("applied_at"):
+            self.initial["applied_at"] = timezone.localtime(timezone.now()).strftime("%Y-%m-%dT%H:%M")
+
+    def clean_job(self):
+        """
+        If the job field is disabled, Django won't post it. Ensure we return the initial job.
+        """
+        job = self.cleaned_data.get("job")
+        if job is None and self.fields["job"].disabled:
+            return self.fields["job"].initial
+        return job
 
 class CompanyForm(forms.ModelForm):
     class Meta:
@@ -120,12 +129,16 @@ class ApplicationEditForm(forms.ModelForm):
         model = Application
         fields = [
             "status",
-            "applied_date",
+            "applied_at",
             "resume_version",
             "cover_letter_version",
             "last_contact_date",
             "next_followup_date",
         ]
+
+        widgets = {
+            "applied_at": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
 
 class ContactForm(forms.ModelForm):
     """

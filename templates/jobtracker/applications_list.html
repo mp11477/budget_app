@@ -6,7 +6,7 @@
 
     <div class="flex gap-2">
       <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"
-        href="{% url 'jobtracker:dashboard' %}">
+        href="{% url 'jobtracker:jobtracker_dashboard' %}">
         Back
       </a>
 
@@ -17,6 +17,28 @@
       </div>
     
   </div>
+
+   <div class="flex flex-wrap gap-2 text-sm mb-3">
+      <a class="px-3 py-1 rounded-xl text-blue-600 bg-blue-100 shadow"
+        href="{% url 'jobtracker:applications_list' %}?days=7">Applied last 7 days</a>
+
+      <a class="px-3 py-1 rounded-xl text-blue-600 bg-blue-100 shadow"
+        href="{% url 'jobtracker:applications_list' %}?days=14">Applied last 14 days</a>
+
+      <a class="px-3 py-1 rounded-xl text-indigo-900 bg-indigo-300 shadow"
+        href="{% url 'jobtracker:applications_list' %}?week=1">
+        This week (Sun-Sat)
+      </a>
+
+      <a class="px-3 py-1 rounded-xl text-red-600 bg-red-100 shadow"
+        href="{% url 'jobtracker:applications_list' %}">Clear filters</a>
+
+      <a class="px-3 py-1 rounded-xl bg-emerald-600 text-white text-sm"
+        href="{% url 'jobtracker:applications_export_csv' %}?{{ request.GET.urlencode }}">
+        Export CSV
+      </a>
+
+    </div>
 
   <form method="get" class="mb-4 flex flex-wrap gap-8 items-end justify-center">
     <div>
@@ -46,7 +68,7 @@
         {% endfor %}
       </select>
     </div>
-
+  
     <label class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white shadow text-sm">
       <input type="checkbox" name="due" value="1" {% if filters.due == "1" %}checked{% endif %}>
       Follow-ups due
@@ -56,6 +78,7 @@
       <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm">Apply</button>
       <a href="{% url 'jobtracker:applications_list' %}" class="px-4 py-2 rounded-xl bg-gray-200 text-sm">Reset</a>
     </div>
+   
   </form>
 
   <div class="bg-white rounded-2xl shadow overflow-hidden">
@@ -83,7 +106,7 @@
               {% endif %}
             </td>
             <td class="p-3">{{ a.get_status_display }}</td>
-            <td class="p-3">{{ a.applied_date }}</td>
+            <td class="p-3">{{ a.applied_at|date:"n/j/Y g:i A" }}</td>
             <td class="p-3">
                 {% if a.next_followup_date %}
                     {{ a.next_followup_date }}
