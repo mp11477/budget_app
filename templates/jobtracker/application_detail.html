@@ -47,7 +47,7 @@
           <div class="py-3">
             <div class="font-medium">{{ c.summary }}</div>
             <div class="text-sm text-gray-600">
-              {{ c.when }} · {{ c.get_method_display }} · {% if c.inbound %}Inbound{% else %}Outbound{% endif %}
+              {{ c.when|date:"n/j/Y g:i A" }} · {{ c.get_method_display }} · {% if c.inbound %}Inbound{% else %}Outbound{% endif %}
             </div>
             {% if c.notes %}
               <div class="text-sm whitespace-pre-wrap mt-2">{{ c.notes }}</div>
