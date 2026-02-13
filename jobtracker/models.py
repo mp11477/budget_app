@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 
 """
 jobtracker.models
@@ -92,7 +93,9 @@ class Application(models.Model):
             new_date = timezone.localtime(self.applied_at).date()
             if self.applied_date != new_date:
                 self.applied_date = new_date
-        super().save(*args, **kwargs)   
+            if self.status == self.Status.APPLIED and not self.next_followup_date and self.applied_date:
+                self.next_followup_date = self.applied_date + timedelta(days=7)
+            super().save(*args, **kwargs)   
 
     def __str__(self) -> str:
         return f"{self.job} ({self.status})"
@@ -111,6 +114,9 @@ class Communication(models.Model):
     inbound = models.BooleanField(default=False)
     summary = models.CharField(max_length=300)
     notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-when", "-id"]
 
     def __str__(self) -> str:
         direction = "In" if self.inbound else "Out"

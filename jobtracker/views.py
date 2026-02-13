@@ -23,6 +23,14 @@ def dashboard(request):
     """
     today = timezone.localdate()
 
+    # week start (Sunday)
+    days_since_sunday = (today.weekday() + 1) % 7
+    week_start = today - timedelta(days=days_since_sunday)
+
+    week_apps_count = Application.objects.filter(applied_date__gte=week_start).count()
+    week_goal = 2
+    week_remaining = max(0, week_goal - week_apps_count)
+
     # Follow-ups due (today or earlier) and not closed out
     followups_due = Application.objects.select_related("job", "job__company").filter(
         next_followup_date__isnull=False,
@@ -46,6 +54,10 @@ def dashboard(request):
         "today": today,
         "followups_due": followups_due[:25],
         "pipeline": pipeline,
+        "week_start": week_start,
+        "week_apps_count": week_apps_count,
+        "week_goal": week_goal,
+        "week_remaining": week_remaining,
     }
     return render(request, "jobtracker/jobtracker_dashboard.html", context)
 
@@ -55,7 +67,6 @@ def _add_query_param(url: str, key: str, value: str) -> str:
     q[key] = [value]
     new_query = urlencode(q, doseq=True)
     return urlunparse((parts.scheme, parts.netloc, parts.path, parts.params, new_query, parts.fragment))
-
 
 def job_create(request):
     """
@@ -397,14 +408,17 @@ def application_detail(request, app_id: int):
             comm.save()
 
             # Auto-update last_contact_date to communication date (localdate)
-            app.last_contact_date = timezone.localdate(comm.when)
+            app.last_contact_date = timezone.localdate(comm.when).date()
 
             # Optional: set/bump next followup from today
+            update_fields = ["last_contact_date", "updated_at"]
+
             days = form.cleaned_data.get("followup_in_days")
             if days is not None:
                 app.next_followup_date = timezone.localdate() + timedelta(days=int(days))
+                update_fields.append("next_followup_date")
 
-            app.save(update_fields=["last_contact_date", "next_followup_date", "updated_at"])
+            app.save(update_fields=update_fields)
             return redirect("jobtracker:application_detail", app_id=app.id)
     else:
         form = CommunicationForm()

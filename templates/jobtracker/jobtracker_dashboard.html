@@ -5,6 +5,17 @@
     <div>
       <h1 class="text-2xl font-semibold">JobTracker</h1>
       <div class="text-sm text-gray-600">Today: {{ today }}</div>
+        <div class="mt-1 text-sm text-blue-700">
+          <a class="underline"
+            href="{% url 'jobtracker:applications_list' %}?week=1">
+            This week (Sun–Sat): <span class="font-medium">{{ week_apps_count }}</span> applications
+          </a>
+          {% if week_remaining > 0 %}
+            <span class="text-red-600"> · Need {{ week_remaining }} more</span>
+          {% else %}
+            <span class="text-emerald-700"> · Met requirement</span>
+          {% endif %}
+        </div>
     </div>
     <div class="flex gap-2">
       <a class="px-3 py-2 rounded-xl bg-white shadow hover:shadow-md transition text-sm"

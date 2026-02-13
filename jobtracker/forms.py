@@ -109,6 +109,7 @@ class CommunicationForm(forms.ModelForm):
     followup_in_days = forms.IntegerField(
         required=False,
         min_value=0,
+        max_value=365,
         label="Set follow-up (days from today)",
         help_text="Optional. If set, updates the application's next follow-up date.",
     )
@@ -118,8 +119,19 @@ class CommunicationForm(forms.ModelForm):
         fields = ["when", "method", "inbound", "summary", "notes"]
         widgets = {
             "notes": forms.Textarea(attrs={"rows": 3}),
+            "when": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "summary": forms.TextInput(attrs={"placeholder": "e.g., Follow-up email sent"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if not self.initial.get("when"):
+            self.initial["when"] = timezone.localtime(
+                timezone.now()
+            ).strftime("%Y-%m-%dT%H:%M")
+    
+    
 
 class ApplicationEditForm(forms.ModelForm):
     """
