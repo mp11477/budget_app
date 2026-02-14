@@ -14,12 +14,30 @@
         <div class="smartcal-day {% if day.is_today %}today{% endif %}">
           <div class="day-num">{{ day.date.day }}</div>
 
+          {# --- SPECIAL ITEMS FIRST --- #}
+          {% if day.special_items %}
+            {% for item in day.special_items %}
+              <div class="event-chip holiday
+                {% if item.color_key|lower == 'orange' %}bg-orange-200/90
+                {% elif item.color_key|lower == 'red' %}bg-red-200/90
+                {% elif item.color_key|lower == 'blue' %}bg-blue-200/90
+                {% elif item.color_key|lower == 'green' %}bg-green-200/90
+                {% elif item.color_key|lower == 'purple' %}bg-purple-200/90
+                {% elif item.color_key|lower == 'pink' %}bg-pink-200/90
+                {% else %}bg-gray-200/90{% endif %}">
+                --- {{ item.title }} ---
+            </div>
+            {% endfor %}
+          {% endif %}
+
+          {# --- NORMAL EVENTS --- #}
           {% with events=events_by_date|get_item:day.date %}
             {% if events %}
               {% for ev in events %}
                 <div class="event-chip person-{{ ev.person }}">
                   <div class="event-time">
-                    {{ ev.start_dt|date:"g:i A" }}{% if ev.end_dt %}–{{ ev.end_dt|date:"g:i A" }}{% endif %}
+                    {{ ev.start_dt|date:"g:i A" }}
+                    {% if ev.end_dt %}–{{ ev.end_dt|date:"g:i A" }}{% endif %}
                   </div>
                   <div class="event-title">
                     {{ ev.title }} — {{ ev.get_person_display }}
@@ -27,12 +45,18 @@
                 </div>
               {% endfor %}
             {% else %}
-              <div class="event-chip empty">No events scheduled.</div>
+              {% if not day.special_items %}
+                <div class="event-chip empty">No events scheduled.</div>
+              {% endif %}
             {% endif %}
           {% endwith %}
         </div>
       {% endfor %}
-    </div>
+
+      <a href="{% url 'calendar:calendar_month' %}" class="kiosk-month-btn">
+          Month View
+      </a>
 
   </section>
+  
 </div>
