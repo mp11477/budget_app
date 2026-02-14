@@ -17,12 +17,12 @@
     gap:var(--gap);
     padding:var(--pad);
     grid-template-columns:1fr;
-    grid-template-rows:auto auto auto 1fr;
+    grid-template-rows:auto auto 1fr;
     grid-template-areas:
       "top-left"
       "middle-photo"
       "top-right"
-      "bottom-half";
+      "bottom-half"
   }
 
   .cal-panel{
@@ -35,8 +35,9 @@
 
   .top-left     { grid-area:top-left; background:#808080; }
   .middle-photo { grid-area:middle-photo; }
-  .weather      { grid-area:top-right; }
-  .bottom-half  { grid-area:bottom-half; }
+  .weather      { grid-area:top-right; overflow:visible}
+  .bottom-half  { grid-area:bottom-half; position: relative; }
+
 
   /* --- Photo background (blur fill + sharp contain) --- */
   .background-container{
@@ -149,13 +150,14 @@
 
   /* forecast row + cards */
   .weather .forecast-row{
-    margin-top:10px;
+    margin-top:24px;
     display:flex;
-    justify-content:flex-end;
-    gap:12px;
+    justify-content:flex-start;
+    gap:8px;
     flex-wrap:nowrap;
     overflow:hidden;
     padding-right: 12px;
+    padding-left: 12px;
   }
 
   .weather .forecast-card{
@@ -216,15 +218,25 @@
     padding:6px 8px;
     margin:6px 0;
     font-size:12px;
-    text-align:left;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
     font-weight:600;
+    text-align:left;
+
+  }
+
+  .event-chip.holiday{
+    color: blue;
+    font-weight: bolder;
+    font-size: 14px;
+    text-align:center;
+    
   }
 
   .bottom-half .event-time{ font-size:11px; opacity:0.9; }
   .bottom-half .event-title{ font-size:12px; }
+
 
   .event-chip.person-mike{ background-color: #BFDBFE; color: black; }
   .event-chip.person-wife{ background-color: #FBCFE8; color: black; }
@@ -235,6 +247,24 @@
     background-color: transparent;
     color: #888;
     text-align: center;
+  }
+
+  .kiosk-month-btn {
+    position: absolute;
+    right: 10px;
+    bottom: 54px; /* sits above lock button */
+    z-index: 50;
+    background: blue;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .kiosk-lock-btn {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 50;
   }
 
   /* --- Desktop layout --- */

@@ -150,11 +150,16 @@ def main_calendar(request):
     window_end = today + timedelta(days=6)
   
     days = []
+        
     for i in range(7):  # today + next 6
         d = today + timedelta(days=i)
+        # special day handling
+        special_items = get_special_items_for_day(d)
+                                        
         days.append({
             "date": d,
             "is_today": (d == today),
+            "special_items": special_items if special_items else []
         })
 
     start_dt = timezone.make_aware(datetime.combine(window_start, time.min))
@@ -176,12 +181,14 @@ def main_calendar(request):
         last = min(ev_end, window_end)
 
         while d <= last:
+             
             events_by_date[d].append(ev)
             d += timedelta(days=1)
 
     # Optional: keep today_events for your agenda section
     today_events = events_by_date.get(today, [])
-           
+    
+              
     context = {
     "image_list": image_list if image_list else [],
     "today_events": today_events,
@@ -189,9 +196,10 @@ def main_calendar(request):
     "days": days,
     "events_by_date": dict(events_by_date),
     "owner": owner,
+    
     **weather_ctx,
     }
-
+   
     return render(request, 'calendar/calendar_home.html', context)
 
 @ensure_csrf_cookie

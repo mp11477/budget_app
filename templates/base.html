@@ -171,10 +171,34 @@
   main p { line-height: 1.6; }
 
   /* Hide sidebar only in kiosk mode (tablet) */
-body.kiosk #sidebar { display: none !important; }
+  body.kiosk #sidebar { display: none !important; }
 
-/* Remove the left offset that assumes sidebar exists */
-body.kiosk main { margin-left: 0 !important; }
+  /* Remove the left offset that assumes sidebar exists */
+  body.kiosk main { margin-left: 0 !important; }
+
+  .kiosk-controls{
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 9999;
+    }
+
+  .kiosk-btn{
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      background: rgba(229,231,235,.85); /* gray-200/80-ish */
+    }
+
+  .kiosk-btn-unlock{
+      background: rgba(253,230,138,.85); /* yellow-200/80-ish */
+    }
+
+    body.kiosk {
+      overflow: hidden;
+    }
 
 </style>
 
@@ -329,20 +353,22 @@ body.kiosk main { margin-left: 0 !important; }
     <main class="flex-1 p-8 {% if not is_kiosk %}md:ml-64{% endif %} {% block main_class %}{% endblock %}">
 
       {% if is_kiosk and not hide_kiosk_bar %}
-        <div class="flex justify-end px-6 pt-4 gap-2">
+        <div class="kiosk-controls">
           {% if can_edit %}
             <button
               type="button"
-              class="px-3 py-1 rounded bg-gray-200/80 text-sm"
-              onclick="kioskLockNow()">  <!--JS function defined below to lock kiosk immediately-->
+              class="kiosk-btn"
+              onclick="kioskLockNow()">
               Lock
             </button>
           {% else %}
-            <a class="px-3 py-1 rounded bg-yellow-200/80 text-sm"
+            <a
+              class="kiosk-btn kiosk-btn-unlock"
               href="{% url 'calendar:kiosk_unlock_page' %}?return_to={{ request.get_full_path|urlencode }}">
               Unlock
             </a>
           {% endif %}
+
         </div>
       {% endif %}
 
