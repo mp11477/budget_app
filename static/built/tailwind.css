@@ -1098,6 +1098,11 @@ video {
   border-color: rgb(250 204 21 / var(--tw-border-opacity, 1));
 }
 
+.border-amber-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(252 211 77 / var(--tw-border-opacity, 1));
+}
+
 .\!bg-\[\#A9B8C1\] {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(169 184 193 / var(--tw-bg-opacity, 1)) !important;
@@ -1138,6 +1143,10 @@ video {
 
 .bg-blue-200\/90 {
   background-color: rgb(191 219 254 / 0.9);
+}
+
+.bg-cyan-200\/90 {
+  background-color: rgb(165 243 252 / 0.9);
 }
 
 .bg-emerald-100 {
@@ -1282,6 +1291,11 @@ video {
 
 .bg-yellow-200\/80 {
   background-color: rgb(254 240 138 / 0.8);
+}
+
+.bg-amber-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1));
 }
 
 .\!p-0 {

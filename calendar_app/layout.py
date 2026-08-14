@@ -18,6 +18,7 @@ class EventBlock:
     id: int
     title: str
     person: str
+    occurrence_date: date
     start_dt: datetime
     end_dt: datetime
     top: int
@@ -65,16 +66,17 @@ def build_day_timeline_blocks(
         height = max(28, end_min - start_min)  # enforce min height like your CSS
 
         raw_blocks.append(EventBlock(
-            id=e.id,
-            title=e.title,
-            person=getattr(e, "person", "") or "",
-            start_dt=timezone.localtime(e.start_dt),
-            end_dt=timezone.localtime(e.end_dt),
-            top=top,
-            height=height,
-            col=0,
-            col_count=1,
-        ))
+        id=e.id,
+        title=e.title,
+        person=getattr(e, "person", "") or "",
+        occurrence_date=timezone.localtime(e.start_dt).date(),
+        start_dt=timezone.localtime(e.start_dt),
+        end_dt=timezone.localtime(e.end_dt),
+        top=top,
+        height=height,
+        col=0,
+        col_count=1,
+    ))
 
     # --- Assign overlap columns ---
     # Greedy column assignment within overlap clusters
