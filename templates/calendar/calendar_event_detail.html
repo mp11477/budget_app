@@ -12,22 +12,48 @@
 
   <div class="space-y-2">
     <div><b>When:</b>
-      {% if event.all_day %}
-        All day ({{ event.start_dt|date:"m/d/Y" }})
+      {% if display_event.all_day %}
+        All day ({{ display_event.start_dt|date:"m/d/Y" }})
       {% else %}
-        {{ event.start_dt|date:"m/d/Y g:i A" }} - {{ event.end_dt|date:"g:i A" }}
+        {{ display_event.start_dt|date:"m/d/Y g:i A" }}
+        -
+        {{ display_event.end_dt|date:"g:i A" }}
       {% endif %}
     </div>
 
-    {% if event.location %}<div><b>Location:</b> {{ event.location }}</div>{% endif %}
-    {% if event.notes %}<div><b>Notes:</b><br>{{ event.notes|linebreaksbr }}</div>{% endif %}
-    <div><b>Person:</b> {{ event.get_person_display }}</div>
+    {% if display_event.location %}
+      <div><b>Location:</b> {{ display_event.location }}</div>
+    {% endif %}
+
+    {% if display_event.notes %}
+      <div><b>Notes:</b><br>{{ display_event.notes|linebreaksbr }}</div>
+    {% endif %}
+
+    <div>
+      <b>Person:</b> {{ display_event.get_person_display }}
+    </div>
+    {% if event.recurrence != "none" %}
+        <div>
+          <b>Repeats:</b> {{ event.get_recurrence_display }}
+        </div>
+
+        <div>
+          <b>Repeat through:</b>
+          {% if event.recurrence_end %}
+            {{ event.recurrence_end|date:"m/d/Y" }}
+          {% else %}
+            No end date
+          {% endif %}
+        </div>
+      {% endif %}
   </div>
 
   {% if can_edit %}
     <div class="mt-6 flex gap-3">
       <a class="px-3 py-2 rounded bg-gray-200"
-          href="{% url 'calendar:calendar_event_edit' event.id %}?return_to={{ return_to|urlencode }}">Edit</a>
+          href="{% url 'calendar:calendar_event_edit' event.id %}?{% if occurrence_date %}occurrence={{ occurrence_date|date:'Y-m-d' }}&{% endif %}return_to={{ return_to|urlencode }}">
+          Edit
+      </a>
 
       <a class="px-3 py-2 rounded bg-red-200"
         href="{% url 'calendar:calendar_event_delete' event.id %}?return_to={{ return_to|urlencode }}">Delete</a>

@@ -65,12 +65,35 @@ class CalendarEvent(models.Model):
         ("wife", "Stef"),
         ("kid1", "Max"),
         ("kid2", "Leo"),
+        ("both_kids", "Both Kids"),
+        ("family", "Family"),
     ]
 
     person = models.CharField(
         max_length=20,
         choices=EVENT_PEOPLE,
         default="mike",
+    )
+
+    RECURRENCE_CHOICES = [
+        ("none", "Does not repeat"),
+        ("daily", "Daily"),
+        ("weekly", "Weekly"),
+        ("biweekly", "Every 2 weeks"),
+        ("monthly", "Monthly"),
+        ("bimonthly", "Every 2 months"),
+        ("yearly", "Yearly"),
+    ]
+
+    recurrence = models.CharField(
+        max_length=20,
+        choices=RECURRENCE_CHOICES,
+        default="none",
+    )
+
+    recurrence_end = models.DateField(
+        null=True,
+        blank=True,
     )
 
     # Conflict handling

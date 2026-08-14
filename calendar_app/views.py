@@ -11,7 +11,11 @@ from django.views.decorators.http import require_POST, require_GET
 from .dates import parse_ymd
 from .devices import looks_like_tablet
 from .layout import build_day_timeline_blocks, build_weeks
-from .queries import get_events_overlapping_range, group_events_by_start_date
+from .queries import (
+    get_events_overlapping_range,
+    group_events_by_start_date,
+    get_occurrence_for_date,
+)
 from .specials import inject_specials_into_events_by_day, get_special_items_for_day
 from .weather import get_cached_weather
 from .permissions import kiosk_enabled, kiosk_edit_required, edit_actor
@@ -162,12 +166,10 @@ def main_calendar(request):
             "special_items": special_items if special_items else []
         })
 
-    start_dt = timezone.make_aware(datetime.combine(window_start, time.min))
-    end_dt   = timezone.make_aware(datetime.combine(window_end, time.max))
-
-    window_events = (CalendarEvent.objects
-        .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
-        .order_by("start_dt")
+    window_events = get_events_overlapping_range(
+        owner,
+        window_start,
+        window_end,
     )
 
     events_by_date = defaultdict(list)
@@ -341,16 +343,24 @@ def calendar_day(request):
     
     day = parse_ymd(request.GET.get("date"), default=today)     # default context day = today
     
-    start_dt = timezone.make_aware(datetime.combine(day, time.min))
-    end_dt = timezone.make_aware(datetime.combine(day, time.max))
-
     prev_day = day - timedelta(days=1)
     next_day = day + timedelta(days=1)
 
-    events = (CalendarEvent.objects
-              .filter(user=owner, start_dt__lte=end_dt, end_dt__gte=start_dt)
-              .order_by("start_dt"))
+    events = get_events_overlapping_range(
+        owner,
+        day,
+        day,
+    )
     
+    print(
+        "[calendar_day]",
+        day,
+        "events:",
+        len(events),
+        [(e.title, e.start_dt) for e in events],
+    )
+
+
     #build grid for display in html
     all_day_events, event_blocks = build_day_timeline_blocks(events, day)
 
@@ -374,18 +384,53 @@ def calendar_day(request):
 #Event CRUD
 def calendar_event_detail(request, event_id):
     owner = get_calendar_owner()
-    event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
+    event = get_object_or_404(
+        CalendarEvent,
+        id=event_id,
+        user=owner,
+    )
 
     is_kiosk = kiosk_enabled(request)
     default_return = calendar_home_url(is_kiosk)
     return_to = request.GET.get("return_to") or default_return
 
+    occurrence_date = None
+    display_event = event
+
+    occurrence_str = request.GET.get("occurrence")
+
+    if occurrence_str:
+        try:
+            occurrence_date = datetime.strptime(
+                occurrence_str,
+                "%Y-%m-%d",
+            ).date()
+        except ValueError:
+            occurrence_date = None
+
+        if occurrence_date is not None:
+            occurrence = get_occurrence_for_date(
+                event,
+                occurrence_date,
+            )
+
+            if occurrence is not None:
+                display_event = occurrence
+            else:
+                occurrence_date = None
+
     context = {
         "event": event,
+        "display_event": display_event,
+        "occurrence_date": occurrence_date,
         "return_to": return_to,
     }
-    
-    return render(request, "calendar/calendar_event_detail.html", context)
+
+    return render(
+        request,
+        "calendar/calendar_event_detail.html",
+        context,
+    )
 
 @ensure_csrf_cookie
 @kiosk_edit_required
@@ -393,13 +438,13 @@ def calendar_event_create(request):
     owner = get_calendar_owner()
 
     is_kiosk = kiosk_enabled(request)
-
     default_return = calendar_home_url(is_kiosk)
     return_to = request.GET.get("return_to") or default_return
 
-    # date prefill: ?date=YYYY-MM-DD
+    # Date prefill: ?date=YYYY-MM-DD
     date_str = request.GET.get("date")
     default_date = timezone.localdate()
+
     if date_str:
         try:
             default_date = datetime.strptime(date_str, "%Y-%m-%d").date()
@@ -407,7 +452,6 @@ def calendar_event_create(request):
             pass
 
     if request.method == "POST":
-        # IMPORTANT: for POST, take return_to from the hidden input first
         return_to = request.POST.get("return_to") or return_to
 
         title = (request.POST.get("title") or "").strip()
@@ -416,13 +460,59 @@ def calendar_event_create(request):
         person = request.POST.get("person", "mike")
         all_day = request.POST.get("all_day") == "on"
 
+        recurrence = request.POST.get("recurrence", "none")
+        recurrence_end_str = (request.POST.get("recurrence_end") or "").strip()
+        recurrence_end = None
+
+        if recurrence not in dict(CalendarEvent.RECURRENCE_CHOICES):
+            recurrence = "none"
+
+        if recurrence != "none" and recurrence_end_str:
+            try:
+                recurrence_end = datetime.strptime(
+                    recurrence_end_str,
+                    "%Y-%m-%d"
+                ).date()
+            except ValueError:
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": default_date,
+                    "return_to": return_to,
+                    "event": None,
+                    "error": "Invalid recurrence end date.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
+
+            if recurrence_end < default_date:
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": default_date,
+                    "return_to": return_to,
+                    "event": None,
+                    "error": "Recurrence end date cannot be before the event date.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
+
+        if recurrence == "none":
+            recurrence_end = None
+
         if not title:
-            context = {"date": default_date, "return_to": return_to, "event": None, "error": "Title is required."}
-            return render(request, "calendar/calendar_event_form.html", context)
+            return render(request, "calendar/calendar_event_form.html", {
+                "date": default_date,
+                "return_to": return_to,
+                "event": None,
+                "error": "Title is required.",
+                "form_recurrence": recurrence,
+                "form_recurrence_end": recurrence_end_str,
+            })
 
         if all_day:
-            start_dt = timezone.make_aware(datetime.combine(default_date, time.min))
-            end_dt = timezone.make_aware(datetime.combine(default_date, time.max))
+            start_dt = timezone.make_aware(
+                datetime.combine(default_date, time.min)
+            )
+            end_dt = timezone.make_aware(
+                datetime.combine(default_date, time.max)
+            )
         else:
             start_time = request.POST.get("start_time", "09:00")
             end_time = request.POST.get("end_time", "10:00")
@@ -431,19 +521,31 @@ def calendar_event_create(request):
                 st = datetime.strptime(start_time, "%H:%M").time()
                 et = datetime.strptime(end_time, "%H:%M").time()
             except ValueError:
-                context = {"date": default_date, "return_to": return_to, "event": None, "error": "Invalid time format."}
-                return render(request, "calendar/calendar_event_form.html", context)
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": default_date,
+                    "return_to": return_to,
+                    "event": None,
+                    "error": "Invalid time format.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
 
             if et <= st:
                 return render(request, "calendar/calendar_event_form.html", {
                     "date": default_date,
                     "return_to": return_to,
                     "error": "End time must be after start time.",
-                    "event": event,
+                    "event": None,
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
                 })
 
-            start_dt = timezone.make_aware(datetime.combine(default_date, st))
-            end_dt = timezone.make_aware(datetime.combine(default_date, et))
+            start_dt = timezone.make_aware(
+                datetime.combine(default_date, st)
+            )
+            end_dt = timezone.make_aware(
+                datetime.combine(default_date, et)
+            )
 
         event = CalendarEvent.objects.create(
             user=owner,
@@ -454,6 +556,8 @@ def calendar_event_create(request):
             all_day=all_day,
             notes=notes,
             location=location,
+            recurrence=recurrence,
+            recurrence_end=recurrence_end,
         )
 
         actor = edit_actor(request)
@@ -463,8 +567,12 @@ def calendar_event_create(request):
 
         return redirect(return_to)
 
-    # GET
-    context = {"date": default_date, "return_to": return_to, "event": None}
+    context = {
+        "date": default_date,
+        "return_to": return_to,
+        "event": None,
+    }
+
     return render(request, "calendar/calendar_event_form.html", context)
 
 @ensure_csrf_cookie
@@ -472,51 +580,131 @@ def calendar_event_create(request):
 def calendar_event_edit(request, event_id):
     owner = get_calendar_owner()
     event = get_object_or_404(CalendarEvent, id=event_id, user=owner)
-    return_to = request.GET.get("return_to") or default_return
-
 
     is_kiosk = kiosk_enabled(request)
     default_return = calendar_home_url(is_kiosk)
-    
+    return_to = request.GET.get("return_to") or default_return
+
     if request.method == "POST":
-        title = request.POST.get("title", "").strip()
-        notes = request.POST.get("notes", "").strip()
-        location = request.POST.get("location", "").strip()
-        person = request.POST.get("person", "mike")
-        all_day = request.POST.get("all_day") == "on"
         return_to = request.POST.get("return_to") or default_return
 
-        if not title:
+        title = (request.POST.get("title") or "").strip()
+        notes = (request.POST.get("notes") or "").strip()
+        location = (request.POST.get("location") or "").strip()
+        person = request.POST.get("person", "mike")
+        all_day = request.POST.get("all_day") == "on"
+
+        recurrence = request.POST.get("recurrence", "none")
+        recurrence_end_str = (request.POST.get("recurrence_end") or "").strip()
+        recurrence_end = None
+
+        if recurrence not in dict(CalendarEvent.RECURRENCE_CHOICES):
+            recurrence = "none"
+
+        '''An existing recurring series must not be converted directly to
+        "Does not repeat", because doing so would make all previously
+        generated occurrences disappear from the calendar.'''
+
+        if event.recurrence != "none" and recurrence == "none":
             return render(request, "calendar/calendar_event_form.html", {
                 "date": event.start_dt.date(),
                 "return_to": return_to,
-                "error": "Title is required.",
                 "event": event,
+                "error": (
+                    "To stop a recurring appointment while keeping its history, "
+                    "leave the recurrence type unchanged and enter a Repeat until date."
+                ),
+                "form_recurrence": event.recurrence,
+                "form_recurrence_end": recurrence_end_str,
             })
-        
-        # date is locked for MVP; we can add change-date later
+
+        # Event date remains locked for now.
         d = event.start_dt.date()
 
+        if recurrence != "none" and recurrence_end_str:
+            try:
+                recurrence_end = datetime.strptime(
+                    recurrence_end_str,
+                    "%Y-%m-%d"
+                ).date()
+            except ValueError:
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": d,
+                    "return_to": return_to,
+                    "event": event,
+                    "error": "Invalid recurrence end date.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
+
+            if recurrence_end < d:
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": d,
+                    "return_to": return_to,
+                    "event": event,
+                    "error": "Recurrence end date cannot be before the event date.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
+
+        if recurrence == "none":
+            recurrence_end = None
+
+        if not title:
+            return render(request, "calendar/calendar_event_form.html", {
+                "date": d,
+                "return_to": return_to,
+                "error": "Title is required.",
+                "event": event,
+                "form_recurrence": recurrence,
+                "form_recurrence_end": recurrence_end_str,
+            })
+
         if all_day:
-            start_dt = timezone.make_aware(datetime.combine(d, time.min))
-            end_dt = timezone.make_aware(datetime.combine(d, time.max))
+            start_dt = timezone.make_aware(
+                datetime.combine(d, time.min)
+            )
+            end_dt = timezone.make_aware(
+                datetime.combine(d, time.max)
+            )
         else:
             try:
-                st = datetime.strptime(request.POST.get("start_time", "09:00"), "%H:%M").time()
-                et = datetime.strptime(request.POST.get("end_time", "10:00"), "%H:%M").time()
+                st = datetime.strptime(
+                    request.POST.get("start_time", "09:00"),
+                    "%H:%M"
+                ).time()
+
+                et = datetime.strptime(
+                    request.POST.get("end_time", "10:00"),
+                    "%H:%M"
+                ).time()
+
             except ValueError:
-                context = {"date": start_dt, "return_to": return_to, "event": None, "error": "Invalid time format."}
-                return render(request, "calendar/calendar_event_form.html", context)
+                return render(request, "calendar/calendar_event_form.html", {
+                    "date": d,
+                    "return_to": return_to,
+                    "event": event,
+                    "error": "Invalid time format.",
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
+                })
 
             if et <= st:
                 return render(request, "calendar/calendar_event_form.html", {
                     "date": d,
-                    "return_to": request.POST.get("return_to", "/calendar/"),
+                    "return_to": return_to,
                     "error": "End time must be after start time.",
                     "event": event,
+                    "form_recurrence": recurrence,
+                    "form_recurrence_end": recurrence_end_str,
                 })
-            start_dt = timezone.make_aware(datetime.combine(d, st))
-            end_dt = timezone.make_aware(datetime.combine(d, et))
+
+            start_dt = timezone.make_aware(
+                datetime.combine(d, st)
+            )
+            end_dt = timezone.make_aware(
+                datetime.combine(d, et)
+            )
 
         event.title = title
         event.notes = notes
@@ -525,20 +713,24 @@ def calendar_event_edit(request, event_id):
         event.all_day = all_day
         event.start_dt = start_dt
         event.end_dt = end_dt
+        event.recurrence = recurrence
+        event.recurrence_end = recurrence_end
+
         if not event.created_by:
             event.created_by = edit_actor(request)
+
         event.last_edited_by = edit_actor(request)
 
         event.save()
 
-        return redirect(request.POST.get("return_to", "/calendar/"))
-    
+        return redirect(return_to)
+
     context = {
         "date": event.start_dt.date(),
-        "return_to": request.GET.get(return_to) or default_return,
+        "return_to": return_to,
         "event": event,
-        }
-    
+    }
+
     return render(request, "calendar/calendar_event_form.html", context)
 
 @ensure_csrf_cookie

@@ -22,3 +22,5 @@
     for better granularity in regard to fees being paid.
 15)Income vs Spend Charts
 16)Bulk validator script to help flag mismatches (e.g. a LOAN_PAYMENT with no corresponding TRANSFER) or if you want to auto-classify some of these cases (Reference to Transaction Type Matrix).
+
+Calendar Daily Summary navigation: Add previous/next arrows to allow moving the summary window backward or forward by day while preserving the multi-day summary format.

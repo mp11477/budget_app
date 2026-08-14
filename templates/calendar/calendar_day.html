@@ -32,6 +32,8 @@
           <span class="px-2 py-1 rounded bg-pink-200/90">Stef</span>
           <span class="px-2 py-1 rounded bg-green-200/90">Max</span>
           <span class="px-2 py-1 rounded bg-purple-200/90">Leo</span>
+          <span class="px-2 py-1 rounded bg-cyan-200/90">Both Kids</span>
+          <span class="px-2 py-1 rounded bg-orange-200/90">Family</span>
         </div>
 
       </h1>
@@ -118,10 +120,12 @@
               {% elif e.person == 'wife' %}bg-pink-200/90
               {% elif e.person == 'kid1' %}bg-green-200/90
               {% elif e.person == 'kid2' %}bg-purple-200/90
+              {% elif e.person == 'both_kids' %}bg-cyan-200/90
+              {% elif e.person == 'family' %}bg-orange-200/90
               {% else %}bg-gray-200/90{% endif %}">
               <span class="font-semibold">All day</span> — 
               <a class="underline"
-                href="{% url 'calendar:calendar_event_detail' e.id %}?return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
+               href="{% url 'calendar:calendar_event_detail' e.id %}?occurrence={{ e.occurrence_date|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
                 {{ e.title }}
               </a>
             </div>
@@ -163,11 +167,13 @@
               {% elif e.person == 'wife' %}bg-pink-200/90
               {% elif e.person == 'kid1' %}bg-green-200/90
               {% elif e.person == 'kid2' %}bg-purple-200/90
+              {% elif e.person == 'both_kids' %}bg-cyan-200/90
+              {% elif e.person == 'family' %}bg-orange-200/90
               {% else %}bg-gray-200/90{% endif %}"
               style="--top: {{ e.top }}; --h: {{ e.height }}; --col: {{ e.col }}; --cols: {{ e.col_count }};">
               <div class="font-semibold">
                 <a class="underline"
-                  href="{% url 'calendar:calendar_event_detail' e.id %}?return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
+                  href="{% url 'calendar:calendar_event_detail' e.id %}?occurrence={{ e.occurrence_date|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
                   {{ e.title }}
                 </a>
               </div>

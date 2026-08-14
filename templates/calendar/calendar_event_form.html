@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="p-6 max-w-xl">
-  <h1 class="text-2xl font-bold mb-4">Add Event ({{ date }})</h1>
+  <h1 class="text-2xl font-bold mb-4">
+    {% if event %}
+      Edit Event
+    {% else %}
+      Add Event
+    {% endif %}
+    ({{ date }})
+  </h1>
 
   <form method="post" class="space-y-3" id="eventForm">
     {% csrf_token %}
@@ -20,6 +27,8 @@
         <option value="wife" {% if event.person == "wife" %}selected{% endif %}>Stef</option>
         <option value="kid1" {% if event.person == "kid1" %}selected{% endif %}>Max</option>
         <option value="kid2" {% if event.person == "kid2" %}selected{% endif %}>Leo</option>
+        <option value="both_kids" {% if event.person == "both_kids" %}selected{% endif %}>Both Kids</option>
+        <option value="family" {% if event.person == "family" %}selected{% endif %}>Family</option>
       </select>
     </div>
 
@@ -60,8 +69,117 @@
       <button class="px-4 py-2 rounded bg-gray-800 text-white">Save</button>
       <a class="px-4 py-2 rounded bg-gray-200" href="{{ return_to }}{{ kiosk_qs_amp }}">Cancel</a>
     </div>
+
+    <!-- Recurrence Warning -->
+    {% if event and event.recurrence != "none" %}
+      <div class="p-3 rounded border border-amber-300 bg-amber-50 text-sm">
+        <div class="font-semibold">
+          Editing recurring series
+        </div>
+
+        <div class="mt-1">
+          Changes made here apply to the entire recurring series.
+        </div>
+
+        <div class="mt-1">
+          To stop future appointments while keeping previous occurrences,
+          keep the recurrence type unchanged and enter a
+          <b>Repeat through</b> date.
+        </div>
+      </div>
+    {% endif %} 
+
+    <!-- Recurrence -->
+    <div>
+      <label class="block text-sm font-semibold">Repeats</label>
+
+      <select
+        id="recurrence"
+        name="recurrence"
+        class="w-full p-2 rounded border"
+      >
+        <option value="none"
+          {% if form_recurrence == "none" or not form_recurrence and event.recurrence == "none" %}
+            selected
+          {% endif %}
+          {% if event and event.recurrence != "none" %}
+            disabled
+          {% endif %}
+        >
+          Does not repeat
+        </option>
+
+        <option value="daily"
+          {% if form_recurrence == "daily" or not form_recurrence and event.recurrence == "daily" %}
+            selected
+          {% endif %}
+        >
+          Daily
+        </option>
+
+        <option value="weekly"
+          {% if form_recurrence == "weekly" or not form_recurrence and event.recurrence == "weekly" %}
+            selected
+          {% endif %}
+        >
+          Weekly
+        </option>
+
+        <option value="biweekly"
+          {% if form_recurrence == "biweekly" or not form_recurrence and event.recurrence == "biweekly" %}
+            selected
+          {% endif %}
+        >
+          Every 2 weeks
+        </option>
+
+        <option value="monthly"
+          {% if form_recurrence == "monthly" or not form_recurrence and event.recurrence == "monthly" %}
+            selected
+          {% endif %}
+        >
+          Monthly
+        </option>
+
+        <option value="bimonthly"
+          {% if form_recurrence == "bimonthly" or not form_recurrence and event.recurrence == "bimonthly" %}
+            selected
+          {% endif %}
+        >
+          Every 2 months
+        </option>
+
+        <option value="yearly"
+          {% if form_recurrence == "yearly" or not form_recurrence and event.recurrence == "yearly" %}
+            selected
+          {% endif %}
+        >
+          Yearly
+        </option>
+      </select>
+    </div>
+
+    <div id="recurrenceEndRow">
+      <label class="block text-sm font-semibold">Repeat through</label>
+
+      <input
+        id="recurrenceEnd"
+        name="recurrence_end"
+        type="date"
+        class="w-full p-2 rounded border"
+        min="{{ date|date:'Y-m-d' }}"
+        value="{% if form_recurrence_end %}{{ form_recurrence_end }}{% elif event.recurrence_end %}{{ event.recurrence_end|date:'Y-m-d' }}{% endif %}"
+      />
+
+      <p class="text-xs text-gray-500 mt-1">
+        The series includes occurrences through this date.
+        Leave blank to continue indefinitely.
+      </p>
+    </div> 
   </form>
 </div>
+
+
 
 <script>
   const allDay = document.getElementById("allDay");
@@ -70,6 +188,9 @@
   const endTime = document.getElementById("endTime");
   const form = document.getElementById("eventForm");
   const timeError = document.getElementById("timeError");
+  const recurrence = document.getElementById("recurrence");
+  const recurrenceEndRow = document.getElementById("recurrenceEndRow");
+  const recurrenceEnd = document.getElementById("recurrenceEnd");
 
   function setTimeInputsEnabled(enabled) {
     startTime.required = enabled;
@@ -113,7 +234,21 @@
     }
   });
 
+  function updateRecurrenceControls() {
+    const repeats = recurrence.value !== "none";
+
+    recurrenceEnd.disabled = !repeats;
+    recurrenceEndRow.style.opacity = repeats ? "1" : "0.6";
+
+    if (!repeats) {
+      recurrenceEnd.value = "";
+    }
+  }
+
+  recurrence.addEventListener("change", updateRecurrenceControls);
+
   // initialize
-  setTimeInputsEnabled(true);
+  setTimeInputsEnabled(!allDay.checked);
+  updateRecurrenceControls();
 </script>
 {% endblock %}
