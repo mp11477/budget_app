@@ -34,7 +34,13 @@
 
     <!-- All-day toggle -->
     <div class="flex items-center gap-2">
-      <input id="allDay" name="all_day" type="checkbox" {% if event.all_day %}checked{% endif %} class="h-4 w-4">
+      <input 
+        id="allDay" 
+        name="all_day" 
+        type="checkbox" 
+        {% if event.all_day %}checked{% endif %} 
+        data-was-all-day="{% if event and event.all_day %}true{% else %}false{% endif %}" 
+        class="h-4 w-4" >
       <label for="allDay" class="text-sm font-semibold">All day</label>
     </div>
 
@@ -195,17 +201,26 @@
   function setTimeInputsEnabled(enabled) {
     startTime.required = enabled;
     endTime.required = enabled;
-    startTime.disabled = !enabled;
-    endTime.disabled = !enabled;
-    timeRow.style.opacity = enabled ? "1" : "0.6";
-    timeRow.style.pointerEvents = enabled ? "auto" : "none";
+
+    // Hide time controls for all-day events rather than disabling them.
+    // This allows an existing all-day event to be converted back into
+    // a timed event cleanly when the checkbox is unchecked.
+    timeRow.classList.toggle("hidden", !enabled);
+
     if (!enabled) {
       timeError.classList.add("hidden");
     }
   }
 
   allDay.addEventListener("change", () => {
-    setTimeInputsEnabled(!allDay.checked);
+    const enabled = !allDay.checked;
+
+    if (enabled && allDay.dataset.wasAllDay === "true") {
+      startTime.value = "09:00";
+      endTime.value = "10:00";
+    }
+
+    setTimeInputsEnabled(enabled);
   });
 
   function isEndAfterStart() {

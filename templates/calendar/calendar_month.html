@@ -123,7 +123,7 @@
                             <span class="font-semibold">All day</span> —
                             {% if e.id %}
                                 <a class="underline"
-                                href="{% url 'calendar:calendar_event_detail' e.id %}?occurrence={{ e.occurrence_date|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}"></a>
+                                href="{% url 'calendar:calendar_event_detail' e.id %}?occurrence={{ e.occurrence_date|date:'Y-m-d' }}&return_to={{ request.get_full_path|urlencode }}{{ kiosk_qs_amp }}">
                                 {{ e.title }}
                                 </a>
                             {% else %}
