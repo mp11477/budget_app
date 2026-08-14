@@ -78,6 +78,7 @@ class CalendarEvent(models.Model):
     RECURRENCE_CHOICES = [
         ("none", "Does not repeat"),
         ("daily", "Daily"),
+        ("weekdays", "Weekdays (Mon-Fri)"),
         ("weekly", "Weekly"),
         ("biweekly", "Every 2 weeks"),
         ("monthly", "Monthly"),

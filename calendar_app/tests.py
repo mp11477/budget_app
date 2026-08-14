@@ -479,4 +479,62 @@ class CalendarRecurrenceTests(TestCase):
         )
 
 
-    
+    def test_weekday_recurrence_skips_weekends(self):
+        """
+        Verify that weekday recurrence generates appointments Monday through
+        Friday while skipping Saturday and Sunday.
+
+        A Friday occurrence should be followed by Monday rather than Saturday.
+        """
+        self.make_event(
+            year=2026,
+            month=8,
+            day=13,
+            recurrence="weekdays",
+        )
+
+        events = get_events_overlapping_range(
+            self.user,
+            datetime(2026, 8, 13).date(),
+            datetime(2026, 8, 21).date(),
+        )
+
+        self.assertEqual(
+            self.occurrence_dates(events),
+            [
+                datetime(2026, 8, 13).date(),  # Thursday
+                datetime(2026, 8, 14).date(),  # Friday
+                datetime(2026, 8, 17).date(),  # Monday
+                datetime(2026, 8, 18).date(),
+                datetime(2026, 8, 19).date(),
+                datetime(2026, 8, 20).date(),
+                datetime(2026, 8, 21).date(),
+            ],
+        )
+
+    def test_weekday_recurrence_started_on_weekend_begins_monday(self):
+        """
+        Verify that a weekday series created with a weekend start date begins
+        on the next Monday rather than generating a weekend occurrence.
+        """
+        self.make_event(
+            year=2026,
+            month=8,
+            day=15,
+            recurrence="weekdays",
+        )
+
+        events = get_events_overlapping_range(
+            self.user,
+            datetime(2026, 8, 15).date(),
+            datetime(2026, 8, 19).date(),
+        )
+
+        self.assertEqual(
+            self.occurrence_dates(events),
+            [
+                datetime(2026, 8, 17).date(),
+                datetime(2026, 8, 18).date(),
+                datetime(2026, 8, 19).date(),
+            ],
+        )

@@ -122,6 +122,14 @@ def _next_occurrence_date(
     if recurrence == "daily":
         return current + timedelta(days=1)
 
+    if recurrence == "weekdays":
+        next_date = current + timedelta(days=1)
+
+        while next_date.weekday() >= 5:
+            next_date += timedelta(days=1)
+
+        return next_date
+
     if recurrence == "weekly":
         return current + timedelta(days=7)
 
@@ -182,6 +190,10 @@ def _expand_event(
     """
 
     original_start = timezone.localtime(event.start_dt).date()
+
+    if event.recurrence == "weekdays" and original_start.weekday() >= 5:
+        while original_start.weekday() >= 5:
+            original_start += timedelta(days=1)
 
     # Ordinary one-time appointment.
     if event.recurrence == "none":

@@ -123,6 +123,14 @@
           Daily
         </option>
 
+        <option value="weekdays"
+          {% if form_recurrence == "weekdays" or not form_recurrence and event.recurrence == "weekdays" %}
+            selected
+          {% endif %}
+        >
+          Weekdays (Mon-Fri)
+        </option>
+
         <option value="weekly"
           {% if form_recurrence == "weekly" or not form_recurrence and event.recurrence == "weekly" %}
             selected
