@@ -26,3 +26,14 @@
 Calendar Daily Summary navigation: Add previous/next arrows to allow moving the summary window backward or forward by day while preserving the multi-day summary format.
 
 Generate the weekday recurrence normally, then suppress an occurrence if that date is marked as No School.  That’s architecturally cleaner and lines up with the exception-date concept we already discussed.
+
+Calendar — Allow event date changes when editing
+
+Add the ability to change an appointment's date from the Edit Event form instead of requiring deletion and recreation.
+
+There's also an important recurrence question hiding inside it that we'll need to address when we implement it:
+
+Single event: changing 9/10 → 9/11 simply moves it.
+Recurring series: changing the date could mean moving the entire series or eventually moving only this occurrence.
+
+That second case dovetails directly with the recurring-event-exceptions backlog item we already identified. Once we have “this occurrence only” support, something like Thursday's swim practice was moved to Friday this week can be represented properly without screwing up every Thursday afterward.
